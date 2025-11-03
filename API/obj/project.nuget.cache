@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "gk7H90YcvLo=",
+  "dgSpecHash": "onsqbkMzg7E=",
   "success": true,
-  "projectFilePath": "C:\\Users\\jakub\\Documents\\01_VU\\03_Komparchas\\Casino\\main\\Cataris\\api\\API.csproj",
+  "projectFilePath": "C:\\Users\\jakub\\Documents\\01_VU\\03_Komparchas\\Casino\\main\\Cataris\\API\\API.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\jakub\\.nuget\\packages\\azure.core\\1.38.0\\azure.core.1.38.0.nupkg.sha512",
     "C:\\Users\\jakub\\.nuget\\packages\\azure.identity\\1.11.4\\azure.identity.1.11.4.nupkg.sha512",

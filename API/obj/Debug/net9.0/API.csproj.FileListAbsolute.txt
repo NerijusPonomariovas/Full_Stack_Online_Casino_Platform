@@ -196,3 +196,4 @@ C:\Users\jakub\Documents\01_VU\03_Komparchas\Casino\main\Cataris\api\obj\Debug\n
 C:\Users\jakub\Documents\01_VU\03_Komparchas\Casino\main\Cataris\api\obj\Debug\net9.0\API.pdb
 C:\Users\jakub\Documents\01_VU\03_Komparchas\Casino\main\Cataris\api\obj\Debug\net9.0\API.genruntimeconfig.cache
 C:\Users\jakub\Documents\01_VU\03_Komparchas\Casino\main\Cataris\api\obj\Debug\net9.0\ref\API.dll
+C:\Users\jakub\Documents\01_VU\03_Komparchas\Casino\main\Cataris\API\obj\Debug\net9.0\API.sourcelink.json
