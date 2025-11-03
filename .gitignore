@@ -40,4 +40,13 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+#bin folder
+bin/
+obj/
+*.cache
+*.pdb
+*.dll
+*.exe
+
+# DB
 /API/appsettings.Development.json
