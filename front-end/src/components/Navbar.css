@@ -1,0 +1,90 @@
+:root{
+  --bg1:#0a1f3b; --bg2:#0b2a52; --txt:#fff; --muted:#b8c7db; --primary:#fff;
+  --blueTop:#133a6a; --blueBot:#0a1f3b;
+  --line: rgba(255,255,255,.15);
+}
+
+/* NAVBAR */
+.nvb{
+  position:sticky; top:0; z-index:50;
+  background:linear-gradient(180deg,var(--bg1),var(--bg2));
+  color:var(--txt); border-bottom:1px solid rgba(255,255,255,.06);
+  min-height:64px; backdrop-filter:blur(4px);
+}
+.nvb__inner{ max-width:1200px; margin:0 auto; padding:10px 18px;
+  display:flex; align-items:center; justify-content:space-between; gap:16px; }
+
+/* KAIRĖ */
+.nvb__left{ display:flex; align-items:center; gap:10px; }
+.nvb__burger{ width:36px; height:36px; border:0; background:transparent;
+  display:flex; align-items:center; justify-content:center; cursor:pointer;
+  border-radius:10px; transition:background .15s; }
+.nvb__burger:hover{ background:rgba(255,255,255,.08); }
+.nvb__burger span{ width:18px; height:2px; background:#8ec1ff; border-radius:2px;
+  box-shadow:0 -6px 0 #8ec1ff, 0 6px 0 #8ec1ff; transition:.2s; }
+.nvb__burger.is-open span{ background:#fff; box-shadow:0 -6px 0 #fff, 0 6px 0 #fff; }
+
+.nvb__brand{ display:flex; align-items:center; text-decoration:none; color:var(--txt); }
+.nvb__brand img{ height:70px; width:auto; filter:drop-shadow(0 0 2px rgba(0,0,0,.4)); }
+
+/* CENTRAS */
+.nvb__links{ list-style:none; display:flex; gap:24px; margin:0; padding:0; }
+.navlink{ color:var(--muted); text-decoration:none; font-weight:700; letter-spacing:.6px;
+  padding:8px 6px; border-radius:8px; transition:.15s; }
+.navlink:hover{ color:#fff; }
+.navlink.active{ color:#fff; background:rgba(255,255,255,.08); box-shadow:inset 0 0 0 1px rgba(255,255,255,.15); }
+
+/* DEŠINĖ */
+.nvb__actions{ display:flex; align-items:center; gap:10px; }
+.btn{ display:inline-flex; align-items:center; justify-content:center; height:34px; padding:0 14px;
+  border-radius:18px; font-weight:700; text-decoration:none; transition:.15s; cursor:pointer; }
+.btn--ghost{ color:#dbe9ff; background:transparent; box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.35); }
+.btn--ghost:hover{ box-shadow:inset 0 0 0 2px #fff; color:#fff; }
+.btn--primary{ color:var(--primary); background:transparent; box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.35); font-weight:700; }
+.btn--primary:hover{ box-shadow:inset 0 0 0 2px #fff; color:#fff; }
+
+/* ——— KAIRINIS DRAWER ——— */
+.sideMenu{
+  position:fixed; top:0; left:-280px; width:260px; height:100dvh;
+  background: linear-gradient(180deg, var(--blueTop), var(--blueBot));
+  box-shadow: 6px 0 18px rgba(0,0,0,.35);
+  color:#fff; display:flex; flex-direction:column; padding:12px; gap:10px;
+  transition:left .25s ease; z-index:60; border-right:1px solid rgba(255,255,255,.08);
+}
+.sideMenu.show{ left:0; }
+
+/* viršutinis blokas: mažas burger + mini logo */
+.sideMenu__top{
+  display:flex; align-items:center; gap:8px;
+  padding:8px 6px;
+  border-radius:8px;
+  background: rgba(255,255,255,.06);
+}
+.sideMenu__burgerMini{
+  width:16px; height:2px; background:#8ec1ff; border-radius:2px;
+  box-shadow:0 -6px 0 #8ec1ff, 0 6px 0 #8ec1ff;
+}
+.sideMenu__logo{ height:18px; }
+
+.sideMenu__group{ display:flex; flex-direction:column; gap:6px; padding:6px 0; }
+.sideMenu__divider{ height:1px; background:var(--line); margin:8px 0; }
+
+/* link’ai su ikonėlėmis */
+.slink{
+  display:flex; align-items:center; gap:10px;
+  color:#e7f0ff; text-decoration:none; font-weight:800; letter-spacing:.4px;
+  padding:10px 10px; border-radius:10px;
+  background:rgba(255,255,255,.06); transition: background .15s;
+}
+.slink:hover{ background:rgba(255,255,255,.12); }
+.slink.btnlike{ border:0; cursor:pointer; }
+.sicon{ width:20px; height:20px; display:inline-flex; color:#fff; }
+
+/* backdrop */
+.sideMenu__backdrop{ position:fixed; inset:0; background:rgba(0,0,0,.35); z-index:55; }
+
+/* Mobile – slėpti centrą ir dešinę */
+@media (max-width:900px){
+  .nvb__links{ display:none; }
+  .nvb__actions{ display:none; }
+}
