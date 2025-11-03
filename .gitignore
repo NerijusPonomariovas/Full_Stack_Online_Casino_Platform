@@ -41,6 +41,7 @@ yarn-error.log*
 next-env.d.ts
 
 #bin folder
+API/
 bin/
 obj/
 *.cache
