@@ -1,0 +1,46 @@
+﻿using API.Interfaces;
+using API.Models;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+
+namespace API.Services
+{
+    public class TokenService : ITokenService
+    {
+        private readonly IConfiguration _configuration;
+        public TokenService(IConfiguration config)
+        {
+            _configuration = config ?? throw new ArgumentNullException(nameof(config));
+        }
+        public string createToken(ApplicationUsers users)
+        {
+            var secretKey = _configuration["AppSettings:TokenKey"];
+
+            //patikrinam ar tkoenas null ar empty
+            if (string.IsNullOrEmpty(secretKey))
+            {
+                throw new ArgumentNullException("Token bby zinia kur");
+            }
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+            var claims = new List<Claim>
+            {
+                new Claim(JwtRegisteredClaimNames.Sub, users.UserName),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(ClaimTypes.NameIdentifier, users.Id.ToString())
+            };
+            var token = new JwtSecurityToken
+            (
+                issuer: null,
+                audience: null,
+                claims: claims,
+                expires: DateTime.UtcNow.AddMinutes(60),
+                signingCredentials: creds
+            );
+            return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+    }
+}
