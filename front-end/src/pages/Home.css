@@ -1,0 +1,86 @@
+.home{
+  background: linear-gradient(180deg, #0b2a52 0%, #0a1f3b 100%);
+  min-height: 150dvh;
+  color: #fff;
+}
+
+/* HERO */
+.hero {
+  position: relative; 
+  display: block;        
+  width: min(1280px, 96%);
+  margin: 0px auto;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 18px 35px rgba(0,0,0,.35);
+  cursor: pointer; 
+  transition: .2s;
+}
+
+.hero:hover {
+  filter: brightness(1.03);
+}
+
+/* image */
+.hero img {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.hero__overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.hero__overlay h1 {
+  font-size: clamp(28px, 4vw, 52px);
+  letter-spacing: 3px;
+  text-shadow: 0 4px 18px rgba(0,0,0,.55);
+}
+
+/* FEATURED */
+.featured{
+  width: min(1280px, 96%);
+  margin: 20px auto 50px;
+}
+.featured__hdr h2{
+  font-size: 22px;
+  margin-bottom: 14px;
+  font-weight: 700;
+}
+
+/* GAMES GRID */
+.games{
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+}
+@media(max-width: 960px){
+  .games{ grid-template-columns: repeat(2, 1fr); }
+}
+@media(max-width: 520px){
+  .games{ grid-template-columns: 1fr; }
+}
+
+/* CARD STYLES */
+.gamecard{
+  display: block;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 6px 20px rgba(0,0,0,.25);
+  transition: .15s;
+}
+.gamecard img{
+  width: 100%;
+  display: block;
+  object-fit: cover;
+}
+.gamecard:hover{
+  transform: translateY(-2px);
+  filter: brightness(1.05);
+}

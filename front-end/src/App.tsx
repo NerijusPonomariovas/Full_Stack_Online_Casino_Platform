@@ -1,6 +1,6 @@
 
 import './App.css'
-import { Route, Routes,Router, BrowserRouter } from 'react-router-dom'
+import { Route, Routes, BrowserRouter } from 'react-router-dom'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import Dashboard from './pages/admin/Dashboard'
@@ -8,10 +8,6 @@ import Home from './pages/Home'
 import Navbar from './components/Navbar'
 
 function App() {
-  <>
-    <div>jakub</div>
-  </>
-  
   return (
     <BrowserRouter>
      <Navbar />
