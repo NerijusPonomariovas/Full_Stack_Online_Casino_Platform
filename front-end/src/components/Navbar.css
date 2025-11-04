@@ -6,7 +6,10 @@
 
 /* NAVBAR */
 .nvb{
-  position:sticky; top:0; z-index:50;
+  position: -webkit-sticky;
+  position: sticky; 
+  top:0; 
+  z-index:50;
   background:linear-gradient(180deg,var(--bg1),var(--bg2));
   color:var(--txt); border-bottom:1px solid rgba(255,255,255,.06);
   min-height:64px; backdrop-filter:blur(4px);
@@ -40,8 +43,17 @@
   border-radius:18px; font-weight:700; text-decoration:none; transition:.15s; cursor:pointer; }
 .btn--ghost{ color:#dbe9ff; background:transparent; box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.35); }
 .btn--ghost:hover{ box-shadow:inset 0 0 0 2px #fff; color:#fff; }
-.btn--primary{ color:var(--primary); background:transparent; box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.35); font-weight:700; }
-.btn--primary:hover{ box-shadow:inset 0 0 0 2px #fff; color:#fff; }
+.btn--primary{ 
+  color:#dbe9ff; 
+  background:transparent; 
+  box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.35); 
+  font-weight:700;
+  transition: box-shadow 0.2s ease, color 0.2s ease;
+}
+.btn--primary:hover{ 
+  box-shadow:inset 0 0 0 2px #fff; 
+  color:#fff; 
+}
 
 /* ——— KAIRINIS DRAWER ——— */
 .sideMenu{
@@ -79,6 +91,7 @@
 .slink:hover{ background:rgba(255,255,255,.12); }
 .slink.btnlike{ border:0; cursor:pointer; }
 .sicon{ width:20px; height:20px; display:inline-flex; color:#fff; }
+.sicon img { width: 100%; height: 100%; object-fit: contain; }
 
 /* backdrop */
 .sideMenu__backdrop{ position:fixed; inset:0; background:rgba(0,0,0,.35); z-index:55; }
