@@ -6,7 +6,6 @@ import Register from './pages/Register'
 import Dashboard from './pages/admin/Dashboard'
 import Home from './pages/Home'
 import Navbar from './components/Navbar'
-import Mines from './mines'
 
 function App() {
   return (
@@ -17,7 +16,6 @@ function App() {
         <Route path="/login" element={<Login/>}/>
         <Route path="/register" element={<Register/>}/>
         <Route path="/dashBoard" element={<Dashboard/>}/>
-         <Route path="/mines" element={<Mines />} />
       </Routes>
     </BrowserRouter>
     
