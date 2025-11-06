@@ -22,6 +22,7 @@ const Login: React.FC<LoginProps> = ({ onClose }) => {
             {
                 onClose();
             }
+
         }
         catch(error: any)
         {
