@@ -2,8 +2,11 @@ import React, { useState } from 'react'
 
 import {login} from '../api/auth';
 import { useNavigate } from 'react-router-dom';
+interface LoginProps {
+  onClose?: () => void;
+}
 
-const Login: React.FC = () => {
+const Login: React.FC<LoginProps> = ({ onClose }) => {
     const[email, setEmail] = useState<string>('');
     const[password, setPassword] = useState<string>('');
     const[error, setError] = useState<string>('');
@@ -28,8 +31,8 @@ const Login: React.FC = () => {
         }
     }
         return (
-        <div className='flex justo-center items-center h-screen bg-gray 100'>
-            <form onSubmit={handleSubmit} className='bg-white p-6 shadow-lg rounded-lg w-96'>
+        <div className='flex justify-center items-center h-screen bg-gray 100'>
+            <form onSubmit={handleSubmit} className='bg-white text-black p-6 shadow-lg rounded-lg w-96'>
                 <h2 className="text-2x1 font-bold mb-4 text-center">Login</h2>
                 {error && <p className='text-red-500 text-center'>{error}</p>}
                 <div className='mb-4'>
