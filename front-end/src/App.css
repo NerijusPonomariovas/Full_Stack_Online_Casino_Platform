@@ -1,1 +1,44 @@
 @import "tailwindcss";
+
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.game{
+  padding: .5rem 1.5rem;
+  background-color: var(--surface);
+  border-radius: 1rem;
+}
+
+.row{
+  display: flex;
+}
+.cell{
+  --cell-size: 5rem;
+  justify-content: center;
+  align-items: center;
+  font-size: calc(var(--cell-size) * 0.75);
+  font-weight: 700;
+  width: var(--cell-size);
+  height: var(--cell-size);
+  border: solid 1px var(--cell-border-color);
+  user-select: none;
+  cursor: pointer;
+  position: relative;
+  box-sizing: border-box;
+}
+
+.overlay {
+  width: 100%;
+  height: 100%;
+  background-color: var(--overlay-bg);
+  border-style: solid;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+}
