@@ -40,8 +40,8 @@ export default function Navbar() {
 
         {/* DEŠINĖ */}
         <div className="nvb__actions">
-          <Link to="/login" className="btn btn--ghost">LOGIN</Link>
-          <Link to="/register" className="btn btn--primary">REGISTER</Link>
+          <Link to="/?auth=login" className="btn btn--ghost">LOGIN</Link>
+          <Link to="/?auth=register" className="btn btn--primary">REGISTER</Link>
         </div>
       </div>
 
