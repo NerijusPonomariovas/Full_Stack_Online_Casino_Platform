@@ -12,6 +12,7 @@ namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    //jwt single sign in token
     public class AccountController : ControllerBase
     {
         private readonly DataContext _context;
