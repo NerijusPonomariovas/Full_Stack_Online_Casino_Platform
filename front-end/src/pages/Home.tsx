@@ -21,6 +21,11 @@ export default function Home() {
     setShowLogin(auth === "login");
     setShowRegister(auth === "register");
   }, [searchParams]);
+  const closeAuthModal = () => {
+    setShowLogin(false);
+    setShowRegister(false);
+    navigate("/", { replace: true }); // clears ?auth=...
+  };
   return (  
     <main className="home">
       {/* HERO */}
@@ -61,7 +66,7 @@ export default function Home() {
             <button className="modal__close" onClick={() => setShowLogin(false)} aria-label="Close">×</button>
             <h3 id="login-title" className="modal__title">Login</h3>
             <Login />
-          </div>
+          </div> 
         </div>
       )}
 
