@@ -67,6 +67,7 @@
   .games{ grid-template-columns: 1fr; }
 }
 
+
 /* CARD STYLES */
 .gamecard{
   display: block;
