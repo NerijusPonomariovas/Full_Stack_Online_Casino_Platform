@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { Link, replace, useNavigate, useSearchParams } from "react-router-dom";
 import "./Home.css";
 import Login from "./Login";
 import Register from "./Register";
+
 
 // Paveiksliukai (keisk kelius/pavadinimus pagal save)
 import hero from "../assets/home/hero.jpg";
@@ -61,10 +62,9 @@ export default function Home() {
       {/* LOGIN MODAL */}
       {showLogin && (
         <div className="modal" role="dialog" aria-modal="true" aria-labelledby="login-title">
-          <div className="modal__backdrop" onClick={() => setShowLogin(false)} />
+          <div className="modal__backdrop" onClick={closeAuthModal} />
           <div className="modal__panel">
-            <button className="modal__close" onClick={() => setShowLogin(false)} aria-label="Close">×</button>
-            <h3 id="login-title" className="modal__title">Login</h3>
+            <button className="modal__close" onClick={closeAuthModal} aria-label="Close">×</button>
             <Login />
           </div> 
         </div>
@@ -73,10 +73,9 @@ export default function Home() {
       {/* REGISTER MODAL */}
       {showRegister && (
         <div className="modal" role="dialog" aria-modal="true" aria-labelledby="register-title">
-          <div className="modal__backdrop" onClick={() => setShowRegister(false)} />
+          <div className="modal__backdrop" onClick={closeAuthModal} />
           <div className="modal__panel">
-            <button className="modal__close" onClick={() => setShowRegister(false)} aria-label="Close">×</button>
-            <h3 id="register-title" className="modal__title">Register</h3>
+            <button className="modal__close" onClick={closeAuthModal} aria-label="Close">×</button>
             <Register />
           </div>
         </div>
