@@ -2,7 +2,6 @@
 import './App.css'
 import { Route, Routes, BrowserRouter } from 'react-router-dom'
 import Dashboard from './pages/admin/Dashboard'
-
 import Home from './pages/Home'
 import Navbar from './components/Navbar'
 

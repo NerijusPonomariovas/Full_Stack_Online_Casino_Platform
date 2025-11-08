@@ -25,7 +25,7 @@ const Register: React.FC = () => {
         {
             await register(name, email, password, confirmPassword, roleName);
             console.log("User registered");
-            navigate('/login');
+            navigate('/');
         }
         catch (error:any)
         {

@@ -23,6 +23,7 @@ const Login: React.FC<LoginProps> = ({ onClose }) => {
             {
                 onClose();
             }
+            navigate('/dashboard')
 
         }
         catch(error: any)
