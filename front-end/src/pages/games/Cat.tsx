@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { Link, replace, useNavigate, useSearchParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import "./cat.css";
 import Login from "../Login";
 import Register from "../Register";
+import BettingPanel from "./gameComponents/BettingPanel";
 
 // png imports
 export default function Home() {
@@ -24,7 +25,7 @@ export default function Home() {
     <main className="home flex">
       <div className="flex justify-center items-center w-screen">
         <div>
-          katinuko game
+          <BettingPanel/>
         </div>
       </div>
       {/* LOGIN MODAL */}
