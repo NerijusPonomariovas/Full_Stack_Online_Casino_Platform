@@ -4,7 +4,8 @@ export default function BettingPanel() {
   const [mode, setMode] = useState("manual"); // "manual" or "auto"
   const [showDifficulty] = useState(true);
   const [difficulty, setDifficulty] = useState("Medium");
-  const [betAmount, setBetAmount] = useState(0);
+  const [betAmount, setBetAmount] = useState<number | null>(null);
+
 
   return (
     <div className="w-64 bg-[#1c5ec3] text-white rounded-xl p-4 space-y-3">
@@ -30,21 +31,45 @@ export default function BettingPanel() {
         <div className="flex mt-1 p-0.5 bg-[#184890] rounded-md">
           <input
             type="number"
-            value={betAmount}
-            onChange={(e) => setBetAmount(Number(e.target.value))}
+            value={betAmount === null ? "" : betAmount}
+            onChange={(e) =>  setBetAmount(e.target.value === "" ? null : Number(e.target.value))}
             className="w-full bg-[#102c56] p-2 rounded-l-sm text-left focus:outline-none"
+            placeholder=""
+            onKeyDown={(e) => {
+              const allowedKeys = [
+                "Backspace",
+                "Delete",
+                "ArrowLeft",
+                "ArrowRight",
+                "Tab",
+                "Enter",
+                "Home",
+                "End",
+                ".", // allow decimals
+              ];
+            
+              // Block letters and invalid characters, but allow navigation + editing
+              if (
+                !/[0-9]/.test(e.key) &&
+                !allowedKeys.includes(e.key)
+              ) {
+                e.preventDefault();
+              }
+            }}
           />
           <div className="flex items-center">
             <button
               className="bg-[#184890] px-3"
-              onClick={() => setBetAmount(betAmount / 2)}
+              onClick={() => setBetAmount(
+            betAmount === null || betAmount === 0 ? 0 : betAmount / 2
+          )}
             >
               ½
             </button>
             <div className="border-l-3 h-[67%] border-l-[#102c56]"></div>
             <button
               className="bg-[#184890] px-3 rounded-r-sm"
-              onClick={() => setBetAmount(betAmount * 2)}
+              onClick={() => setBetAmount(betAmount === null ? 0 : betAmount * 2)}
             >
               2x
             </button>
