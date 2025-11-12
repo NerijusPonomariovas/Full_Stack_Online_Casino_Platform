@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { NavLink, Link } from "react-router-dom";
+import { NavLink, Link, useLocation } from "react-router-dom";
 import logo from "../assets/logo.png";
 import "./Navbar.css";
 
@@ -12,6 +12,13 @@ import icAccount from "../assets/account.png";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
+  const location = useLocation();
+
+    const authLink = (value: "login" | "register") => {
+    const params = new URLSearchParams(location.search);
+    params.set("auth", value);
+    return `${location.pathname}?${params.toString()}`;
+  };
 
   return (
     <nav className="nvb">

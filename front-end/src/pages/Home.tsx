@@ -17,7 +17,7 @@ export default function Home() {
   const navigate = useNavigate();
   const [showLogin, setShowLogin] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
-    useEffect(() => {
+  useEffect(() => {
     const auth = searchParams.get("auth");
     setShowLogin(auth === "login");
     setShowRegister(auth === "register");
@@ -38,7 +38,6 @@ export default function Home() {
       <section className="featured">
         <div className="featured__hdr">
           <h2>FEATURED GAMES</h2>
-          {/* jei prireiks rodyklei vėliau – čia vieta */}
         </div>
 
         <div className="games">
