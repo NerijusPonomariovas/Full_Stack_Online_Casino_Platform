@@ -15,7 +15,7 @@ export default function BettingPanel({ children }: BettingPanelProps) {
     <div className="w-full sm:w-[90%] md:w-6xl mx-auto mt-18 flex flex-col drop-shadow-2xl">
       <div className="flex flex-col md:flex-row">
         {/* LEFT PANEL */}
-        <div className="w-full md:w-64 bg-[#1c5ec3] text-white rounded-tl-4xl p-4 space-y-3 md:h-105">
+        <div className="w-full md:w-64 bg-[#1c5ec3] text-white rounded-tl-4xl p-4 space-y-3 md:h-130">
           {/* Toggle Manual / Auto */}
           <div className="flex bg-[#102c56] rounded-4xl overflow-hidden h-12 w-full items-center pl-1 pr-1">
             <button

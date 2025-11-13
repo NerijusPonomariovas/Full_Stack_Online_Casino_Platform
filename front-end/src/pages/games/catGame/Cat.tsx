@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import "./cat.css";
-import Login from "../Login";
-import Register from "../Register";
-import BettingPanel from "./gameComponents/BettingPanel";
+import "./BettingPanel.css";
+import Login from "../../Login";
+import Register from "../../Register";
+import BettingPanel from "../gameComponents/BettingPanel";
+import Cat from "./CatGame";
 
 // png imports
 export default function Home() {
@@ -25,7 +26,7 @@ export default function Home() {
     <main className="home flex">
       <div className="flex justify-center items-center w-screen h-150">
         <div>
-          <BettingPanel>Game</BettingPanel>
+          <BettingPanel><Cat></Cat></BettingPanel>
         </div>
       </div>
       {/* LOGIN MODAL */}

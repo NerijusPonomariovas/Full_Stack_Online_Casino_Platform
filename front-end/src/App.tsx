@@ -7,7 +7,7 @@ import Home from './pages/Home'
 import Navbar from './components/Navbar'
 import { lazy, Suspense } from "react";
 
-const Cat = lazy(() => import("./pages/games/Cat.tsx"));
+const Cat = lazy(() => import("./pages/games/catGame/Cat.tsx"));
 
 
 function App() {
