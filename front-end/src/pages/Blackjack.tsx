@@ -161,6 +161,7 @@ export default function Home() {
 
   return (  
     <main className="home">
+      <BettingPanel>
         <h1 className="text-4x1 text-center mb-4">BlackJack</h1>
         {gameOver && (<div className={`text-white ${result.type === "player" ? "bg-green-600": "bg-red-700"} font-bold rounded-md text-center mt-4 py-4`}>
             <h2 className="text-2xl">{result.message}</h2>
@@ -186,7 +187,7 @@ export default function Home() {
                 handValue={dealerValue}/>
             </div>
         </div>
-        
+      </BettingPanel>
       {/* LOGIN MODAL */}
       {showLogin && (
         <div className="modal" role="dialog" aria-modal="true" aria-labelledby="login-title">
