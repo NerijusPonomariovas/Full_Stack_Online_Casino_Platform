@@ -1,9 +1,8 @@
 import React from "react";
 import Card from "./Card";
-import { CardSim } from "lucide-react";
 
 interface HandProps {
-    cards: any[];        // <-- zmień na konkretny typ jeśli masz strukturę kart
+    cards: any[];        
     title: string;
     handValue: number;
 }
