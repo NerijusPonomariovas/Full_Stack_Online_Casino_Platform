@@ -6,7 +6,7 @@ import Register from "./Register";
 // @ts-ignore
 import { combinations } from "../assets/CardDeck";
 import Hand from "../components/Hand";
-import { PlaySquare } from "lucide-react";
+import BettingPanel from "../components/BettingPanel";
 
 type CardDeck = {
     suit: string;
