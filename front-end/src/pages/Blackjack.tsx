@@ -40,6 +40,7 @@ export default function Home() {
   const [gameOver, setGameOver] = useState(false);
   const [result, setResult] = useState<{ type: string; message: string }>({type: "",message:""});
   const [newGame, setNewGame] = useState(false);
+  const [dealerRevealed, setDealerRevealed] = useState(false);
   //console.log(gameDeck);
   const getRandomCardFromDeck=()=>{
     const randomIndex = Math.floor(Math.random() * gameDeck.length);
@@ -66,6 +67,7 @@ export default function Home() {
   };
 
   const playerStand= () =>{
+    setDealerRevealed(true);
     setGameOver(true);
     const newHand = [...dealerHand, getRandomCardFromDeck()];
     setDealerHand(newHand);
@@ -81,7 +83,7 @@ export default function Home() {
     let value = 0;
     let aceCount = 0;
     hand.forEach((card: CardDeck) => {
-        if(card.rank ==="J" || card.rank == "Q" || card.rank ===  "K"){
+        if(card.rank ==="J" || card.rank == "D" || card.rank ===  "K"){
             value += 10
         }
         else if(card.rank === "A"){
@@ -112,16 +114,22 @@ export default function Home() {
     setResult({type: "", message: ""}); 
     setNewGame(false);
     setGameDeck(combinations);
+    setDealerRevealed(false);
   }
 
   const playerValue = calculateHandValue(playerHand);
   const dealerValue = calculateHandValue(dealerHand);
 
+    const dealerVisibleValue = dealerRevealed
+    ? dealerValue
+    : calculateHandValue(dealerHand.slice(1));
+
   useEffect(()=>{
     if(playerHand.length === 0 && dealerHand.length === 0)
     {
       setPlayerHand([getRandomCardFromDeck(), getRandomCardFromDeck()])
-      setDealerHand([getRandomCardFromDeck()])
+      setDealerHand([getRandomCardFromDeck(), getRandomCardFromDeck()])
+      setDealerRevealed(false);
     }
     if(playerValue === 21)
     {
@@ -161,7 +169,6 @@ export default function Home() {
 
   return (  
     <main className="home">
-      <BettingPanel>
         <h1 className="text-4x1 text-center mb-4">BlackJack</h1>
         {gameOver && (<div className={`text-white ${result.type === "player" ? "bg-green-600": "bg-red-700"} font-bold rounded-md text-center mt-4 py-4`}>
             <h2 className="text-2xl">{result.message}</h2>
@@ -184,10 +191,12 @@ export default function Home() {
               <Hand 
                 cards={dealerHand} 
                 title="Dealer's Hand" 
-                handValue={dealerValue}/>
+                handValue={dealerVisibleValue}
+                hideFirstCard = {!dealerRevealed}
+                />
+                
             </div>
         </div>
-      </BettingPanel>
       {/* LOGIN MODAL */}
       {showLogin && (
         <div className="modal" role="dialog" aria-modal="true" aria-labelledby="login-title">
