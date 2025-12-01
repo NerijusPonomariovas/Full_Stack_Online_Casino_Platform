@@ -2,10 +2,14 @@ import * as THREE from "three";
 import { metadata as rows } from "./Map";
 import { player, position } from "./Player";
 
-const resultDOM = document.getElementById("result-container");
-const finalScoreDOM = document.getElementById("final-score");
+let resultDOM: HTMLElement | null = null;
+let finalScoreDOM: HTMLElement | null = null;
 
 export function hitTest() {
+  if (!resultDOM) resultDOM = document.getElementById("result-container");
+  if (!finalScoreDOM) finalScoreDOM = document.getElementById("final-score");
+  if (!resultDOM || !finalScoreDOM) return;
+
   const row = rows[position.currentRow - 1];
   if (!row) return;
 

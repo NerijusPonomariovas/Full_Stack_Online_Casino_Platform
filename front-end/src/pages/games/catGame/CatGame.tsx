@@ -61,7 +61,7 @@ export default function Cat() {
   }, []);
 
   return (
-    <div>
+    <div className="w-full h-full">
       <canvas className="game"></canvas>
       <div id="controls">
         <div>
@@ -72,6 +72,13 @@ export default function Cat() {
         </div>
       </div>
       <div id="score">0</div>
+      <div id="result-container">
+        <div id="result">
+          <h1>Game Over!</h1>
+          <p>Score: <span id="final-score">0</span></p>
+          <button id="retry">Retry</button>
+        </div>
+      </div>
     </div>
   );
 }

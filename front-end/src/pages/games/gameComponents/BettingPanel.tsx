@@ -12,10 +12,11 @@ export default function BettingPanel({ children }: BettingPanelProps) {
   const [betAmount, setBetAmount] = useState<number | null>(null);
 
   return (
-    <div className="w-full sm:w-[90%] md:w-6xl mx-auto mt-18 flex flex-col drop-shadow-2xl">
+    //fix responsiveness when width smaller than 768px atleast, nu krc navbar'as uzdengia puse betting menu :)
+    <div className="w-full sm:w-[90%] md:w-6xl relative xl:mt-30 flex flex-col drop-shadow-2xl">
       <div className="flex flex-col md:flex-row">
         {/* LEFT PANEL */}
-        <div className="w-full md:w-64 bg-[#1c5ec3] text-white rounded-tl-4xl p-4 space-y-3 md:h-130">
+        <div className="w-full md:w-64 bg-[#1c5ec3] text-white rounded-tl-4xl p-4 space-y-3 sm:h-130">
           {/* Toggle Manual / Auto */}
           <div className="flex bg-[#102c56] rounded-4xl overflow-hidden h-12 w-full items-center pl-1 pr-1">
             <button
@@ -135,14 +136,14 @@ export default function BettingPanel({ children }: BettingPanelProps) {
         </div>
 
         {/* RIGHT PANEL */}
-        <div className="bg-[#184890] relative w-full md:w-[78%] rounded-tr-2xl md:rounded-tr-4xl min-h-[200px] md:min-h-[400px] flex items-center justify-center">
+        <div className="bg-[#184890] relative w-full md:w-[78%] xl:rounded-tr-4xl min-h-[200px] md:min-h-[400px] flex items-center justify-center">
           {/* Your visual / graph / game area goes here */}
           {children}
         </div>
       </div>
 
       {/* BOTTOM PANEL */}
-      <div className="w-full bg-[#10305f] h-24 rounded-b-2xl md:rounded-b-4xl flex items-center justify-center text-gray-300 text-sm">
+      <div className="w-full bg-[#10305f] h-24 rounded-b-4xl flex items-center justify-center text-gray-300 text-sm">
         Cataris
       </div>
     </div>

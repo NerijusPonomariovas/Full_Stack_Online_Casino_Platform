@@ -26,7 +26,11 @@ export default function Home() {
     <main className="home flex">
       <div className="flex justify-center items-center w-screen h-150">
         <div>
-          <BettingPanel><Cat></Cat></BettingPanel>
+          <BettingPanel>
+            <div id="game-container" className="w-full h-full sm:rounded-none xl:rounded-tr-2xl">
+              <Cat />
+            </div>
+          </BettingPanel>
         </div>
       </div>
       {/* LOGIN MODAL */}
