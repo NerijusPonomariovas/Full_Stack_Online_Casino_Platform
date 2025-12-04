@@ -25,9 +25,9 @@ export default function Home() {
   return (  
     <main className="home flex">
       <div className="flex justify-center items-center w-screen h-150">
-        <div>
+        <div className="w-full justify-center items-center flex">
           <BettingPanel>
-            <div id="game-container" className="w-full h-full sm:rounded-none xl:rounded-tr-2xl">
+            <div id="game-container" className="w-full h-full sm:rounded-none md:rounded-tr-2xl">
               <Cat />
             </div>
           </BettingPanel>

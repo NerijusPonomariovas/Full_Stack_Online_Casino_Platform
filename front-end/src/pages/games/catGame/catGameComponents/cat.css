@@ -112,7 +112,6 @@ canvas.game {
 
 /* Responsive rules */
 @media (max-width: 1024px) {
-  #game-container { height: min(60vh, 640px); }
   #controls { bottom: 12px; left: 12px; }
   #controls button { font-size: 15px; padding: 8px; }
 }
