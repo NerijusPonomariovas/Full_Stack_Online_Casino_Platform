@@ -41,6 +41,11 @@ export default function Home() {
   const [result, setResult] = useState<{ type: string; message: string }>({type: "",message:""});
   const [newGame, setNewGame] = useState(false);
   const [dealerRevealed, setDealerRevealed] = useState(false);
+  const [hasPair, setHasPair] = useState(false)
+  const [isSplit, setIsSplit] = useState(false);
+  const [leftHand, setLeftHand] = useState<CardDeck[]>([]);
+  const [rightHand, setRightHand] = useState<CardDeck[]>([]);
+  const [activeHand, setActiveHand] = useState<"left" | "right">("left");
   //console.log(gameDeck);
   const getRandomCardFromDeck=()=>{
     const randomIndex = Math.floor(Math.random() * gameDeck.length);
@@ -79,19 +84,30 @@ export default function Home() {
         handleGamerOver({type: "player", message: "Player wins"});
     }
   }
+  const getCardValue = (card: CardDeck) =>{
+    if(card.rank === "D" || card.rank === "J" || card.rank === "K")
+    {
+      return 10;
+    }
+    else if(card.rank === "A")
+    {
+      return 11;
+    }
+    else 
+    {
+      return parseInt(card.rank, 10);
+    }
+  }
+
   const calculateHandValue = (hand: CardDeck[]) =>{
     let value = 0;
     let aceCount = 0;
     hand.forEach((card: CardDeck) => {
-        if(card.rank ==="J" || card.rank == "D" || card.rank ===  "K"){
-            value += 10
-        }
-        else if(card.rank === "A"){
-            aceCount+=1; value += 11
-        } 
-        else{
-            value +=parseInt(card.rank)
-        }
+      value += getCardValue(card);
+      if(card.rank === "A")
+      {
+        aceCount +=1;
+      }
     });
     while(value > 21 && aceCount > 0)
     {
@@ -166,6 +182,26 @@ export default function Home() {
       }
     }
   },[playerHand, dealerHand, gameOver]);
+
+  useEffect(() => {
+    if(playerHand.length === 2)
+    {
+      const firstHandValue = getCardValue(playerHand[0]);
+      const secondHandValue = getCardValue(playerHand[1]);
+      if(firstHandValue === secondHandValue) {
+        setHasPair(false);
+        console.log("Player has a pair");
+      }
+      else
+      {
+        setHasPair(false);
+      }
+    } 
+    else
+    {
+      setHasPair(false);
+    }
+  }, [playerHand]);
 
   return (  
     <main className="home">
