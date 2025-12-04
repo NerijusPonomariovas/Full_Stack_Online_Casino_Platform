@@ -14,15 +14,15 @@ export function generateRows(amount: number): Row[] {
 function generateRow(): Row {
   const type: RowType = randomElement(["car", "truck", "forest"]);
   if (type === "car") return generateCarLaneMetadata();
-  if (type === "truck") return generateTruckLaneMetadata();
-  return generateForesMetadata();
+  /* if (type === "truck") */ return generateTruckLaneMetadata();
+  //return generateForestMetadata();
 }
 
 function randomElement<T>(array: T[]): T {
   return array[Math.floor(Math.random() * array.length)];
 }
 
-function generateForesMetadata(): Row {
+/* function generateForestMetadata(): Row {
   const occupiedTiles = new Set<number>();
   const trees = Array.from({ length: 4 }, () => {
     let tileIndex;
@@ -37,10 +37,10 @@ function generateForesMetadata(): Row {
   });
 
   return { type: "forest", trees };
-}
+} */
 
 function generateCarLaneMetadata(): Row {
-  const direction = randomElement([true, false]);
+  const direction = true;
   const speed = randomElement([125, 156, 188]);
 
   const occupiedTiles = new Set<number>();
@@ -68,7 +68,7 @@ function generateCarLaneMetadata(): Row {
 }
 
 function generateTruckLaneMetadata(): Row {
-  const direction = randomElement([true, false]);
+  const direction = true;
   const speed = randomElement([125, 156, 188]);
 
   const occupiedTiles = new Set<number>();

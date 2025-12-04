@@ -88,5 +88,12 @@ export function stepCompleted() {
   if (position.currentRow > rows.length - 10) addRows();
 
   const scoreDOM = document.getElementById("score");
-  if (scoreDOM) scoreDOM.innerText = position.currentRow.toString();
+  if (!scoreDOM) return;
+  
+  const score = Number(scoreDOM.innerText) || 0;
+  
+  if (position.currentRow > score) {
+    scoreDOM.innerText = position.currentRow.toString();
+  }
+
 }

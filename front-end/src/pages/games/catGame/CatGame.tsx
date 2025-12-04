@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import * as THREE from "three";
 import { Renderer } from "./catGameComponents/Renderer";
 import { Camera } from "./catGameComponents/Camera";
-import { player, initializePlayer } from "./catGameComponents/Player";
+import { player, initializePlayer, position } from "./catGameComponents/Player";
 import { map, initializeMap } from "./catGameComponents/Map";
 import { DirectionalLight } from "./catGameComponents/DirectionalLight";
 import { animateVehicles } from "./catGameComponents/animateVehicles";
@@ -25,11 +25,11 @@ export default function Cat() {
     dirLight.target = player;
     player.add(dirLight);
 
-    const camera = Camera();
-    player.add(camera);
-
     const scoreDOM = document.getElementById("score");
     const resultDOM = document.getElementById("result-container");
+
+    const camera = Camera();
+    //player.add(camera);
 
     function initializeGame() {
       initializePlayer();
@@ -46,6 +46,25 @@ export default function Cat() {
       animateVehicles();
       animatePlayer();
       hitTest();
+
+      if (position.currentRow >= 4) {
+      // Example offsets; adjust to taste
+      const offsetX = 200;
+      const offsetY = 0; // behind the player
+      const offsetZ = 150;  // above the player
+
+      camera.position.set(
+        player.position.x + offsetX,
+        player.position.y + offsetY,
+        player.position.z + offsetZ
+      );
+      camera.lookAt(player.position.x, player.position.y, player.position.z);
+      } else {
+        camera.up.set(0,0,1);
+        camera.lookAt(0,168,0);
+        camera.position.set(200, 168, 150);
+      }
+
       renderer.render(scene, camera);
     };
 

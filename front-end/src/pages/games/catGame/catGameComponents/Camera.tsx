@@ -1,7 +1,7 @@
 import * as THREE from "three";
 
 export function Camera() {
-  const size = 200;
+  const size = 180;
   const viewRatio = window.innerWidth / window.innerHeight;
   const width = viewRatio < 1 ? size : size * viewRatio;
   const height = viewRatio < 1 ? size / viewRatio : size;
@@ -16,7 +16,7 @@ export function Camera() {
   );
 
   camera.up.set(0, 0, 1);
-  camera.position.set(200, 0, 100);
+  camera.position.set(200, 0, 150);
   camera.lookAt(0, 0, 0);
 
   return camera;
