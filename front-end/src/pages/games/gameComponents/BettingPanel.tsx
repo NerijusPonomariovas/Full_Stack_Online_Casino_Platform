@@ -13,8 +13,8 @@ export default function BettingPanel({ children }: BettingPanelProps) {
 
   return (
     //fix responsiveness when width smaller than 768px atleast, nu krc navbar'as uzdengia puse betting menu :)
-    <div className="w-[95%] sm:w-[95%] md:ml-0 lg:w-5xl xl:w-6xl relative mt-110 md:mt-60 flex flex-col drop-shadow-2xl ">
-      <div className="flex flex-col md:flex-row h-178">
+    <div className="w-[95%] sm:w-[95%] md:ml-0 xl:w-6xl relative mt-110 md:mt-30 flex flex-col drop-shadow-2xl ">
+      <div className="flex flex-col md:flex-row h-140">
         {/* LEFT PANEL */}
         <div className="w-full md:w-64 bg-[#1c5ec3] text-white rounded-t-4xl p-4 space-y-3 md:rounded-tr-none">
           {/* Toggle Manual / Auto */}
@@ -143,7 +143,7 @@ export default function BettingPanel({ children }: BettingPanelProps) {
       </div>
 
       {/* BOTTOM PANEL */}
-      <div className="w-full bg-[#10305f] h-24 rounded-b-4xl flex items-center justify-center text-gray-300 text-sm relative mt-44 md:mt-0">
+      <div className="w-full bg-[#10305f] h-24 rounded-b-4xl flex items-center justify-center text-gray-300 text-sm relative mt-82 md:mt-0">
         Cataris
       </div>
     </div>

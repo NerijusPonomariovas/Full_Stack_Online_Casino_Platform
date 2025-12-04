@@ -11,12 +11,12 @@ export function Camera() {
     width / 2, // right
     height / 2, // top
     height / -2, // bottom
-    100, // near
-    900 // far
+    0, // near
+    1280 // far
   );
 
   camera.up.set(0, 0, 1);
-  camera.position.set(0, -350, 300);
+  camera.position.set(200, 0, 100);
   camera.lookAt(0, 0, 0);
 
   return camera;

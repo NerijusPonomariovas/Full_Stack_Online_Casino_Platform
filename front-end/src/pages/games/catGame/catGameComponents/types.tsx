@@ -28,4 +28,4 @@ export type Row =
       }[];
     };
 
-export type MoveDirection = "forward" | "backward" | "left" | "right";
+export type MoveDirection = "forward" | "backward" /* | "left" | "right" */;

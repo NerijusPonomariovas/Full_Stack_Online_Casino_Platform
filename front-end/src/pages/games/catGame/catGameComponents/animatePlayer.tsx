@@ -33,8 +33,8 @@ function setPosition(progress: number) {
   let endX = startX;
   let endY = startY;
 
-  if (movesQueue[0] === "left") endX -= tileSize;
-  if (movesQueue[0] === "right") endX += tileSize;
+/*   if (movesQueue[0] === "left") endX -= tileSize;
+  if (movesQueue[0] === "right") endX += tileSize; */
   if (movesQueue[0] === "forward") endY += tileSize;
   if (movesQueue[0] === "backward") endY -= tileSize;
 
@@ -46,8 +46,8 @@ function setPosition(progress: number) {
 function setRotation(progress: number) {
   let endRotation = 0;
   if (movesQueue[0] == "forward") endRotation = 0;
-  if (movesQueue[0] == "left") endRotation = Math.PI / 2;
-  if (movesQueue[0] == "right") endRotation = -Math.PI / 2;
+/*   if (movesQueue[0] == "left") endRotation = Math.PI / 2;
+  if (movesQueue[0] == "right") endRotation = -Math.PI / 2; */
   if (movesQueue[0] == "backward") endRotation = Math.PI;
 
   player.children[0].rotation.z = THREE.MathUtils.lerp(

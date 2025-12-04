@@ -81,8 +81,8 @@ export function stepCompleted() {
 
   if (direction === "forward") position.currentRow += 1;
   if (direction === "backward") position.currentRow -= 1;
-  if (direction === "left") position.currentTile -= 1;
-  if (direction === "right") position.currentTile += 1;
+/*   if (direction === "left") position.currentTile -= 1;
+  if (direction === "right") position.currentTile += 1; */
 
   // Add new rows if the player is running out of them
   if (position.currentRow > rows.length - 10) addRows();
