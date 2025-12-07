@@ -5,6 +5,8 @@ import AppLayout from "./layout/AppLayout";
 import Dashboard from './pages/admin/Dashboard'
 import Home from './pages/Home'
 import Games from './pages/Games';
+import Promotions from './pages/promotion';
+
 
 
 
@@ -16,6 +18,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/games" element={<Games />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/promotions" element={<Promotions />} />
         </Route>
       </Routes>
     </BrowserRouter>
