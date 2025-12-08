@@ -71,16 +71,17 @@
   aspect-ratio: 1;
   background: #17325c;
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: center;
   overflow: hidden;
   border-bottom: none;
   padding: 0;
+  border-radius: 12px 12px 0 0; /* Add rounded top corners */
 }
 
 .promocard__img img {
-  width: 100%;
-  height: 100%;
+  width: 80%;
+  height: 80%;
   object-fit: contain;
   transition: transform 0.2s ease;
 }
@@ -97,6 +98,7 @@
   gap: 6px;
   flex: 1;
   background: rgba(15, 37, 53, 0.8);
+  border-radius: 0 0 12px 12px; /* Add rounded bottom corners */
 }
 
 .promocard__title {
