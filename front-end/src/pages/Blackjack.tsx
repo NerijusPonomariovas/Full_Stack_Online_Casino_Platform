@@ -139,7 +139,6 @@ export default function Home() {
   };
 
   const resetGame = () => {
-    setGameStarted(true);
     setPlayerHand([]);
     setDealerHand([]);
     setGameOver(false);
@@ -258,18 +257,18 @@ export default function Home() {
                     {/* HIT */}
                     <button
                       className={`w-24 h-12 flex items-center justify-center text-white font-semibold rounded-lg shadow-md
-      bg-green-500 ${!gameStarted ? "opacity-40 cursor-not-allowed" : ""}`}
+      bg-green-500 ${!canHit ? "opacity-40 cursor-not-allowed" : ""}`}
                       onClick={dealCardToPlayer}
-                      disabled={!gameStarted}
+                      disabled={!canHit}
                     >
                       Hit
                     </button>
                     {/* STAND */}
                     <button
                       className={`w-24 h-12 flex items-center justify-center text-white font-semibold rounded-lg shadow-md
-      bg-red-500 ${!gameStarted ? "opacity-40 cursor-not-allowed" : ""}`}
+      bg-red-500 ${!canStand ? "opacity-40 cursor-not-allowed" : ""}`}
                       onClick={playerStand}
-                      disabled={!gameStarted}
+                      disabled={!canStand}
                     >
                       Stand
                     </button>
