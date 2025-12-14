@@ -1,7 +1,7 @@
 .games-container {
   padding: 60px 80px;
   background: linear-gradient(180deg, #0A1F3D 0%, #1E3A5F 100%);
-  min-height: 100vh;
+  min-height: 100dvh;
 }
 
 .games-header {
