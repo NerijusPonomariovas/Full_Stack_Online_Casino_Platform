@@ -6,7 +6,7 @@ import Register from "./Register";
 // @ts-ignore
 import { combinations } from "../assets/CardDeck";
 import Hand from "../components/Hand";
-import BettingPanel from "../components/BettingPanel";
+import BettingPanel from "../components/BettingPanelBlackJack";
 import banner from "../assets/BANNER.svg";
 import cardDeck from "../assets/DECK-CARDS.svg";
 
@@ -41,7 +41,9 @@ export default function Home() {
   const [gameDeck, setGameDeck] = useState<CardDeck[]>(combinations);
   const [playerHand, setPlayerHand] = useState<CardDeck[]>([]);
   const [dealerHand, setDealerHand] = useState<CardDeck[]>([]);
+  const [betAmount, setBetAmount] = useState<number | null>(null);
   const [gameOver, setGameOver] = useState(false);
+  const [gameStarted, setGameStarted] = useState(false);
   const [result, setResult] = useState<{ type: string; message: string }>({
     type: "",
     message: "",
@@ -53,6 +55,7 @@ export default function Home() {
   const [leftHand, setLeftHand] = useState<CardDeck[]>([]);
   const [rightHand, setRightHand] = useState<CardDeck[]>([]);
   const [activeHand, setActiveHand] = useState<"left" | "right">("left");
+
 
   const getRandomCardFromDeck = () => {
     const randomIndex = Math.floor(Math.random() * gameDeck.length);
@@ -118,7 +121,25 @@ export default function Home() {
     }
   };
 
+  const startGame = () => {
+    if (betAmount && betAmount > 0) {
+      setGameStarted(true);
+      setPlayerHand([]);
+      setDealerHand([]);
+      setGameOver(false);
+      setResult({ type: "", message: "" });
+      setNewGame(false);
+      setGameDeck(combinations);
+      setDealerRevealed(false);
+    }
+    else
+    {
+      alert("Pleace place a bet before starting a game!");
+    }
+  };
+
   const resetGame = () => {
+    setGameStarted(true);
     setPlayerHand([]);
     setDealerHand([]);
     setGameOver(false);
@@ -143,7 +164,7 @@ export default function Home() {
           ? "lose"
           : result.message === "Draw"
             ? "tie"
-          : "neutral"
+            : "neutral"
       : "neutral";
 
   useEffect(() => {
@@ -202,7 +223,7 @@ export default function Home() {
     <main className="home">
       <div className="flex w-screen min-h-screen justify-center items-start">
         <div className="w-full flex justify-center">
-          <BettingPanel>
+          <BettingPanel betAmount={betAmount} setBetAmount={setBetAmount} startGame={startGame} gameOver={gameOver} gameStarted={gameStarted}>
             <div className="w-full h-full sm:rounded-none md:rounded-tr-2xl relative">
               <img
                 src={cardDeck}
@@ -237,18 +258,18 @@ export default function Home() {
                     {/* HIT */}
                     <button
                       className={`w-24 h-12 flex items-center justify-center text-white font-semibold rounded-lg shadow-md
-      bg-green-500 ${!canHit ? "opacity-40 cursor-not-allowed" : ""}`}
+      bg-green-500 ${!gameStarted ? "opacity-40 cursor-not-allowed" : ""}`}
                       onClick={dealCardToPlayer}
-                      disabled={!canHit}
+                      disabled={!gameStarted}
                     >
                       Hit
                     </button>
                     {/* STAND */}
                     <button
                       className={`w-24 h-12 flex items-center justify-center text-white font-semibold rounded-lg shadow-md
-      bg-red-500 ${!canStand ? "opacity-40 cursor-not-allowed" : ""}`}
+      bg-red-500 ${!gameStarted ? "opacity-40 cursor-not-allowed" : ""}`}
                       onClick={playerStand}
-                      disabled={!canStand}
+                      disabled={!gameStarted}
                     >
                       Stand
                     </button>
@@ -265,8 +286,7 @@ export default function Home() {
                     >
                       Double
                     </button>
-
-                    {/* RESET */}
+                    {/* RESET 
                     <button
                       className={`w-24 h-12 flex items-center justify-center text-white font-semibold rounded-lg shadow-md
       bg-blue-500 ${!canReset ? "opacity-40 cursor-not-allowed" : ""}`}
@@ -275,6 +295,7 @@ export default function Home() {
                     >
                       Reset
                     </button>
+                    */}
                   </div>
                 </div>
               </div>

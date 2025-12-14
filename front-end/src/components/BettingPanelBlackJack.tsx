@@ -2,13 +2,17 @@ import { useState, type ReactNode } from "react";
 
 type BettingPanelProps = {
   children?: ReactNode;
+  betAmount: number | null;
+  setBetAmount: (amount: number | null) => void;
+  startGame: () => void;
+  gameOver: boolean;
+  gameStarted: boolean;
 };
 
-export default function BettingPanel({ children }: BettingPanelProps) {
+export default function BettingPanel({ children, betAmount, setBetAmount, startGame, gameOver}: BettingPanelProps) {
   const [mode, setMode] = useState("manual");
-  const [showDifficulty] = useState(true);
-  const [difficulty, setDifficulty] = useState("Medium");
-  const [betAmount, setBetAmount] = useState<number | null>(null);
+
+  const isGoButtonActive = betAmount !== null && betAmount > 0 && !gameOver;
 
   return (
     <div className="w-full sm:w-[90%] max-w-6xl mx-auto flex flex-col drop-shadow-2xl">
@@ -33,7 +37,7 @@ export default function BettingPanel({ children }: BettingPanelProps) {
             >
               Auto
             </button>
-          </div>
+          </div>  
 
           {/* Bet Amount */}
           <div>
@@ -91,30 +95,18 @@ export default function BettingPanel({ children }: BettingPanelProps) {
             </div>
           </div>
 
-          {/* Difficulty */}
-          {showDifficulty && (
-            <div>
-              <label className="text-sm text-gray-200">Difficulty</label>
-              <div className="bg-[#184890] mt-1 p-0.5 rounded-md">
-                <select
-                  value={difficulty}
-                  onChange={(e) => setDifficulty(e.target.value)}
-                  className="w-full bg-[#0a2e6e] p-2 rounded-sm focus:outline-none"
-                >
-                  <option>Easy</option>
-                  <option>Medium</option>
-                  <option>Hard</option>
-                </select>
-              </div>
-            </div>
-          )}
-
           {/* Bet / Go */}
           <div className="flex flex-col sm:flex-row gap-2 mt-3">
             <button className="flex-1 bg-[#2cbf2a] py-2 rounded-lg text-black font-semibold hover:bg-[#33de30]">
               Bet
             </button>
-            <button className="flex-1 bg-[#154a9b] py-2 rounded-lg text-[#2874e9] shadow-md">
+            <button className={`flex-1 py-2 rounded-lg text-[#2874e9] shadow-md font-semibold transition duration-300 ease-in-out ${
+                isGoButtonActive
+                  ? "bg-[#154a9b] hover:bg-[#1e69c6]" // Active: Brighter on hover
+                  : "bg-[#154a9b] opacity-50 cursor-not-allowed" // Disabled: Darker, not clickable
+              }`}
+              onClick={startGame}
+              disabled={!isGoButtonActive}>
               Go
             </button>
           </div>
