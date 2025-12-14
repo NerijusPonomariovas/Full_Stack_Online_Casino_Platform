@@ -7,10 +7,11 @@ import Register from "./Register";
 
 // Paveiksliukai (keisk kelius/pavadinimus pagal save)
 import hero from "../assets/home/hero.jpg";
-import imgCat from "../assets/home/game-cat.png";
-import imgMice from "../assets/home/game-mice.png";
-import imgTreat from "../assets/home/game-treat.png";
-import imgMeow from "../assets/home/game-meowjack.png";
+import gameCat from '../assets/games/game-cat.png';
+import gameMice from '../assets/games/game-mice.png';
+import gameTreat from '../assets/games/game-treat.png';
+import gameMeowJack from '../assets/games/game-meowjack.png';
+
 
 export default function Home() {
   const [searchParams] = useSearchParams();
@@ -42,19 +43,19 @@ export default function Home() {
 
         <div className="games">
           <Link to="/games/cat" className="gamecard" aria-label="Play CAT">
-            <img src={imgCat} alt="CAT game" />
+            <img src={gameCat} alt="CAT game" />
           </Link>
 
           <Link to="/games/mice" className="gamecard" aria-label="Play MICE">
-            <img src={imgMice} alt="MICE game" />
+            <img src={gameMice} alt="MICE game" />
           </Link>
 
           <Link to="/games/treat" className="gamecard" aria-label="Play TREAT">
-            <img src={imgTreat} alt="TREAT game" />
+            <img src={gameTreat} alt="TREAT game" />
           </Link>
 
           <Link to="/games/meow-jack" className="gamecard" aria-label="Play MEOW-JACK">
-            <img src={imgMeow} alt="MEOW-JACK game" />
+            <img src={gameMeowJack} alt="MEOW-JACK game" />
           </Link>
         </div>
       </section>

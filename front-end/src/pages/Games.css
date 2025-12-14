@@ -58,19 +58,20 @@
 }
 
 .game-image-wrapper {
-  position: relative;
   width: 100%;
-  aspect-ratio: 3/4;
-  overflow: hidden;
-  border-radius: 12px;
+  height: 100%;
+  overflow: hidden; /* Avoid overflow */
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .game-image {
+  /* Set the image size */
   width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  border-radius: 20px;
+  height: auto; /* Maintain aspect ratio */
+  object-fit: cover; /* Scale and crop to cover the container */
+  border-radius: 8px; /* Optional: Add rounded corners */
 }
 
 .game-multiplier {
