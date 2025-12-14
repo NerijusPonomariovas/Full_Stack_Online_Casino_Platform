@@ -57,7 +57,7 @@ namespace API.Controllers
                 token
             });
         }
-        [HttpPost("Register")]
+        [HttpPost("register")]
         public async Task<ActionResult> Register([FromBody]RegisterViewModel model)
         {
             if (!ModelState.IsValid)
