@@ -1,8 +1,7 @@
-import { useState } from "react";
-import type { ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 
 type BettingPanelProps = {
-  children?: ReactNode; // optional children
+  children?: ReactNode;
 };
 
 export default function BettingPanel({ children }: BettingPanelProps) {
@@ -12,10 +11,10 @@ export default function BettingPanel({ children }: BettingPanelProps) {
   const [betAmount, setBetAmount] = useState<number | null>(null);
 
   return (
-    <div className="w-full sm:w-[90%] md:w-6xl mx-auto mt-18 flex flex-col drop-shadow-2xl">
-      <div className="flex flex-col md:flex-row">
+    <div className="w-full sm:w-[90%] max-w-6xl mx-auto flex flex-col drop-shadow-2xl">
+      <div className="flex flex-col md:flex-row items-stretch">
         {/* LEFT PANEL */}
-        <div className="w-full md:w-64 bg-[#1c5ec3] text-white rounded-tl-4xl p-4 space-y-3 md:h-130">
+        <div className="w-full md:w-64 bg-[#1c5ec3] text-white rounded-tl-4xl p-4 space-y-3 flex-shrink-0">
           {/* Toggle Manual / Auto */}
           <div className="flex bg-[#102c56] rounded-4xl overflow-hidden h-12 w-full items-center pl-1 pr-1">
             <button
@@ -49,7 +48,6 @@ export default function BettingPanel({ children }: BettingPanelProps) {
                   )
                 }
                 className="w-full bg-[#102c56] p-2 rounded-l-sm text-left focus:outline-none"
-                placeholder=""
                 onKeyDown={(e) => {
                   const allowedKeys = [
                     "Backspace",
@@ -60,7 +58,7 @@ export default function BettingPanel({ children }: BettingPanelProps) {
                     "Enter",
                     "Home",
                     "End",
-                    ".", // allow decimals
+                    ".",
                   ];
                   if (!/[0-9]/.test(e.key) && !allowedKeys.includes(e.key)) {
                     e.preventDefault();
@@ -93,7 +91,7 @@ export default function BettingPanel({ children }: BettingPanelProps) {
             </div>
           </div>
 
-          {/* Conditional Difficulty Section */}
+          {/* Difficulty */}
           {showDifficulty && (
             <div>
               <label className="text-sm text-gray-200">Difficulty</label>
@@ -111,18 +109,17 @@ export default function BettingPanel({ children }: BettingPanelProps) {
             </div>
           )}
 
-          {/* Bet / Go Buttons */}
+          {/* Bet / Go */}
           <div className="flex flex-col sm:flex-row gap-2 mt-3">
             <button className="flex-1 bg-[#2cbf2a] py-2 rounded-lg text-black font-semibold hover:bg-[#33de30]">
               Bet
             </button>
-
             <button className="flex-1 bg-[#154a9b] py-2 rounded-lg text-[#2874e9] shadow-md">
               Go
             </button>
           </div>
 
-          {/* Profit Section */}
+          {/* Profit */}
           <div className="mt-3">
             <p className="text-xs text-white">Total profit (1.00x)</p>
             <input
@@ -134,9 +131,8 @@ export default function BettingPanel({ children }: BettingPanelProps) {
           </div>
         </div>
 
-        {/* RIGHT PANEL */}
-        <div className="bg-[#184890] relative w-full md:w-[78%] rounded-tr-2xl md:rounded-tr-4xl min-h-[200px] md:min-h-[400px] flex items-center justify-center">
-          {/* Your visual / graph / game area goes here */}
+        {/* RIGHT PANEL – STÓŁ */}
+        <div className="bg-[#184890] relative w-full md:w-[78%] rounded-tr-2xl md:rounded-tr-4xl min-h-[400px] flex items-center justify-center">
           {children}
         </div>
       </div>
