@@ -4,11 +4,10 @@ import React, {useState} from 'react'
 
 
 const Register: React.FC = () => {
-    const[name, setName] = useState<string>('');
+    const[username, setUsername] = useState<string>('');
     const[email, setEmail] = useState<string>('');
     const[password, setPassword] = useState<string>('');
     const[confirmPassword, setConfirmPassword] = useState<string>('');
-    const[roleName, setRoleName] = useState<string>('');
     const[error, setError] = useState<string>('');
 
     const navigate = useNavigate();
@@ -23,7 +22,7 @@ const Register: React.FC = () => {
         }
         try
         {
-            await register(name, email, password, confirmPassword, roleName);
+            await register(username, email, password, confirmPassword);
             console.log("User registered");
             navigate('/');
         }
@@ -42,8 +41,8 @@ const Register: React.FC = () => {
                         type='text'
                         placeholder='Name'
                         className='w-full p-2 border border-gray-300 rounded'
-                        value= {name}
-                        onChange={(e) => setName(e.target.value)}
+                        value= {username}
+                        onChange={(e) => setUsername(e.target.value)}
                         required />
                 </div>
                 <div className='mb-4'>
@@ -72,16 +71,6 @@ const Register: React.FC = () => {
                         value= {confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
                         required />
-                </div>
-                <div className='mb-4'>
-                    <select
-                    className='w-full p-2 border border-gray-300 rounded'
-                    value={roleName}
-                    onChange={(e) => setRoleName(e.target.value)}
-                    required>
-                        <option value="User">User</option>
-                        <option value="Admin">Admin</option>
-                    </select>
                 </div>
                 <button type='submit' className='w-full bg-blue-500 text0white py-2 rounded'>Register</button>
 

@@ -4,10 +4,10 @@ import { Route, Routes, BrowserRouter } from 'react-router-dom'
 import AppLayout from "./layout/AppLayout";
 import Dashboard from './pages/admin/Dashboard'
 import Home from './pages/Home'
-import BlackJack from './pages/blackjack'
+import BlackJack from './pages/Blackjack'
 import Games from './pages/Games';
 import Promotions from './pages/promotion';
-
+import Wallet from './pages/wallet';
 
 
 
@@ -21,6 +21,7 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/games/meow-jack" element={<BlackJack />} />
           <Route path="/promotions" element={<Promotions />} />
+          <Route path="/wallet" element={<Wallet/>}/>
         </Route>
       </Routes>
     </BrowserRouter>
