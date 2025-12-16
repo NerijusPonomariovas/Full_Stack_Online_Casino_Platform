@@ -79,7 +79,7 @@ export default function Navbar() {
 
         {/* Right */}
         <div className="nvb__actions">
-          {!isAuthenticated ? (
+          {isAuthenticated ? (
             <>
               <Link to={authLink("login")} className="btn btn--ghost">LOGIN</Link>
               <Link to={authLink("register")} className="btn btn--primary">REGISTER</Link>

@@ -1,5 +1,5 @@
 import axios from "axios";
-/*
+
 const API_URL = 'http://localhost:5054/api/Account';
 
 interface AuthResponse {
@@ -26,7 +26,6 @@ export const register = async (
     email: string,
     password: string,
     confirmPassword: string,
-    roles: string
     ): Promise<void> =>
     {
         try
@@ -35,8 +34,7 @@ export const register = async (
                 name,
                 email, 
                 password,
-                confirmPassword,
-                roles
+                confirmPassword
             });
             return response.data;
         }
@@ -48,8 +46,10 @@ export const register = async (
         localStorage.removeItem("token");
         localStorage.removeItem("user")
     }
-*/
 
+
+
+/*
 const API_URL = 'http://your-backend-api-url'; // Update this with your actual backend URL
 
 // Login API function
@@ -121,3 +121,4 @@ export const logout = (): void => {
   localStorage.removeItem('token');
   localStorage.removeItem('user');
 };
+*/
