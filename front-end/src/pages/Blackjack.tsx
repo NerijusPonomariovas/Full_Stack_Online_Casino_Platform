@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, replace, useFetcher, useNavigate, useSearchParams } from "react-router-dom";
-import "./Home.css";
+
 import Login from "./Login";
 import Register from "./Register";
 // @ts-ignore

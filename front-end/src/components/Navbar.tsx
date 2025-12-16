@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { NavLink, Link, useLocation } from "react-router-dom";
 import logo from "../assets/logo.png";
 import "./Navbar.css";
-
 import icHome from "../assets/house.png";
 import icGame from "../assets/game.png";
 import icTrophy from "../assets/trophy.png";
@@ -13,6 +12,7 @@ import icAccount from "../assets/account.png";
 type UserBalance = {
   balance: number;
 };
+
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
@@ -30,10 +30,11 @@ export default function Navbar() {
     }
   }, []);
 
+
   const fetchBalance = async () => {
     try {
       // Assuming your backend provides the balance in a GET request
-      const response = await fetch("http://your-backend-api-url/user/balance", {
+      const response = await fetch("/api/wallet/balance", {
         method: "GET",
         headers: {
           "Authorization": `Bearer ${localStorage.getItem('token')}`,
@@ -44,6 +45,13 @@ export default function Navbar() {
     } catch (error) {
       console.error("Failed to fetch balance:", error);
     }
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    setIsAuthenticated(false); // Update state after logout
+    console.log("User logged out successfully");
+    window.location.reload();
   };
 
   const authLink = (value: "login" | "register") => {
@@ -79,20 +87,25 @@ export default function Navbar() {
 
         {/* Right */}
         <div className="nvb__actions">
-          {isAuthenticated ? (
+          {!isAuthenticated ? (
             <>
               <Link to={authLink("login")} className="btn btn--ghost">LOGIN</Link>
               <Link to={authLink("register")} className="btn btn--primary">REGISTER</Link>
             </>
           ) : (
-            <Link to="/wallet" className="btn btn--primary">
-              ACCOUNT
-              {userBalance !== null && (
-                <span className="ml-2 text-sm font-semibold">
-                  ${userBalance.toFixed(2)} {/* Show the balance next to the Account label */}
-                </span>
-              )}
-            </Link>
+            <>
+              <Link to="/wallet" className="btn btn--primary">
+                ACCOUNT
+                {userBalance !== null && (
+                  <span className="ml-2 text-sm font-semibold">
+                    ${userBalance.toFixed(2)} {/* Show the balance next to the Account label */}
+                  </span>
+                )}
+              </Link>
+              <button onClick = {handleLogout}
+                className="btn btn--ghost ml-4">LOGOUT
+              </button>
+            </>
           )}
         </div>
       </div>
