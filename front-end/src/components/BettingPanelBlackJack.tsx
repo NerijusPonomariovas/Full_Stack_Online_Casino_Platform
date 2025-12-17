@@ -25,6 +25,8 @@ export default function BettingPanel({ children, betAmount, setBetAmount, startG
   const [mode, setMode] = useState("manual");
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null); // Error message state
+  const [betPlaced, setBetPlaced] = useState<boolean>(false); // Track if the bet is placed
+
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -59,6 +61,12 @@ export default function BettingPanel({ children, betAmount, setBetAmount, startG
 
   const isGoButtonActive = betAmount !== null && betAmount > 0 && !gameOver && betAmount <= balance;
 
+  const handleGoButtonClick = () => {
+    if (isGoButtonActive) {
+      startGame();
+      setBetPlaced(true); // Mark that the bet has been placed
+    }
+  };
 
   return (
     <div className="w-full sm:w-[90%] max-w-6xl mx-auto flex flex-col drop-shadow-2xl">
@@ -134,7 +142,7 @@ export default function BettingPanel({ children, betAmount, setBetAmount, startG
                   ? "bg-[#2cbf2a] hover:bg-[#33de30]" // Active: Brighter on hover
                   : "bg-[#2cbf2a] opacity-50 cursor-not-allowed" // Disabled: Darker, not clickable
               }`}
-              onClick={startGame}
+              onClick={handleGoButtonClick}
               disabled={!isGoButtonActive}>
               Go
             </button>
@@ -154,6 +162,14 @@ export default function BettingPanel({ children, betAmount, setBetAmount, startG
 
         {/* RIGHT PANEL – STÓŁ */}
         <div className="bg-[#184890] relative w-full md:w-[78%] rounded-tr-2xl md:rounded-tr-4xl min-h-[400px] flex items-center justify-center">
+          {!betPlaced && (
+            <div
+              className="absolute inset-0 flex items-center justify-center text-2xl font-bold text-white bg-[#184890] bg-opacity-70"
+              style={{ pointerEvents: "auto", zIndex: 10 }}
+            >
+              <div>Please place your bet to start the game.</div>
+            </div>
+          )}
           {children}
         </div>
       </div>
