@@ -1,6 +1,5 @@
 import * as THREE from "three";
 import { tilesPerRow, tileSize } from "./constants";
-import { StopBollard } from "./StopBollard";
 
 export function Grass({ rowIndex }: {rowIndex: number}) {
   const grass = new THREE.Group();

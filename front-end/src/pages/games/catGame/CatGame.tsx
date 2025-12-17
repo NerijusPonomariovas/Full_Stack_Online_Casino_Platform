@@ -44,8 +44,9 @@ export default function Cat() {
 
     const animate = () => {
       animateVehicles();
-      animatePlayer();
       hitTest();
+      animatePlayer();
+      
 
       if (position.currentRow >= 4) {
       // Example offsets; adjust to taste

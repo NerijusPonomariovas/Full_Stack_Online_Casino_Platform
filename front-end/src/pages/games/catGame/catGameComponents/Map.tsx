@@ -3,12 +3,10 @@ import * as THREE from "three";
 import { generateRows } from "./generateRows";
 import { Grass } from "./Grass";
 import { Road } from "./Road";
-import { Tree } from "./Tree";
 import { Car } from "./Car";
 import { Truck } from "./Truck";
 import { StopBollard } from "./StopBollard";
 import { tileSize } from "./constants";
-
 export const metadata: Row[] = [];
 
 export const updatedRows = new Set<number>();
@@ -37,17 +35,6 @@ export function addRows() {
 
   newMetadata.forEach((rowData, index) => {
     const rowIndex = startIndex + index + 1;
-
-    if (rowData.type === "forest") {
-      const row = Grass({rowIndex});
-
-      rowData.trees.forEach(({ tileIndex, height }) => {
-        const three = Tree(tileIndex, height);
-        row.add(three);
-      });
-
-      map.add(row);
-    }
 
     if (rowData.type === "car") {
       const row = Road(rowIndex);
@@ -83,6 +70,13 @@ export function addRows() {
   });
 }
 
+function hasVehicles(row: Row): row is (
+  | { type: "car"; direction: boolean; speed: number; vehicles: { initialTileIndex: number; color: THREE.ColorRepresentation; ref?: THREE.Object3D }[] }
+  | { type: "truck"; direction: boolean; speed: number; vehicles: { initialTileIndex: number; color: THREE.ColorRepresentation; ref?: THREE.Object3D }[] }
+) {
+  return row.type === "car" || row.type === "truck";
+}
+
 export function updateRow(rowData: any, rowIndex: number) {
   // Check if the row has already been updated
   if (updatedRows.has(rowIndex)) return;
@@ -92,7 +86,19 @@ export function updateRow(rowData: any, rowIndex: number) {
   if (existingRow) {
     map.remove(existingRow);  // Remove the existing row
   }
+  // Check if the row has vehicles before attempting to access `vehicles`
+  const row = metadata[rowIndex-1];
+  if (hasVehicles(row)) {
+  row.vehicles.forEach(vehicle => {
+    if(vehicle.ref){
+      map.remove(vehicle.ref);
+      vehicle.ref = undefined;
+      console.log("removed!");
+    }
+  });
+}
 
+  metadata[rowIndex-1].type = "stopBollard";
   // Create a new road row
   const newRow = Road(rowIndex);
 

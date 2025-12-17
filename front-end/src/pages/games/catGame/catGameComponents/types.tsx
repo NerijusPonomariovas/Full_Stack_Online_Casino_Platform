@@ -1,12 +1,11 @@
 import * as THREE from "three";
 
-export type RowType = "forest" | "car" | "truck";
+export type RowType = "car" | "truck" | "stopBollard";
 
 export type Row =
   | {
-      type: "forest";
-      trees: { tileIndex: number; height: number }[];
-    }
+    type: "stopBollard";
+  }
   | {
       type: "car";
       direction: boolean;

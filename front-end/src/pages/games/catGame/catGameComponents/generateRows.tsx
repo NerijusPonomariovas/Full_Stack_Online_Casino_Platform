@@ -12,7 +12,7 @@ export function generateRows(amount: number): Row[] {
 }
 
 function generateRow(): Row {
-  const type: RowType = randomElement(["car", "truck", "forest"]);
+  const type: RowType = randomElement(["car", "truck"]);
   if (type === "car") return generateCarLaneMetadata();
   /* if (type === "truck") */ return generateTruckLaneMetadata();
   //return generateForestMetadata();

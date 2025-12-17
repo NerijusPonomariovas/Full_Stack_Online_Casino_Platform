@@ -13,20 +13,21 @@ export function hitTest() {
   const row = rows[position.currentRow - 1];
   if (!row) return;
 
+  // Check if the row has vehicles (and if they are visible)
   if (row.type === "car" || row.type === "truck") {
     const playerBoundingBox = new THREE.Box3();
     playerBoundingBox.setFromObject(player);
 
     row.vehicles.forEach(({ ref }) => {
-      if (!ref) throw Error("Vehicle reference is missing");
+      if (!ref || !ref.visible) return;  // Skip invisible vehicles
 
       const vehicleBoundingBox = new THREE.Box3();
       vehicleBoundingBox.setFromObject(ref);
-
       if (playerBoundingBox.intersectsBox(vehicleBoundingBox)) {
         if (!resultDOM || !finalScoreDOM) return;
         resultDOM.style.visibility = "visible";
         finalScoreDOM.innerText = position.currentRow.toString();
+        console.log("hit!");
       }
     });
   }

@@ -3,6 +3,7 @@ import { endsUpInValidPosition } from "./endsUpInValidPosition";
 import { metadata as rows, addRows } from "./Map";
 import type { MoveDirection } from "./types";
 import { updateRow, updatedRows} from "./Map";
+import {hitTest} from "./hitTest";
 
 export const player = Player();
 
@@ -84,6 +85,7 @@ export function stepCompleted() {
   if (direction === "backward") position.currentRow -= 1;
 /*   if (direction === "left") position.currentTile -= 1;
   if (direction === "right") position.currentTile += 1; */
+  hitTest();
 
   // Add new rows if the player is running out of them
   if (position.currentRow > rows.length - 10) addRows();
