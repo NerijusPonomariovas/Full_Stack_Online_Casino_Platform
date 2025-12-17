@@ -6,18 +6,19 @@ import Register from "./Register";
 
 
 // Paveiksliukai (keisk kelius/pavadinimus pagal save)
-import hero from "../assets/home/hero.jpg";
-import imgCat from "../assets/home/game-cat.png";
-import imgMice from "../assets/home/game-mice.png";
-import imgTreat from "../assets/home/game-treat.png";
-import imgMeow from "../assets/home/game-meowjack.png";
+import hero from "../assets/home/hero.svg";
+import gameCat from '../assets/games/game-cat.png';
+import gameMice from '../assets/games/game-mice.png';
+import gameTreat from '../assets/games/game-treat.png';
+import gameMeowJack from '../assets/games/game-meowjack.png';
+
 
 export default function Home() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const [showLogin, setShowLogin] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
-    useEffect(() => {
+  useEffect(() => {
     const auth = searchParams.get("auth");
     setShowLogin(auth === "login");
     setShowRegister(auth === "register");
@@ -38,24 +39,23 @@ export default function Home() {
       <section className="featured">
         <div className="featured__hdr">
           <h2>FEATURED GAMES</h2>
-          {/* jei prireiks rodyklei vėliau – čia vieta */}
         </div>
 
-        <div className="games">
+        <div className="games grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
           <Link to="/games/cat" className="gamecard" aria-label="Play CAT">
-            <img src={imgCat} alt="CAT game" />
+            <img src={gameCat} alt="CAT game" className="w-full h-auto"/>
           </Link>
 
           <Link to="/games/mice" className="gamecard" aria-label="Play MICE">
-            <img src={imgMice} alt="MICE game" />
+            <img src={gameMice} alt="MICE game" className="w-full h-auto"/>
           </Link>
 
           <Link to="/games/treat" className="gamecard" aria-label="Play TREAT">
-            <img src={imgTreat} alt="TREAT game" />
+            <img src={gameTreat} alt="TREAT game"className="w-full h-auto" />
           </Link>
 
           <Link to="/games/meow-jack" className="gamecard" aria-label="Play MEOW-JACK">
-            <img src={imgMeow} alt="MEOW-JACK game" />
+            <img src={gameMeowJack} alt="MEOW-JACK game"className="w-full h-auto" />
           </Link>
         </div>
       </section>
