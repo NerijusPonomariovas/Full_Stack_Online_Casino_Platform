@@ -1,4 +1,5 @@
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
+import { fetchWalletBalance } from "../api/auth";
 
 type BettingPanelProps = {
   children?: ReactNode;
@@ -9,10 +10,55 @@ type BettingPanelProps = {
   gameStarted: boolean;
 };
 
-export default function BettingPanel({ children, betAmount, setBetAmount, startGame, gameOver}: BettingPanelProps) {
-  const [mode, setMode] = useState("manual");
+type WalletBalanceResponse = {
+  balance: number;
+};
 
-  const isGoButtonActive = betAmount !== null && betAmount > 0 && !gameOver;
+type AuthError = {
+  type: string;
+  message: string;
+};
+
+
+export default function BettingPanel({ children, betAmount, setBetAmount, startGame, gameOver, gameStarted}: BettingPanelProps) {
+  const [balance, setBalance] = useState<number>(0); // Example balance, replace with actual fetched balance
+  const [mode, setMode] = useState("manual");
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null); // Error message state
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    setIsAuthenticated(!!token);
+
+    if (token) {
+      const getBalance = async () => {
+        const result = await fetchWalletBalance();
+        if('balance' in result) {
+          setBalance(result.balance);
+          console.log('Account Balance in BettingPanel:', result.balance);
+        } else {  
+          console.error("Failed to fetch wallet balance:", result.message);
+        }
+      };
+      getBalance();
+      // Fetch user balance if authenticated
+    }
+  }, []);
+
+  const handleBetAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newBetAmount = e.target.value === "" ? null : Number(e.target.value);
+
+    if (newBetAmount !== null && newBetAmount > balance) {
+      setErrorMessage("Insufficient funds"); // Set error message if bet is greater than balance
+    } else {
+      setErrorMessage(null); // Clear error message when bet is valid
+    }
+
+    setBetAmount(newBetAmount);
+  };
+
+  const isGoButtonActive = betAmount !== null && betAmount > 0 && !gameOver && betAmount <= balance;
+
 
   return (
     <div className="w-full sm:w-[90%] max-w-6xl mx-auto flex flex-col drop-shadow-2xl">
@@ -52,22 +98,7 @@ export default function BettingPanel({ children, betAmount, setBetAmount, startG
                   )
                 }
                 className="w-full bg-[#102c56] p-2 rounded-l-sm text-left focus:outline-none"
-                onKeyDown={(e) => {
-                  const allowedKeys = [
-                    "Backspace",
-                    "Delete",
-                    "ArrowLeft",
-                    "ArrowRight",
-                    "Tab",
-                    "Enter",
-                    "Home",
-                    "End",
-                    ".",
-                  ];
-                  if (!/[0-9]/.test(e.key) && !allowedKeys.includes(e.key)) {
-                    e.preventDefault();
-                  }
-                }}
+                disabled={gameStarted}
               />
               <div className="flex items-center">
                 <button
@@ -97,13 +128,11 @@ export default function BettingPanel({ children, betAmount, setBetAmount, startG
 
           {/* Bet / Go */}
           <div className="flex flex-col sm:flex-row gap-2 mt-3">
-            <button className="flex-1 bg-[#2cbf2a] py-2 rounded-lg text-black font-semibold hover:bg-[#33de30]">
-              Bet
-            </button>
-            <button className={`flex-1 py-2 rounded-lg text-[#2874e9] shadow-md font-semibold transition duration-300 ease-in-out ${
+
+            <button className={`flex-1 py-2 rounded-lg text-black shadow-md font-semibold transition duration-300 ease-in-out ${
                 isGoButtonActive
-                  ? "bg-[#154a9b] hover:bg-[#1e69c6]" // Active: Brighter on hover
-                  : "bg-[#154a9b] opacity-50 cursor-not-allowed" // Disabled: Darker, not clickable
+                  ? "bg-[#2cbf2a] hover:bg-[#33de30]" // Active: Brighter on hover
+                  : "bg-[#2cbf2a] opacity-50 cursor-not-allowed" // Disabled: Darker, not clickable
               }`}
               onClick={startGame}
               disabled={!isGoButtonActive}>

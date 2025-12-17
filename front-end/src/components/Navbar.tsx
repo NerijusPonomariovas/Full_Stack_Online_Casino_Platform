@@ -11,9 +11,6 @@ import icAccount from "../assets/account.png";
 import { fetchWalletBalance } from "../api/auth";
 import Cataris_coin from "../assets/Cataris_coin.svg";
 
-type accountBalance = {
-  balance: number;
-};
 
 
 export default function Navbar() {
@@ -27,13 +24,18 @@ export default function Navbar() {
     setIsAuthenticated(!!token);
 
     if (token) {
+      const getBalance = async () => {
+        const result = await fetchWalletBalance();
+        if('balance' in result) {
+          setAccountBalance(result.balance);
+        } else {
+          console.error("Failed to fetch wallet balance:", result.message);
+        }
+      };
+      getBalance();
       // Fetch user balance if authenticated
-      fetchWalletBalance();
     }
   }, []);
-
-
-
 
   const handleLogout = () => {
     localStorage.removeItem('token');

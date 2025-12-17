@@ -3,8 +3,13 @@ import { register } from '../api/auth';
 import React, { useState } from 'react'
 import login from './Login';
 
+interface RegisterProps {
+    onClose?: () => void;
+        
+}
 
-const Register: React.FC = () => {
+
+const Register: React.FC<RegisterProps> = ({onClose}) => {
     const [username, setUsername] = useState<string>('');
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
@@ -34,7 +39,12 @@ const Register: React.FC = () => {
         try {
             await register(username, email, password, confirmPassword);
             console.log("User registered");
-            /*
+            if(onClose){
+                onClose();
+            }
+            navigate('/');
+            window.location.reload();            
+                /*
             const result = await login({username, password});
             if(result && 'token' in result)
             {

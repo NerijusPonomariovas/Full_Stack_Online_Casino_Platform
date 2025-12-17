@@ -180,10 +180,10 @@ export const fetchWalletBalance = async (): Promise<WalletBalanceResponse | Auth
     });
     console.log('Response status:', response.status);
     console.log('Response data:', response.data);
-    if (response.data && response.data.balance !== undefined) {
+    if (response.data !== undefined) {
       console.log('Wallet balance fetched successfully!');
       return {
-        balance: response.data.balance,
+        balance: response.data,
       };
     } else {
       throw new Error('Wallet balance fetch failed: Invalid response');
