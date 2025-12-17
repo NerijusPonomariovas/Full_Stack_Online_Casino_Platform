@@ -2,6 +2,7 @@ import * as THREE from "three";
 import { endsUpInValidPosition } from "./endsUpInValidPosition";
 import { metadata as rows, addRows } from "./Map";
 import type { MoveDirection } from "./types";
+import { updateRow, updatedRows} from "./Map";
 
 export const player = Player();
 
@@ -96,4 +97,11 @@ export function stepCompleted() {
     scoreDOM.innerText = position.currentRow.toString();
   }
 
+  const currentRowData = rows[position.currentRow];
+  if (
+    (currentRowData.type === "car" || currentRowData.type === "truck") &&
+    !updatedRows.has(position.currentRow)
+  ) {
+    updateRow(currentRowData, position.currentRow);
+  }
 }

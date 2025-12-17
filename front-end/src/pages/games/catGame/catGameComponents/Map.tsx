@@ -6,14 +6,20 @@ import { Road } from "./Road";
 import { Tree } from "./Tree";
 import { Car } from "./Car";
 import { Truck } from "./Truck";
+import { StopBollard } from "./StopBollard";
+import { tileSize } from "./constants";
 
 export const metadata: Row[] = [];
+
+export const updatedRows = new Set<number>();
 
 export const map = new THREE.Group();
 
 export function initializeMap() {
   // Remove all rows
   metadata.length = 0;
+  updatedRows.clear();
+  updatedRows.add(0);
   map.remove(...map.children);
 
   for (let rowIndex = 0; rowIndex > -1; rowIndex--) {
@@ -75,4 +81,29 @@ export function addRows() {
       map.add(row);
     }
   });
+}
+
+export function updateRow(rowData: any, rowIndex: number) {
+  // Check if the row has already been updated
+  if (updatedRows.has(rowIndex)) return;
+
+  // Remove the old row if it exists
+  const existingRow = map.children.find((child: any) => child.position.y === rowIndex * tileSize);
+  if (existingRow) {
+    map.remove(existingRow);  // Remove the existing row
+  }
+
+  // Create a new road row
+  const newRow = Road(rowIndex);
+
+  // Add stop bollard to the new row
+  const stopBollard = StopBollard();
+  stopBollard.position.set(-42, 0, 0); // Adjust position of stop bollard
+  newRow.add(stopBollard);
+
+  // Add the new row to the map
+  map.add(newRow);
+
+  // Mark this row as updated
+  updatedRows.add(rowIndex);
 }

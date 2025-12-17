@@ -8,6 +8,8 @@ export function Car(
   color: THREE.ColorRepresentation
 ) {
   const car = new THREE.Group();
+
+  car.name = "vehicle";
   car.position.x = initialTileIndex * tileSize;
   if (!direction) car.rotation.z = Math.PI;
 

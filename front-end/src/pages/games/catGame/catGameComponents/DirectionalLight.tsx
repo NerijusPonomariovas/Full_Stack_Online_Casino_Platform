@@ -2,7 +2,7 @@ import * as THREE from "three";
 
 export function DirectionalLight() {
   const dirLight = new THREE.DirectionalLight();
-  dirLight.position.set(-100, -100, 200);
+  dirLight.position.set(-100, -100, 100);
   dirLight.up.set(0, 0, 1);
   dirLight.castShadow = true;
 
@@ -15,7 +15,7 @@ export function DirectionalLight() {
   dirLight.shadow.camera.top = 400;
   dirLight.shadow.camera.bottom = -400;
   dirLight.shadow.camera.near = 50;
-  dirLight.shadow.camera.far = 400;
+  dirLight.shadow.camera.far = 500;
 
   return dirLight;
 }

@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import { tilesPerRow, tileSize } from "./constants";
+import { StopBollard } from "./StopBollard";
 
 export function Grass({ rowIndex }: {rowIndex: number}) {
   const grass = new THREE.Group();
@@ -11,6 +12,7 @@ export function Grass({ rowIndex }: {rowIndex: number}) {
   );
   foundation.position.z = 1.5;
   foundation.receiveShadow = true;
+  //grass.add(StopBollard());
   grass.add(foundation);
 
   return grass;
