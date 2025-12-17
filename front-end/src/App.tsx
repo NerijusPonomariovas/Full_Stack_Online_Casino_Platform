@@ -9,6 +9,7 @@ import Games from './pages/Games';
 import Promotions from './pages/promotion';
 import Wallet from './pages/wallet';
 import Navbar from './components/Navbar'; // Adjust the path accordingly
+import Cat from './pages/games/catGame/CatGame';
 
 const App: React.FC = () => {
   return (
@@ -21,6 +22,7 @@ const App: React.FC = () => {
           <Route path="/games/meow-jack" element={<BlackJack />} />
           <Route path="/promotions" element={<Promotions />} />
           <Route path="/wallet" element={<Wallet />} />
+          <Route path="/games/cat" element={<Cat/>}/>
         </Route>
       </Routes>
     </BrowserRouter>
