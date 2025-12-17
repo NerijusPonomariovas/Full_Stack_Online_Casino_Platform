@@ -27,7 +27,10 @@ const Login: React.FC<LoginProps> = ({ onClose}) => {
                 }
                 navigate("/");
                 window.location.reload();
-
+            }
+            else
+            {
+                setError("Invalid username or password. Please try again");
             }
             /*
             // Check if response contains token

@@ -1,6 +1,9 @@
-import React from 'react';
-import { Link } from "react-router-dom";
+
 import './Games.css';
+import Login from "./Login";
+import Register from "./Register";
+import React, { useEffect, useState } from "react";
+import { Link, replace, useNavigate, useSearchParams } from "react-router-dom";
 
 // Import game images
 import gameCat from '../assets/games/game-cat.png';
@@ -17,8 +20,7 @@ interface Game {
   link: string;
 }
 
-const Games: React.FC = () => {
-  const games: Game[] = [
+const games: Game[] = [
     {
       id: 1,
       image: gameCat,
@@ -51,6 +53,23 @@ const Games: React.FC = () => {
     }
   ];
 
+
+
+export default function Games() {
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+  const [showLogin, setShowLogin] = useState(false);
+  const [showRegister, setShowRegister] = useState(false);
+  useEffect(() => {
+    const auth = searchParams.get("auth");
+    setShowLogin(auth === "login");
+    setShowRegister(auth === "register");
+  }, [searchParams]);
+  const closeAuthModal = () => {
+    setShowLogin(false);
+    setShowRegister(false);
+    navigate("/games", { replace: true }); // clears ?auth=...
+  };
   return (
     <div className="games-container">
       <div className="games-header">
@@ -66,8 +85,28 @@ const Games: React.FC = () => {
             </Link>
         ))}
         </div>
+        {/* LOGIN MODAL */}
+      {showLogin && (
+        <div className="modal" role="dialog" aria-modal="true" aria-labelledby="login-title">
+          <div className="modal__backdrop" onClick={closeAuthModal} />
+          <div className="modal__panel">
+            <button className="modal__close" onClick={closeAuthModal} aria-label="Close">×</button>
+            <Login />
+          </div> 
+        </div>
+      )}
+
+      {/* REGISTER MODAL */}
+      {showRegister && (
+        <div className="modal" role="dialog" aria-modal="true" aria-labelledby="register-title">
+          <div className="modal__backdrop" onClick={closeAuthModal} />
+          <div className="modal__panel">
+            <button className="modal__close" onClick={closeAuthModal} aria-label="Close">×</button>
+            <Register />
+          </div>
+        </div>
+      )}
     </div>
+    
   );
 };
-
-export default Games;

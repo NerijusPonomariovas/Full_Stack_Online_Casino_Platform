@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, replace, useFetcher, useNavigate, useSearchParams } from "react-router-dom";
-
+import "./Home.css";
 import Login from "./Login";
 import Register from "./Register";
 // @ts-ignore
@@ -9,6 +9,7 @@ import Hand from "../components/Hand";
 import BettingPanel from "../components/BettingPanelBlackJack";
 import banner from "../assets/BANNER.svg";
 import cardDeck from "../assets/DECK-CARDS.svg";
+import logo from "../assets/LOGO.svg";
 
 type CardDeck = {
   suit: string;
@@ -26,10 +27,16 @@ export default function Home() {
   const [showLogin, setShowLogin] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
 
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+
   useEffect(() => {
     const auth = searchParams.get("auth");
     setShowLogin(auth === "login");
     setShowRegister(auth === "register");
+
+    const token = localStorage.getItem("token");
+    setIsAuthenticated(!!token)
+    console.log(token)
   }, [searchParams]);
 
   const closeAuthModal = () => {
@@ -132,8 +139,10 @@ export default function Home() {
       setGameDeck(combinations);
       setDealerRevealed(false);
     }
-    else
-    {
+    else if (!isAuthenticated) {
+      alert("Please log in to play")
+    }
+    else {
       alert("Pleace place a bet before starting a game!");
     }
   };
@@ -219,7 +228,23 @@ export default function Home() {
   const canReset = newGame || gameOver;
 
   return (
-    <main className="home">
+    <main className="home h-screen overflow-hidden">
+      {!isAuthenticated && (
+        <div className="fixed inset-0 bg-black bg-opacity-100 z-10 flex justify-center items-center">
+          <div className="bg-white p-6 rounded-lg w-11/12 sm:w-96 relative">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center">
+                <img
+                  src={logo}
+                  alt="Logo"
+                  className="w-16 h-auto" // Adjust the size of your logo
+                />
+                <p className="text-xl ml-4 text-gray-700">Please log in to play the game!</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
       <div className="flex w-screen min-h-screen justify-center items-start">
         <div className="w-full flex justify-center">
           <BettingPanel betAmount={betAmount} setBetAmount={setBetAmount} startGame={startGame} gameOver={gameOver} gameStarted={gameStarted}>
@@ -302,7 +327,6 @@ export default function Home() {
           </BettingPanel>
         </div>
       </div>
-
       {/* LOGIN MODAL */}
       {showLogin && (
         <div className="modal" role="dialog" aria-modal="true" aria-labelledby="login-title">

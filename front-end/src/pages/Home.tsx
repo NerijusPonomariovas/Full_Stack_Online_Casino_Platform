@@ -6,7 +6,7 @@ import Register from "./Register";
 
 
 // Paveiksliukai (keisk kelius/pavadinimus pagal save)
-import hero from "../assets/home/hero.jpg";
+import hero from "../assets/home/hero.svg";
 import gameCat from '../assets/games/game-cat.png';
 import gameMice from '../assets/games/game-mice.png';
 import gameTreat from '../assets/games/game-treat.png';

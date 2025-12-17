@@ -1,5 +1,9 @@
-
+import React, { useEffect, useState } from "react";
+import { Link, replace, useNavigate, useSearchParams } from "react-router-dom";
 import './promotion.css';
+import Login from "./Login";
+import Register from "./Register";
+
 
 // Promotion images
 import promo1 from '../assets/Promotion/1st-promotion.png';
@@ -56,6 +60,20 @@ const promotionsData: Promotion[] = [
 ];
 
 export default function Promotions() {
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+  const [showLogin, setShowLogin] = useState(false);
+  const [showRegister, setShowRegister] = useState(false);
+  useEffect(() => {
+    const auth = searchParams.get("auth");
+    setShowLogin(auth === "login");
+    setShowRegister(auth === "register");
+  }, [searchParams]);
+  const closeAuthModal = () => {
+    setShowLogin(false);
+    setShowRegister(false);
+    navigate("/promotions", { replace: true }); // clears ?auth=...
+  };
   return (
     <main className="promotions">
       {/* BANNER */}
@@ -92,6 +110,27 @@ export default function Promotions() {
           ))}
         </div>
       </section>
+      {/* LOGIN MODAL */}
+      {showLogin && (
+        <div className="modal" role="dialog" aria-modal="true" aria-labelledby="login-title">
+          <div className="modal__backdrop" onClick={closeAuthModal} />
+          <div className="modal__panel">
+            <button className="modal__close" onClick={closeAuthModal} aria-label="Close">×</button>
+            <Login />
+          </div> 
+        </div>
+      )}
+
+      {/* REGISTER MODAL */}
+      {showRegister && (
+        <div className="modal" role="dialog" aria-modal="true" aria-labelledby="register-title">
+          <div className="modal__backdrop" onClick={closeAuthModal} />
+          <div className="modal__panel">
+            <button className="modal__close" onClick={closeAuthModal} aria-label="Close">×</button>
+            <Register />
+          </div>
+        </div>
+      )}
     </main>
   );
 }
