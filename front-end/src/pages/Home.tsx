@@ -41,21 +41,21 @@ export default function Home() {
           <h2>FEATURED GAMES</h2>
         </div>
 
-        <div className="games">
+        <div className="games grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
           <Link to="/games/cat" className="gamecard" aria-label="Play CAT">
-            <img src={gameCat} alt="CAT game" />
+            <img src={gameCat} alt="CAT game" className="w-full h-auto"/>
           </Link>
 
           <Link to="/games/mice" className="gamecard" aria-label="Play MICE">
-            <img src={gameMice} alt="MICE game" />
+            <img src={gameMice} alt="MICE game" className="w-full h-auto"/>
           </Link>
 
           <Link to="/games/treat" className="gamecard" aria-label="Play TREAT">
-            <img src={gameTreat} alt="TREAT game" />
+            <img src={gameTreat} alt="TREAT game"className="w-full h-auto" />
           </Link>
 
           <Link to="/games/meow-jack" className="gamecard" aria-label="Play MEOW-JACK">
-            <img src={gameMeowJack} alt="MEOW-JACK game" />
+            <img src={gameMeowJack} alt="MEOW-JACK game"className="w-full h-auto" />
           </Link>
         </div>
       </section>

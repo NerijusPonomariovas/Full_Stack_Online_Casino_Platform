@@ -8,8 +8,10 @@ import icTrophy from "../assets/trophy.png";
 import icWallet from "../assets/wallet.png";
 import icSettings from "../assets/settings.png";
 import icAccount from "../assets/account.png";
+import { fetchWalletBalance } from "../api/auth";
+import Cataris_coin from "../assets/Cataris_coin.svg";
 
-type UserBalance = {
+type accountBalance = {
   balance: number;
 };
 
@@ -17,7 +19,7 @@ type UserBalance = {
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-  const [userBalance, setUserBalance] = useState<number | null>(null);
+  const [accountBalance, setAccountBalance] = useState<number | null>(null);
   const location = useLocation();
 
   useEffect(() => {
@@ -26,26 +28,12 @@ export default function Navbar() {
 
     if (token) {
       // Fetch user balance if authenticated
-      fetchBalance();
+      fetchWalletBalance();
     }
   }, []);
 
 
-  const fetchBalance = async () => {
-    try {
-      // Assuming your backend provides the balance in a GET request
-      const response = await fetch("/api/wallet/balance", {
-        method: "GET",
-        headers: {
-          "Authorization": `Bearer ${localStorage.getItem('token')}`,
-        },
-      });
-      const data: UserBalance = await response.json();
-      setUserBalance(data.balance);
-    } catch (error) {
-      console.error("Failed to fetch balance:", error);
-    }
-  };
+
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -86,24 +74,34 @@ export default function Navbar() {
         </ul>
 
         {/* Right */}
+        {!isAuthenticated ?(
+          <>
+          </>
+        ) : (
+          <>
+          <label className="flex items-center space-x-2 bg-blue-950 text-white w-auto font-bold px-3 py-1.5 rounded-lg shadow-md hover:shadow-lg w-max">
+          <span className="flex-1 text-sm">
+            {accountBalance !== null ? `$${accountBalance.toFixed(2)}` : 'Loading...'}
+          </span>
+          <img src={Cataris_coin} alt="Coin" className="h-6 w-6" />
+        </label>
+          </>
+        )}
+        {/* Example for Account and Logout (Responsive) */}
         <div className="nvb__actions">
           {!isAuthenticated ? (
             <>
-              <Link to={authLink("login")} className="btn btn--ghost">LOGIN</Link>
-              <Link to={authLink("register")} className="btn btn--primary">REGISTER</Link>
+              <Link to={authLink("login")} className="btn btn--ghost hidden sm:block">LOGIN</Link>
+              <Link to={authLink("register")} className="btn btn--primary hidden sm:block">REGISTER</Link>
             </>
           ) : (
             <>
-              <Link to="/wallet" className="btn btn--primary">
+              {/* Balance always visible */}
+              <Link to="/wallet" className="btn btn--primary hidden sm:block">
                 ACCOUNT
-                {userBalance !== null && (
-                  <span className="ml-2 text-sm font-semibold">
-                    ${userBalance.toFixed(2)} {/* Show the balance next to the Account label */}
-                  </span>
-                )}
               </Link>
-              <button onClick = {handleLogout}
-                className="btn btn--ghost ml-4">LOGOUT
+              <button onClick={handleLogout} className="btn btn--ghost ml-4 hidden sm:block">
+                LOGOUT
               </button>
             </>
           )}
@@ -127,15 +125,32 @@ export default function Navbar() {
         <div className="sideMenu__divider" />
 
         <div className="sideMenu__group">
-          <button className="slink btnlike" onClick={() => setOpen(false)}>
+          <NavLink to="/wallet" className="slink btnlike" onClick={() => setOpen(false)}>
             <i className="sicon"><img src={icWallet} alt="Wallet" /></i> WALLET
-          </button>
+          </NavLink>
           <button className="slink btnlike" onClick={() => setOpen(false)}>
             <i className="sicon"><img src={icSettings} alt="Settings" /></i> SETTINGS
           </button>
           <button className="slink btnlike" onClick={() => setOpen(false)}>
             <i className="sicon"><img src={icAccount} alt="Account" /></i> ACCOUNT
           </button>
+          <div className="sideMenu__divider" />
+          {!isAuthenticated ? (
+            <>
+              <NavLink to="/?auth=login" className="slink btnlike !bg-white !text-black hover:!bg-gray-400 p-2 rounded" onClick={() => setOpen(false)}>
+                LOGIN
+              </NavLink>
+              <NavLink to="/?auth=register" className="slink btnlike !bg-blue-500 !text-white hover:!bg-blue-700 p-2 rounded" onClick={() => setOpen(false)}>
+                REGISTER
+              </NavLink>
+            </>
+          ) : (
+            <>
+              <button className="slink btnlike !bg-red-500 text-white hover:!bg-red-700 p-2 rounded" onClick={handleLogout}>
+                LOGOUT
+              </button>
+            </>
+          )}
         </div>
       </aside>
 

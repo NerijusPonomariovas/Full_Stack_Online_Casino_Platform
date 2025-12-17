@@ -114,12 +114,6 @@
 }
 
 /* image */
-.hero img {
-  width: 100%;
-  height: auto; /* Ensures the aspect ratio is maintained */
-  object-fit: cover; /* Ensures the image fills the area while keeping its aspect ratio */
-}
-
 .hero__overlay {
   position: absolute;
   inset: 0;

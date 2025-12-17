@@ -42,7 +42,7 @@ export default function Home() {
   const closeAuthModal = () => {
     setShowLogin(false);
     setShowRegister(false);
-    navigate("./", { replace: true }); // clears ?auth=...
+    navigate("/games/meow-jack", { replace: true }); // clears ?auth=...
   };
 
   const [gameDeck, setGameDeck] = useState<CardDeck[]>(combinations);
