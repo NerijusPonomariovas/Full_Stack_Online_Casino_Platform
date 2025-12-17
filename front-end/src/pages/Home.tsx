@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Link, replace, useNavigate, useSearchParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import "./Home.css";
 import Login from "./Login";
 import Register from "./Register";
