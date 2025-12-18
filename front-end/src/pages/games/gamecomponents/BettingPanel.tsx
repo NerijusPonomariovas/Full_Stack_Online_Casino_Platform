@@ -10,27 +10,27 @@ type BettingPanelProps = {
   gameStarted: boolean;
 };
 
-type WalletBalanceResponse = {
+/* type WalletBalanceResponse = {
   balance: number;
 };
 
 type AuthError = {
   type: string;
   message: string;
-};
+}; */
 
 
 export default function BettingPanel({ children, betAmount, setBetAmount, startGame, gameOver, gameStarted}: BettingPanelProps) {
   const [balance, setBalance] = useState<number>(0); // Example balance, replace with actual fetched balance
   const [mode, setMode] = useState("manual");
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null); // Error message state
+/*   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null); // Error message state */
   const [betPlaced, setBetPlaced] = useState<boolean>(false); // Track if the bet is placed
 
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    setIsAuthenticated(!!token);
+    //setIsAuthenticated(!!token);
 
     if (token) {
       const getBalance = async () => {
@@ -47,17 +47,6 @@ export default function BettingPanel({ children, betAmount, setBetAmount, startG
     }
   }, []);
 
-  const handleBetAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newBetAmount = e.target.value === "" ? null : Number(e.target.value);
-
-    if (newBetAmount !== null && newBetAmount > balance) {
-      setErrorMessage("Insufficient funds"); // Set error message if bet is greater than balance
-    } else {
-      setErrorMessage(null); // Clear error message when bet is valid
-    }
-
-    setBetAmount(newBetAmount);
-  };
 
   const isGoButtonActive = betAmount !== null && betAmount > 0 && !gameOver && betAmount <= balance;
 

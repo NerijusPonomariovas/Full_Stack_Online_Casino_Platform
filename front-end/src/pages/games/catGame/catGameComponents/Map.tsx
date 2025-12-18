@@ -77,7 +77,7 @@ function hasVehicles(row: Row): row is (
   return row.type === "car" || row.type === "truck";
 }
 
-export function updateRow(rowData: any, rowIndex: number) {
+export function updateRow(rowIndex: number) {
   // Check if the row has already been updated
   if (updatedRows.has(rowIndex)) return;
 

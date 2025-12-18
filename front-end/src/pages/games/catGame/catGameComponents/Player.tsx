@@ -104,6 +104,6 @@ export function stepCompleted() {
     (currentRowData.type === "car" || currentRowData.type === "truck") &&
     !updatedRows.has(position.currentRow)
   ) {
-    updateRow(currentRowData, position.currentRow);
+    updateRow( position.currentRow);
   }
 }
