@@ -8,8 +8,7 @@ import BlackJack from './pages/Blackjack'
 import Games from './pages/Games';
 import Promotions from './pages/promotion';
 import Wallet from './pages/wallet';
-import Navbar from './components/Navbar'; // Adjust the path accordingly
-import Cat from './pages/games/catGame/CatGame';
+import Cat from './pages/games/catGame/Cat';
 
 const App: React.FC = () => {
   return (

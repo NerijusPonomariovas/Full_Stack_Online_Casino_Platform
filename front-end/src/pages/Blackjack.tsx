@@ -248,79 +248,82 @@ export default function Home() {
       <div className="flex w-screen min-h-screen justify-center items-start">
         <div className="w-full flex justify-center">
           <BettingPanel betAmount={betAmount} setBetAmount={setBetAmount} startGame={startGame} gameOver={gameOver} gameStarted={gameStarted}>
-            <div className="w-full h-full sm:rounded-none md:rounded-tr-2xl relative">
-              <img
-                src={cardDeck}
-                alt="Card deck"
-                className="absolute top-0 right-4 w-35 h-auto"
-              />
-              {gameOver}
-              <div>
-                <div className="flex flex-col justify-center items-center mt-6">
-                  <Hand
-                    cards={dealerHand}
-                    title="Dealer's Hand"
-                    handValue={dealerVisibleValue}
-                    hideFirstCard={!dealerRevealed}
-                  />
-                  <img
-                    src={banner}
-                    alt="Blackjack banner"
-                    className="w-[260px] my-4 drop-shadow-lg"
-                  />
-                  <Hand
-                    cards={playerHand}
-                    title="Players's Hand"
-                    handValue={playerValue}
-                    status={playerStatus}
-                  />
-                </div>
-
-                {/* PANEL PRZYCISKÓW – zawsze widoczny */}
-                <div className="flex justify-center mt-6">
-                  <div className="grid grid-cols-2 gap-3 p-4 rounded-xl bg-[#003366] border border-[#0a1a2f]">
-                    {/* HIT */}
-                    <button
-                      className={`w-24 h-12 flex items-center justify-center text-white font-semibold rounded-lg shadow-md
+            <div className="w-full h-full flex">
+                <div className="w-full h-full sm:rounded-none md:rounded-tr-2xl relative flex justify-center">
+                <img
+                  src={cardDeck}
+                  alt="Card deck"
+                  className="absolute top-0 right-4 w-35 h-auto"
+                />
+                {gameOver}
+                <div className="flex justify-center items-center">
+                  <div className="flex flex-col justify-center items-center mt-6 mb-6">
+                    <Hand
+                      cards={dealerHand}
+                      title="Dealer's Hand"
+                      handValue={dealerVisibleValue}
+                      hideFirstCard={!dealerRevealed}
+                    />
+                    <img
+                      src={banner}
+                      alt="Blackjack banner"
+                      className="w-[260px] my-4 drop-shadow-lg"
+                    />
+                    <Hand
+                      cards={playerHand}
+                      title="Players's Hand"
+                      handValue={playerValue}
+                      status={playerStatus}
+                    />
+                    {/*Button panel blet*/}
+                  <div className="flex justify-center mt-6">
+                    <div className="grid grid-cols-2 gap-3 p-4 rounded-xl bg-[#003366] border border-[#0a1a2f]">
+                      {/* HIT */}
+                      <button
+                        className={`w-24 h-12 flex items-center justify-center text-white font-semibold rounded-lg shadow-md
       bg-green-500 ${!canHit ? "opacity-40 cursor-not-allowed" : ""}`}
-                      onClick={dealCardToPlayer}
-                      disabled={!canHit}
-                    >
-                      Hit
-                    </button>
-                    {/* STAND */}
-                    <button
-                      className={`w-24 h-12 flex items-center justify-center text-white font-semibold rounded-lg shadow-md
+                        onClick={dealCardToPlayer}
+                        disabled={!canHit}
+                      >
+                        Hit
+                      </button>
+                      {/* STAND */}
+                      <button
+                        className={`w-24 h-12 flex items-center justify-center text-white font-semibold rounded-lg shadow-md
       bg-red-500 ${!canStand ? "opacity-40 cursor-not-allowed" : ""}`}
-                      onClick={playerStand}
-                      disabled={!canStand}
-                    >
-                      Stand
-                    </button>
+                        onClick={playerStand}
+                        disabled={!canStand}
+                      >
+                        Stand
+                      </button>
 
-                    {/* DOUBLE */}
-                    <button
-                      className={`w-24 h-12 flex items-center justify-center text-white font-semibold rounded-lg shadow-md
+                      {/* DOUBLE */}
+                      <button
+                        className={`w-24 h-12 flex items-center justify-center text-white font-semibold rounded-lg shadow-md
       bg-yellow-500 ${!canDouble ? "opacity-40 cursor-not-allowed" : ""}`}
-                      onClick={() => {
-                        dealCardToPlayer();
-                        playerStand();
-                      }}
-                      disabled={!canDouble}
-                    >
-                      Double
-                    </button>
-                    {/* RESET 
-                    <button
-                      className={`w-24 h-12 flex items-center justify-center text-white font-semibold rounded-lg shadow-md
-      bg-blue-500 ${!canReset ? "opacity-40 cursor-not-allowed" : ""}`}
-                      onClick={resetGame}
-                      disabled={!canReset}
-                    >
-                      Reset
-                    </button>
-                    */}
+                        onClick={() => {
+                          dealCardToPlayer();
+                          playerStand();
+                        }}
+                        disabled={!canDouble}
+                      >
+                        Double
+                      </button>
+                      {/* RESET 
+                      <button
+                        className={`w-24 h-12 flex items-center justify-center text-white font-semibold rounded-lg shadow-md
+      bg-blu  e-500 ${!canReset ? "opacity-40 cursor-not-allowed" : ""}`}
+                        onClick={resetGame}
+                        disabled={!canReset}
+                      >
+                        Reset
+                      </button>
+                      */}
+                    </div>
                   </div>
+                  </div>
+
+                  
                 </div>
               </div>
             </div>

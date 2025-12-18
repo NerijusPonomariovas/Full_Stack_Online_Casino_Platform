@@ -8,6 +8,11 @@ import Cat from "./CatGame";
 
 // png imports
 export default function Home() {
+  
+  const [betAmount, setBetAmount] = useState<number | null>(null);
+  const [gameStarted, setGameStarted] = useState(false);
+  const [gameOver, setGameOver] = useState(false);
+
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const [showLogin, setShowLogin] = useState(false);
@@ -22,11 +27,17 @@ export default function Home() {
     setShowRegister(false);
     navigate("/", { replace: true }); // clears ?auth=...
   };
+
+    const startGame = () => {
+    setGameStarted(true);
+    setGameOver(false);
+    // Add your game starting logic here
+  };
   return (  
     <main className="home flex">
       <div className="flex justify-center items-center w-screen h-150">
-        <div className="w-full justify-center items-center flex">
-          <BettingPanel>
+        <div className="w-full justify-center items-center flex h-150">
+          <BettingPanel betAmount={betAmount} setBetAmount={setBetAmount} startGame={startGame} gameOver={gameOver} gameStarted={gameStarted}>
             <div id="game-container" className="w-full h-full sm:rounded-none md:rounded-tr-2xl">
               <Cat />
             </div>

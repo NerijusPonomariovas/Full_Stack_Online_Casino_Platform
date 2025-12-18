@@ -1,22 +1,78 @@
-import { useState } from "react";
-import type { ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
+import { fetchWalletBalance } from "../../../api/auth";
 
 type BettingPanelProps = {
-  children?: ReactNode; // optional children
+  children?: ReactNode;
+  betAmount: number | null;
+  setBetAmount: (amount: number | null) => void;
+  startGame: () => void;
+  gameOver: boolean;
+  gameStarted: boolean;
 };
 
-export default function BettingPanel({ children }: BettingPanelProps) {
+type WalletBalanceResponse = {
+  balance: number;
+};
+
+type AuthError = {
+  type: string;
+  message: string;
+};
+
+
+export default function BettingPanel({ children, betAmount, setBetAmount, startGame, gameOver, gameStarted}: BettingPanelProps) {
+  const [balance, setBalance] = useState<number>(0); // Example balance, replace with actual fetched balance
   const [mode, setMode] = useState("manual");
-  const [showDifficulty] = useState(true);
-  const [difficulty, setDifficulty] = useState("Medium");
-  const [betAmount, setBetAmount] = useState<number | null>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null); // Error message state
+  const [betPlaced, setBetPlaced] = useState<boolean>(false); // Track if the bet is placed
+
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    setIsAuthenticated(!!token);
+
+    if (token) {
+      const getBalance = async () => {
+        const result = await fetchWalletBalance();
+        if('balance' in result) {
+          setBalance(result.balance);
+          console.log('Account Balance in BettingPanel:', result.balance);
+        } else {  
+          console.error("Failed to fetch wallet balance:", result.message);
+        }
+      };
+      getBalance();
+      // Fetch user balance if authenticated
+    }
+  }, []);
+
+  const handleBetAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newBetAmount = e.target.value === "" ? null : Number(e.target.value);
+
+    if (newBetAmount !== null && newBetAmount > balance) {
+      setErrorMessage("Insufficient funds"); // Set error message if bet is greater than balance
+    } else {
+      setErrorMessage(null); // Clear error message when bet is valid
+    }
+
+    setBetAmount(newBetAmount);
+  };
+
+  const isGoButtonActive = betAmount !== null && betAmount > 0 && !gameOver && betAmount <= balance;
+
+  const handleGoButtonClick = () => {
+    if (isGoButtonActive) {
+      startGame();
+      setBetPlaced(true); // Mark that the bet has been placed
+    }
+  };
 
   return (
-    //fix responsiveness when width smaller than 768px atleast, nu krc navbar'as uzdengia puse betting menu :)
     <div className="w-[95%] sm:w-[95%] md:ml-0 xl:w-6xl relative mt-110 md:mt-30 flex flex-col drop-shadow-2xl ">
       <div className="flex flex-col md:flex-row h-140">
         {/* LEFT PANEL */}
-        <div className="w-full md:w-64 bg-[#1c5ec3] text-white rounded-t-4xl p-4 space-y-3 md:rounded-tr-none">
+        <div className="w-full md:w-64 bg-[#1c5ec3] text-white rounded-tl-4xl p-4 space-y-3 shrink-0">
           {/* Toggle Manual / Auto */}
           <div className="flex bg-[#102c56] rounded-4xl overflow-hidden h-12 w-full items-center pl-1 pr-1">
             <button
@@ -35,7 +91,7 @@ export default function BettingPanel({ children }: BettingPanelProps) {
             >
               Auto
             </button>
-          </div>
+          </div>  
 
           {/* Bet Amount */}
           <div>
@@ -50,7 +106,8 @@ export default function BettingPanel({ children }: BettingPanelProps) {
                   )
                 }
                 className="w-full bg-[#102c56] p-2 rounded-l-sm text-left focus:outline-none"
-                placeholder=""
+                disabled={gameStarted}
+                                placeholder=""
                 onKeyDown={(e) => {
                   const allowedKeys = [
                     "Backspace",
@@ -94,36 +151,21 @@ export default function BettingPanel({ children }: BettingPanelProps) {
             </div>
           </div>
 
-          {/* Conditional Difficulty Section */}
-          {showDifficulty && (
-            <div>
-              <label className="text-sm text-gray-200">Difficulty</label>
-              <div className="bg-[#184890] mt-1 p-0.5 rounded-md">
-                <select
-                  value={difficulty}
-                  onChange={(e) => setDifficulty(e.target.value)}
-                  className="w-full bg-[#0a2e6e] p-2 rounded-sm focus:outline-none"
-                >
-                  <option>Easy</option>
-                  <option>Medium</option>
-                  <option>Hard</option>
-                </select>
-              </div>
-            </div>
-          )}
-
-          {/* Bet / Go Buttons */}
+          {/* Bet / Go */}
           <div className="flex flex-row gap-2 mt-3">
-            <button className="flex-1 bg-[#2cbf2a] py-2 rounded-lg text-black font-semibold hover:bg-[#33de30]">
-              Bet
-            </button>
 
-            <button className="flex-1 bg-[#154a9b] py-2 rounded-lg text-[#2874e9] shadow-md">
+            <button className={`flex-1 py-2 rounded-lg text-black shadow-md font-semibold transition duration-300 ease-in-out ${
+                isGoButtonActive
+                  ? "bg-[#2cbf2a] hover:bg-[#33de30]" // Active: Brighter on hover
+                  : "bg-[#2cbf2a] opacity-50 cursor-not-allowed" // Disabled: Darker, not clickable
+              }`}
+              onClick={handleGoButtonClick}
+              disabled={!isGoButtonActive}>
               Go
             </button>
           </div>
 
-          {/* Profit Section */}
+          {/* Profit */}
           <div className="mt-3">
             <p className="text-xs text-white">Total profit (1.00x)</p>
             <input
@@ -135,9 +177,16 @@ export default function BettingPanel({ children }: BettingPanelProps) {
           </div>
         </div>
 
-        {/* RIGHT PANEL */}
+        {/* RIGHT PANEL – STÓŁ */}
         <div className="bg-[#184890] relative w-full md:rounded-tr-4xl flex items-center justify-center">
-          {/* Your visual / graph / game area goes here */}
+          {!betPlaced && (
+            <div
+              className="absolute inset-0 flex items-center justify-center text-2xl font-bold text-white md:rounded-tr-4xl bg-[#184890] bg-opacity-70"
+              style={{ pointerEvents: "auto", zIndex: 20 }}
+            >
+              <div>Please place your bet to start the game.</div>
+            </div>
+          )}
           {children}
         </div>
       </div>

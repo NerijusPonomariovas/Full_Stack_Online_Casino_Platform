@@ -55,7 +55,7 @@ export default function Hand({
                                 key={`hidden-${index}`}
                                 src={backCard}
                                 alt="Hidden card"
-                                className="w-[80px] h-[120px] rounded-lg"
+                                className="w-20 h-[120px] rounded-lg"
                                 style={style}
                             />
                         );
