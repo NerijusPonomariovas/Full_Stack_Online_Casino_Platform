@@ -1,27 +1,19 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { updateWalletBalance } from "../api/auth";
 import { fetchWalletBalance } from "../api/auth";
-import { NavLink, Link, useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import Login from "./Login";
 import Register from "./Register";
 import logo from "../assets/LOGO.svg";
 
-interface UserData {
-  username: string;
-  email: string;
-  balance: number;
-}
 
 export default function Wallet() {
   const [searchParams] = useSearchParams();
-  const [userData, setUserData] = useState<UserData | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [accountBalance, setAccountBalance] = useState<number | null>(null);
   const [loading, setLoading] = useState<boolean>(false); // For button loading state
   const [showLogin, setShowLogin] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
-  const [statusMessage, setStatusMessage] = useState<string>("");
-  const location = useLocation();
   const navigate = useNavigate();
 
     const closeAuthModal = () => {
@@ -54,11 +46,9 @@ export default function Wallet() {
   const handleDeposit = async () => {
     console.log("Pressed");
     setLoading(true);
-    setStatusMessage("Processing deposit...");
     try {
       const result = await updateWalletBalance("50", "win");
       if('balance' in result) {
-        setStatusMessage("Deposit successful!");
         setLoading(false);
         console.log("New balance: ", result.balance);
       }
@@ -100,14 +90,14 @@ export default function Wallet() {
           <div className="py-4 border-b border-[#1e4f8f]">
             <span className="text-sm text-[#7fb3ff]">Username</span>
             <div className="text-lg font-semibold text-white">
-              {userData?.username ?? "-"}
+              {"-"}
             </div>
           </div>
 
           <div className="py-4 border-b border-[#1e4f8f]">
             <span className="text-sm text-[#7fb3ff]">Email</span>
             <div className="text-lg font-semibold text-white">
-              {userData?.email ?? "-"}
+              {"-"}
             </div>
           </div>
 

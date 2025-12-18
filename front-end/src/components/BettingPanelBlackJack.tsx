@@ -77,7 +77,7 @@ export default function BettingPanel({ children, betAmount, setBetAmount, startG
       setBetAmount(null); // Optionally reset bet amount
       
     }
-  } , [gameOver]);
+  } , [gameOver, setBetAmount]);
 
   return (
     <div className="w-[95%] sm:w-[95%] md:ml-0 xl:w-6xl relative mt-110 md:mt-10 flex flex-col drop-shadow-2xl ">

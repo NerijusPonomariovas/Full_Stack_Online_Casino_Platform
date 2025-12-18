@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Link, replace, useFetcher, useNavigate, useSearchParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import "./Home.css";
 import Login from "./Login";
 import Register from "./Register";
@@ -86,6 +86,7 @@ export default function Home() {
     const card = gameDeck[randomIndex];
     const newDeck = gameDeck.filter((_, index) => index !== randomIndex);
     setGameDeck(newDeck);
+    console.log(balance);
     return card;
   };
 
@@ -121,7 +122,8 @@ export default function Home() {
     setTimeout(() => {
       setBetAmount(null); // Reset bet amount
       setGameStarted(false); // Disable the "Go" button after game ends
-    }, 500); // Adjust delay as needed
+      window.location.reload();
+    }, 5000); // Adjust delay as needed
   };
 
   const dealCardToPlayer = () => {
@@ -154,10 +156,10 @@ export default function Home() {
     if (betAmount === null) {
       return;
     }
-    const betAmountStr = (betAmount * 2).toFixed(2).toString();
+    const betAmountStr = (betAmount.toFixed(2)).toString();
     if (outcome === "win") {
       try {
-        updateWalletBalance(betAmountStr, outcome);
+        updateWalletBalance(betAmountStr, outcome); 
         console.log("WIN update wallet balance called");
       } catch (error) {
         console.error("Failed to update wallet balance: ", error);
@@ -172,25 +174,6 @@ export default function Home() {
       }
     }
   }
-
-  const startGame = () => {
-    if (betAmount && betAmount > 0) {
-      setGameStarted(true);
-      setPlayerHand([]);
-      setDealerHand([]);
-      setGameOver(false);
-      setResult({ type: "", message: "" });
-      setNewGame(false);
-      setGameDeck(combinations);
-      setDealerRevealed(false);
-    }
-    else if (!isAuthenticated) {
-      alert("Please log in to play")
-    }
-    else {
-      alert("Pleace place a bet before starting a game!");
-    }
-  };
 
   const resetGame = () => {
     setPlayerHand([]);
@@ -232,7 +215,7 @@ export default function Home() {
       switch (true) {
         case playerValue === 21:
           setResult({ type: "player", message: "BlackJack! Player won" });
-          updateWalletBalance((betAmount * 2.5).toFixed(2).toString(), "win");
+          updateWalletBalance((betAmount * 1.5).toFixed(2).toString(), "win");
           console.log("Blackjack win, balance updated");
           break;
         case playerValue > 21:
@@ -262,7 +245,6 @@ export default function Home() {
   // *** LOGIKA AKTYWNOŚCI PRZYCISKÓW ***
   const canHit = !gameOver && !newGame;
   const canStand = !gameOver && !newGame;
-  const canReset = newGame || gameOver;
 
   return (
     <main className="home h-screen overflow-hidden">

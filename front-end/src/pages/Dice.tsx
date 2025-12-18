@@ -9,6 +9,7 @@ import Login from "./Login";
 import Register from "./Register";
 import { updateWalletBalance } from "../api/auth";
 import { fetchWalletBalance } from "../api/auth";
+import { refreshBalance } from "../components/refreshBalance";
 
 const Dice = () => {
   const [chance, setChance] = useState(50);
@@ -26,6 +27,7 @@ const Dice = () => {
   const [balance, setBalance] = useState<number>(0.0);
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  const [accountBalance, setAccountBalance] = useState<number | null>(null);
 
   const HOUSE_EDGE = 0.05;
   const multiplier = useMemo(
@@ -34,6 +36,11 @@ const Dice = () => {
   );
   const clampToRange = (value: number) => Math.min(100, Math.max(1, Math.round(value)));
   const markerPercent = useMemo(() => Math.min(99, Math.max(1, markerValue)), [markerValue]);
+
+  const handleTransactionComplete = () => {
+  refreshBalance(setAccountBalance);
+  console.log(accountBalance);
+};
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -82,7 +89,7 @@ const Dice = () => {
     setPayoutAmount(null);
     setFinalValue(null);
     setMarkerValue(clampToRange(chance));
-
+    console.log(balance);
     const animationSteps = 14;
     let step = 0;
 
@@ -110,9 +117,11 @@ const Dice = () => {
             const finalValue = payout - betAmount!;
             updateWalletBalance(finalValue.toString(), "win");
             console.log("WIN update wallet balance called");
+            handleTransactionComplete();
           } else {
             updateWalletBalance(wager.toFixed(2).toString(), "loss");
             console.log("LOSS update wallet balance called");
+            handleTransactionComplete();
           }
         }
       }, 70);

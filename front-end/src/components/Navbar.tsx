@@ -10,6 +10,7 @@ import icSettings from "../assets/settings.png";
 import icAccount from "../assets/account.png";
 import { fetchWalletBalance } from "../api/auth";
 import Cataris_coin from "../assets/Cataris_coin.svg";
+import { refreshBalance } from "../components/refreshBalance";
 
 
 
@@ -24,16 +25,7 @@ export default function Navbar() {
     setIsAuthenticated(!!token);
 
     if (token) {
-      const getBalance = async () => {
-        const result = await fetchWalletBalance();
-        if('balance' in result) {
-          setAccountBalance(parseFloat(result.balance.toFixed(2)));
-        } else {
-          console.error("Failed to fetch wallet balance:", result.message);
-        }
-      };
-      getBalance();
-      // Fetch user balance if authenticated
+      refreshBalance(setAccountBalance);
     }
   }, []);
 
