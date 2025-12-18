@@ -100,7 +100,7 @@
 .hero {
   position: relative; 
   display: block;        
-  width: min(1280px, 96%);
+  width: min(1280px, 100%);
   margin: 0px auto;
   border-radius: 16px;
   overflow: hidden;
@@ -114,12 +114,6 @@
 }
 
 /* image */
-.hero img {
-  width: 100%;
-  display: block;
-  object-fit: cover;
-}
-
 .hero__overlay {
   position: absolute;
   inset: 0;
@@ -127,12 +121,14 @@
   align-items: center;
   justify-content: center;
   pointer-events: none;
+  background: rgba(0, 0, 0, 0.5); /* Optional: darkens the background */
 }
 
 .hero__overlay h1 {
-  font-size: clamp(28px, 4vw, 52px);
+  font-size: clamp(28px, 4vw, 52px); /* Responsive font size */
   letter-spacing: 3px;
-  text-shadow: 0 4px 18px rgba(0,0,0,.55);
+  text-shadow: 0 4px 18px rgba(0,0,0,.55); /* Adds shadow to the text for better visibility */
+  color: white; /* Ensures the text is white */
 }
 
 /* FEATURED */
@@ -174,6 +170,6 @@
   object-fit: cover;
 }
 .gamecard:hover{
-  transform: translateY(-2px);
+  transform: translateY(-8px);
   filter: brightness(1.05);
 }

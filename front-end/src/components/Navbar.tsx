@@ -1,22 +1,59 @@
-import { useState } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { NavLink, Link, useLocation } from "react-router-dom";
 import logo from "../assets/logo.png";
 import "./Navbar.css";
-
 import icHome from "../assets/house.png";
 import icGame from "../assets/game.png";
 import icTrophy from "../assets/trophy.png";
 import icWallet from "../assets/wallet.png";
 import icSettings from "../assets/settings.png";
 import icAccount from "../assets/account.png";
+import { fetchWalletBalance } from "../api/auth";
+import Cataris_coin from "../assets/Cataris_coin.svg";
+
+
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [accountBalance, setAccountBalance] = useState<number | null>(null);
+  const location = useLocation();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    setIsAuthenticated(!!token);
+
+    if (token) {
+      const getBalance = async () => {
+        const result = await fetchWalletBalance();
+        if('balance' in result) {
+          setAccountBalance(result.balance);
+        } else {
+          console.error("Failed to fetch wallet balance:", result.message);
+        }
+      };
+      getBalance();
+      // Fetch user balance if authenticated
+    }
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    setIsAuthenticated(false); // Update state after logout
+    console.log("User logged out successfully");
+    window.location.reload();
+  };
+
+  const authLink = (value: "login" | "register") => {
+    const params = new URLSearchParams(location.search);
+    params.set("auth", value);
+    return `${location.pathname}?${params.toString()}`;
+  };
 
   return (
     <nav className="nvb">
       <div className="nvb__inner">
-        {/* KAIRĖ */}
+        {/* Left */}
         <div className="nvb__left">
           <button
             className={`nvb__burger ${open ? "is-open" : ""}`}
@@ -31,23 +68,50 @@ export default function Navbar() {
           </Link>
         </div>
 
-        {/* CENTRAS */}
+        {/* Center */}
         <ul className="nvb__links">
           <li><NavLink to="/" end className="navlink">HOME</NavLink></li>
           <li><NavLink to="/games" className="navlink">GAMES</NavLink></li>
           <li><NavLink to="/promotions" className="navlink">PROMOTIONS</NavLink></li>
         </ul>
 
-        {/* DEŠINĖ */}
+        {/* Right */}
+        {!isAuthenticated ?(
+          <>
+          </>
+        ) : (
+          <>
+          <label className="flex items-center space-x-2 bg-blue-950 text-white w-auto font-bold px-3 py-1.5 rounded-lg shadow-md hover:shadow-lg w-max">
+          <span className="flex-1 text-sm">
+            {accountBalance !== null ? `$${accountBalance.toFixed(2)}` : 'Loading...'}
+          </span>
+          <img src={Cataris_coin} alt="Coin" className="h-6 w-6" />
+        </label>
+          </>
+        )}
+        {/* Example for Account and Logout (Responsive) */}
         <div className="nvb__actions">
-          <Link to="/?auth=login" className="btn btn--ghost">LOGIN</Link>
-          <Link to="/?auth=register" className="btn btn--primary">REGISTER</Link>
+          {!isAuthenticated ? (
+            <>
+              <Link to={authLink("login")} className="btn btn--ghost hidden sm:block">LOGIN</Link>
+              <Link to={authLink("register")} className="btn btn--primary hidden sm:block">REGISTER</Link>
+            </>
+          ) : (
+            <>
+              {/* Balance always visible */}
+              <Link to="/wallet" className="btn btn--primary hidden sm:block">
+                ACCOUNT
+              </Link>
+              <button onClick={handleLogout} className="btn btn--ghost ml-4 hidden sm:block">
+                LOGOUT
+              </button>
+            </>
+          )}
         </div>
       </div>
 
-      {/* KAIRINIS MENIU (vienintelis) */}
+      {/* Side menu (only visible when open) */}
       <aside className={`sideMenu ${open ? "show" : ""}`}>
-
         <div className="sideMenu__group">
           <NavLink to="/" end className="slink" onClick={() => setOpen(false)}>
             <i className="sicon"><img src={icHome} alt="Home" /></i> HOME
@@ -56,22 +120,39 @@ export default function Navbar() {
             <i className="sicon"><img src={icGame} alt="Games" /></i> GAMES
           </NavLink>
           <NavLink to="/promotions" className="slink" onClick={() => setOpen(false)}>
-            <i className="sicon"><img src={icTrophy} alt="Promotions" /></i> PROMOTION
+            <i className="sicon"><img src={icTrophy} alt="Promotions" /></i> PROMOTIONS
           </NavLink>
         </div>
 
         <div className="sideMenu__divider" />
 
         <div className="sideMenu__group">
-          <button className="slink btnlike" onClick={() => setOpen(false)}>
+          <NavLink to="/wallet" className="slink btnlike" onClick={() => setOpen(false)}>
             <i className="sicon"><img src={icWallet} alt="Wallet" /></i> WALLET
-          </button>
+          </NavLink>
           <button className="slink btnlike" onClick={() => setOpen(false)}>
             <i className="sicon"><img src={icSettings} alt="Settings" /></i> SETTINGS
           </button>
           <button className="slink btnlike" onClick={() => setOpen(false)}>
             <i className="sicon"><img src={icAccount} alt="Account" /></i> ACCOUNT
           </button>
+          <div className="sideMenu__divider" />
+          {!isAuthenticated ? (
+            <>
+              <NavLink to="/?auth=login" className="slink btnlike !bg-white !text-black hover:!bg-gray-400 p-2 rounded" onClick={() => setOpen(false)}>
+                LOGIN
+              </NavLink>
+              <NavLink to="/?auth=register" className="slink btnlike !bg-blue-500 !text-white hover:!bg-blue-700 p-2 rounded" onClick={() => setOpen(false)}>
+                REGISTER
+              </NavLink>
+            </>
+          ) : (
+            <>
+              <button className="slink btnlike !bg-red-500 text-white hover:!bg-red-700 p-2 rounded" onClick={handleLogout}>
+                LOGOUT
+              </button>
+            </>
+          )}
         </div>
       </aside>
 

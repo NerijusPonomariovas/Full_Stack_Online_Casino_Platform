@@ -138,3 +138,6 @@ secrets.json
 
 # Microsoft auto-generated folder
 .vs/
+package-lock.json
+front-end/package-lock.json
+front-end/package.json
