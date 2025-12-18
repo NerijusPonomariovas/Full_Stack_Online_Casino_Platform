@@ -47,7 +47,7 @@ export default function Home() {
           </Link>
 
           <Link to="/games/dice" className="gamecard" aria-label="Play MICE">
-            <img src={imgMice} alt="MICE game" />
+            <img src={gameMice} alt="MICE game" />
           </Link>
 
           <Link to="/games/treat" className="gamecard" aria-label="Play TREAT">

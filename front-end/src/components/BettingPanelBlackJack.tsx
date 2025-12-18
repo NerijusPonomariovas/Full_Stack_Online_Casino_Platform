@@ -1,4 +1,4 @@
-import { useEffect, useState, type ReactNode } from "react";
+import { use, useEffect, useState, type ReactNode } from "react";
 import { fetchWalletBalance } from "../api/auth";
 
 type BettingPanelProps = {
@@ -68,8 +68,15 @@ export default function BettingPanel({ children, betAmount, setBetAmount, startG
     }
   };
 
+  useEffect(() => {
+    if (gameOver) {
+      setBetPlaced(false); // Reset bet placed status when game is over
+      setBetAmount(null); // Optionally reset bet amount
+    }
+  } , [gameOver]);
+
   return (
-    <div className="w-[95%] sm:w-[95%] md:ml-0 xl:w-6xl relative mt-110 md:mt-30 flex flex-col drop-shadow-2xl ">
+    <div className="w-[95%] sm:w-[95%] md:ml-0 xl:w-6xl relative mt-110 md:mt-10 flex flex-col drop-shadow-2xl ">
       <div className="flex flex-col md:flex-row h-auto">
         {/* LEFT PANEL */}
         <div className="w-full md:w-64 bg-[#1c5ec3] text-white rounded-tl-4xl p-4 space-y-3 shrink-0">
@@ -151,16 +158,16 @@ export default function BettingPanel({ children, betAmount, setBetAmount, startG
             </div>
           </div>
 
-          {/* Bet / Go */}
+          {/* Go */}
           <div className="flex flex-row gap-2 mt-3">
 
             <button className={`flex-1 py-2 rounded-lg text-black shadow-md font-semibold transition duration-300 ease-in-out ${
-                isGoButtonActive
+                isGoButtonActive && !gameOver
                   ? "bg-[#2cbf2a] hover:bg-[#33de30]" // Active: Brighter on hover
                   : "bg-[#2cbf2a] opacity-50 cursor-not-allowed" // Disabled: Darker, not clickable
               }`}
               onClick={handleGoButtonClick}
-              disabled={!isGoButtonActive}>
+              disabled={!isGoButtonActive ||gameOver}>
               Go
             </button>
           </div>

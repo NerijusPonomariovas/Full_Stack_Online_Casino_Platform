@@ -181,7 +181,7 @@ export default function BettingPanel({ children, betAmount, setBetAmount, startG
         <div className="bg-[#184890] relative w-full md:rounded-tr-4xl flex items-center justify-center">
           {!betPlaced && (
             <div
-              className="absolute inset-0 flex items-center justify-center text-2xl font-bold text-white md:rounded-tr-4xl bg-[#184890] bg-opacity-70"
+              className="absolute inset-0 flex items-center justify-center text-2xl font-bold text-white md:rounded-tr-4xl bg-[#184890] bg-opacity-100"
               style={{ pointerEvents: "auto", zIndex: 20 }}
             >
               <div>Please place your bet to start the game.</div>

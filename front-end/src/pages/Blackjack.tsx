@@ -10,6 +10,8 @@ import BettingPanel from "../components/BettingPanelBlackJack";
 import banner from "../assets/BANNER.svg";
 import cardDeck from "../assets/DECK-CARDS.svg";
 import logo from "../assets/LOGO.svg";
+import { updateWalletBalance } from "../api/auth";
+import { fetchWalletBalance } from "../api/auth";
 
 type CardDeck = {
   suit: string;
@@ -26,6 +28,7 @@ export default function Home() {
   const navigate = useNavigate();
   const [showLogin, setShowLogin] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
+  const [balance, setBalance] = useState<number>(0);
 
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
@@ -38,6 +41,25 @@ export default function Home() {
     setIsAuthenticated(!!token)
     console.log(token)
   }, [searchParams]);
+
+  useEffect(() => {
+      const token = localStorage.getItem("token");
+      setIsAuthenticated(!!token);
+  
+      if (token) {
+        const getBalance = async () => {
+          const result = await fetchWalletBalance();
+          if('balance' in result) {
+            setBalance(result.balance);
+            console.log('Account Balance in BettingPanel:', result.balance);
+          } else {  
+            console.error("Failed to fetch wallet balance:", result.message);
+          }
+        };
+        getBalance();
+        // Fetch user balance if authenticated
+      }
+    }, []);
 
   const closeAuthModal = () => {
     setShowLogin(false);
@@ -101,7 +123,10 @@ export default function Home() {
   const handleGamerOver = (result: GameOverResult) => {
     setGameOver(true);
     setResult(result);
-    setNewGame(true);
+    setTimeout(() => {
+    setBetAmount(null); // Reset bet amount
+    setGameStarted(false); // Disable the "Go" button after game ends
+  }, 500); // Adjust delay as needed
   };
 
   const dealCardToPlayer = () => {
@@ -147,15 +172,6 @@ export default function Home() {
     }
   };
 
-  const resetGame = () => {
-    setPlayerHand([]);
-    setDealerHand([]);
-    setGameOver(false);
-    setResult({ type: "", message: "" });
-    setNewGame(false);
-    setGameDeck(combinations);
-    setDealerRevealed(false);
-  };
 
   const playerValue = calculateHandValue(playerHand);
   const dealerValue = calculateHandValue(dealerHand);
@@ -185,20 +201,21 @@ export default function Home() {
       switch (true) {
         case playerValue === 21:
           setResult({ type: "player", message: "BlackJack! Player won" });
+          updateWalletBalance((balance - betAmount!) + betAmount! * 2.5, "win"); // Payout 3:2 for Blackjack
           break;
         case playerValue > 21:
           setResult({ type: "dealer", message: "Dealer Wins" });
+          updateWalletBalance(balance - betAmount!, "lose");
           break;
         case dealerValue < playerValue:
           playerStand();
           break;
         case dealerValue === playerValue && dealerHand.length <= 5:
           setResult({ type: "", message: "Draw" });
-          setNewGame(true);
           break;
         case dealerValue > playerValue && dealerValue <= 21:
           setResult({ type: "dealer", message: "Dealer Wins" });
-          setNewGame(true);
+          updateWalletBalance(balance - betAmount!, "lose");
           break;
         default:
           break;
@@ -226,6 +243,7 @@ export default function Home() {
   const canStand = !gameOver && !newGame;
   const canDouble = !gameOver && !newGame && playerHand.length === 2;
   const canReset = newGame || gameOver;
+
 
   return (
     <main className="home h-screen overflow-hidden">

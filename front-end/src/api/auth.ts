@@ -211,3 +211,62 @@ export const fetchWalletBalance = async (): Promise<WalletBalanceResponse | Auth
     }
   }
 }
+
+export const updateWalletBalance = async (wager: number, outcome: "win" | "lose"): Promise<WalletBalanceResponse | AuthError> => {
+  try {
+    // Get the JWT token from localStorage
+    const token = localStorage.getItem('token');
+    if (!token) {
+      return {
+        type: 'auth_error',
+        message: 'No authentication token found. Please log in again.',
+      };
+    }
+
+    // Prepare the request payload
+    const payload = {
+      wager: wager,
+      outcome: outcome
+    };
+
+    // Send the POST request to update the wallet balance
+    const response = await axios.post(`${API_URL}/wallet/wager`, payload, {
+      headers: {
+        "Content-Type": "application/json", // Ensure the request is sent as JSON
+        "Authorization": `Bearer ${token}`, // Send token for authorization
+      }
+    });
+
+    // Handle response
+    if (response.status === 200 && response.data) {
+      console.log('Wallet balance updated successfully!');
+      return {
+        balance: response.data.balance, // Update with the actual balance returned by the API
+      };
+    } else {
+      throw new Error('Failed to update wallet balance');
+    }
+  } catch (error: any) {
+    // Handle error response
+    console.error('Error during wallet balance update:');
+    if (error.response) {
+      console.error('Error response:', error.response.data);
+      return {
+        type: 'http_error',
+        message: `Wallet balance update failed: ${error.response.data.error || error.response.statusText}`,
+      };
+    } else if (error.request) {
+      console.error('Error request:', error.request);
+      return {
+        type: 'network_error',
+        message: 'Wallet balance update failed: No response received from the server',
+      };
+    } else {
+      console.error('Error:', error.message);
+      return {
+        type: 'unknown_error',
+        message: error.message || 'Wallet balance update failed: An unknown error occurred',
+      };
+    }
+  }
+};
