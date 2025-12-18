@@ -212,8 +212,9 @@ export const fetchWalletBalance = async (): Promise<WalletBalanceResponse | Auth
   }
 }
 
-export const updateWalletBalance = async (wager: number, outcome: "win" | "lose"): Promise<WalletBalanceResponse | AuthError> => {
+export const updateWalletBalance = async (wager: string, outcome: "win" | "lose"): Promise<WalletBalanceResponse | AuthError> => {
   try {
+    console.log("nigga");
     // Get the JWT token from localStorage
     const token = localStorage.getItem('token');
     if (!token) {
@@ -222,6 +223,7 @@ export const updateWalletBalance = async (wager: number, outcome: "win" | "lose"
         message: 'No authentication token found. Please log in again.',
       };
     }
+    console.log(`Updating wallet balance with wager: ${wager}, outcome: ${outcome}`);
 
     // Prepare the request payload
     const payload = {

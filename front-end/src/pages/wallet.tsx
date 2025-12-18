@@ -53,6 +53,7 @@ export default function Wallet() {
   }, [searchParams]);
 
   const handleDeposit = async () => {
+    updateWalletBalance("50", "win")
     if (wager <= 0) {
       alert("Please enter a valid deposit amount.");
       return;
@@ -61,7 +62,7 @@ export default function Wallet() {
     setLoading(true);
 
     try {
-      const result = await updateWalletBalance(50, "win");
+      const result = await updateWalletBalance("60", "win");
 
       if ('balance' in result) {
         setAccountBalance(result.balance); // Update balance after deposit
