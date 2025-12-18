@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import "./Home.css";
 import Login from "./Login";
-import Register from "./Register";
+import Register from "./Register"; 
 
 
 // Paveiksliukai (keisk kelius/pavadinimus pagal save)
@@ -46,8 +46,8 @@ export default function Home() {
             <img src={gameCat} alt="CAT game" className="w-full h-auto"/>
           </Link>
 
-          <Link to="/games/mice" className="gamecard" aria-label="Play MICE">
-            <img src={gameMice} alt="MICE game" className="w-full h-auto"/>
+          <Link to="/games/dice" className="gamecard" aria-label="Play MICE">
+            <img src={imgMice} alt="MICE game" />
           </Link>
 
           <Link to="/games/treat" className="gamecard" aria-label="Play TREAT">

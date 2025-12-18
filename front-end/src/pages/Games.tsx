@@ -29,7 +29,8 @@ const games: Game[] = [
     {
       id: 2,
       image: gameMice,
-      link: "/games/mice"
+      label: 'CATARIS ORIGINAL',
+      link: "/games/dice"
     },
     {
       id: 3,

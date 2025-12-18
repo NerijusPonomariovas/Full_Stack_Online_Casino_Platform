@@ -1,0 +1,406 @@
+.dice-page {
+  min-height: calc(100vh - 120px);
+  padding: 48px 24px 80px;
+  background: radial-gradient(circle at top, rgba(255, 255, 255, 0.08), transparent 45%),
+    linear-gradient(180deg, #051430 0%, #0a1f3d 40%, #1e3a5f 100%);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  box-sizing: border-box;
+}
+
+.dice-panel {
+  width: 100%;
+  max-width: 720px;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 48px;
+  box-shadow: none;
+  display: grid;
+  gap: 36px;
+  margin: 0 auto;
+}
+
+.dice-header h1 {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 42px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #ffffff;
+}
+
+.dice-header p {
+  margin-top: 12px;
+  margin-bottom: 0;
+  font-family: 'Inter', sans-serif;
+  font-size: 18px;
+  color: #cbd5e0;
+}
+
+.dice-slider {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+}
+
+.chance-visual {
+  position: relative;
+  width: min(100%, 560px);
+}
+
+.chance-track {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 640 / 170;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(22px, 5vw, 34px) clamp(18px, 6vw, 32px);
+}
+
+.chance-track-inner {
+  --lane-padding: clamp(10px, 4vw, 22px);
+  --lane-extension: clamp(8px, 2.2vw, 18px);
+  position: relative;
+  width: 100%;
+  height: clamp(72px, 14vw, 94px);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  overflow: visible;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chance-lane {
+  position: absolute;
+  top: clamp(16px, 4vw, 24px);
+  bottom: clamp(16px, 4vw, 24px);
+  left: calc(var(--lane-padding) - var(--lane-extension));
+  right: calc(var(--lane-padding) - var(--lane-extension));
+  border-radius: 999px;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+  background: linear-gradient(
+    90deg,
+    #00c853 0%,
+    #00c853 calc(var(--chance-stop) * 1%),
+    #ff4d4f calc(var(--chance-stop) * 1%),
+    #ff4d4f 100%
+  );
+  opacity: 0.9;
+  overflow: visible;
+}
+
+.chance-marker {
+  position: absolute;
+  top: 50%;
+  left: calc(var(--marker-position) * 1%);
+  transform: translate(-50%, -50%);
+  min-width: clamp(36px, 8vw, 52px);
+  padding: clamp(7px, 1.6vw, 11px) clamp(10px, 2.4vw, 14px);
+  border-radius: 28px;
+  background: radial-gradient(circle at 30% 25%, #f8fafc, #c7d2fe 65%, #97a6f2 100%);
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: clamp(11px, 2.4vw, 14px);
+  color: #0b1b34;
+  box-shadow: 0 16px 24px rgba(11, 27, 58, 0.4), inset 0 -6px 10px rgba(0, 0, 0, 0.22);
+  transition: left 0.18s ease, background 0.2s ease;
+  text-align: center;
+  z-index: 9;
+  pointer-events: none;
+}
+
+.chance-marker span {
+  pointer-events: none;
+}
+
+.chance-marker.win {
+  background: linear-gradient(135deg, #31d17f, #23a95d);
+  color: #ffffff;
+  box-shadow: 0 16px 24px rgba(35, 169, 93, 0.4), inset 0 -6px 10px rgba(0, 0, 0, 0.22);
+}
+
+.chance-marker.lose {
+  background: linear-gradient(135deg, #ff4d4f, #c62828);
+  color: #ffffff;
+  box-shadow: 0 16px 24px rgba(198, 40, 40, 0.4), inset 0 -6px 10px rgba(0, 0, 0, 0.24);
+}
+
+.chance-marker.rolling {
+  animation: pulse 0.45s ease-in-out infinite alternate;
+}
+
+.chance-handle {
+  position: absolute;
+  top: 50%;
+  left: calc(
+    (var(--lane-padding) - var(--lane-extension)) +
+      (100% - ((var(--lane-padding) - var(--lane-extension)) * 2)) *
+        (var(--chance-stop) / 100)
+  );
+  transform: translate(-50%, -50%);
+  width: clamp(36px, 7.8vw, 48px);
+  pointer-events: none;
+}
+
+.chance-value {
+  position: absolute;
+  bottom: calc(100% + clamp(10px, 1.6vw, 16px) - 20px);
+  left: calc(
+    (var(--lane-padding) - var(--lane-extension)) +
+      (100% - ((var(--lane-padding) - var(--lane-extension)) * 2)) *
+        (var(--chance-stop) / 100)
+  );
+  transform: translate(-50%, 0);
+  padding: clamp(6px, 1.4vw, 9px) clamp(10px, 2.4vw, 14px);
+  border-radius: 16px;
+  background: linear-gradient(180deg, rgba(12, 28, 59, 0.95), rgba(5, 13, 31, 0.9));
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 14px 28px rgba(9, 20, 42, 0.35);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  font-family: 'Inter', sans-serif;
+  color: #f7fafc;
+  z-index: 4;
+  text-align: center;
+  pointer-events: none;
+}
+
+.chance-value::after {
+  content: '';
+  position: absolute;
+  bottom: -7px;
+  left: 50%;
+  width: 12px;
+  height: 12px;
+  background: inherit;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  border-right: 1px solid rgba(255, 255, 255, 0.12);
+  transform: translateX(-50%) rotate(45deg);
+  z-index: -1;
+}
+
+.chance-value span {
+  font-weight: 700;
+  font-size: clamp(16px, 3vw, 22px);
+  line-height: 1;
+}
+
+.chance-value small {
+  font-size: clamp(10px, 2vw, 12px);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(203, 213, 225, 0.9);
+}
+
+.chance-handle img {
+  width: 100%;
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 8px 14px rgba(13, 27, 58, 0.45));
+  transition: opacity 0.18s ease;
+}
+
+.chance-handle.rolling img {
+  opacity: 0.5;
+}
+
+.chance-input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.chance-labels {
+  width: min(100%, 560px);
+  display: flex;
+  justify-content: flex-start;
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(20px, 3.6vw, 26px);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #f7fafc;
+  text-align: left;
+}
+
+.chance-labels span {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.chance-labels strong {
+  font-size: clamp(24px, 4.2vw, 32px);
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  color: #7ae7c7;
+}
+
+.dice-result {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.dice-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.dice-roll {
+  padding: 18px 26px;
+  border-radius: 14px;
+  border: none;
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 18px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  background: linear-gradient(135deg, #63b3ed, #3182ce);
+  color: #ffffff;
+  cursor: pointer;
+  box-shadow: 0 16px 30px rgba(49, 130, 206, 0.35);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.dice-roll:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 18px 36px rgba(49, 130, 206, 0.45);
+}
+
+.dice-roll:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
+
+.dice-roll-value {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 22px 26px;
+  border-radius: 18px;
+  background: rgba(12, 28, 59, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  font-family: 'Inter', sans-serif;
+  color: #cbd5e0;
+  min-height: 132px;
+  width: 100%;
+  box-sizing: border-box;
+  box-shadow: 0 18px 36px rgba(5, 13, 31, 0.3);
+  transition: background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.dice-roll-value-number {
+  font-weight: 700;
+  font-size: 20px;
+  color: #f7fafc;
+}
+
+.dice-roll-value-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  font-size: 15px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(203, 213, 224, 0.92);
+}
+
+.dice-roll-value-outcome {
+  font-size: clamp(20px, 3.2vw, 26px);
+  font-weight: 800;
+  line-height: 1.5;
+  color: #e2e8f0;
+  text-align: center;
+  letter-spacing: 0.04em;
+}
+
+.dice-roll-value.win {
+  background: #16a34a;
+  border-color: #15803d;
+  box-shadow: 0 22px 38px rgba(21, 128, 61, 0.3);
+}
+
+.dice-roll-value.lose {
+  background: #dc2626;
+  border-color: #b91c1c;
+  box-shadow: 0 22px 38px rgba(185, 28, 28, 0.3);
+}
+
+.dice-roll-value.win .dice-roll-value-header,
+.dice-roll-value.win .dice-roll-value-number,
+.dice-roll-value.win .dice-roll-value-outcome,
+.dice-roll-value.lose .dice-roll-value-header,
+.dice-roll-value.lose .dice-roll-value-number,
+.dice-roll-value.lose .dice-roll-value-outcome {
+  color: #ffffff;
+}
+
+.dice-outcome {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  color: #cbd5e0;
+  margin: 0;
+  line-height: 1.6;
+}
+
+.dice-outcome.win {
+  color: #66ffa6;
+}
+
+.dice-outcome.lose {
+  color: #ff9090;
+}
+
+@keyframes pulse {
+  from {
+    transform: translate(-50%, -50%) scale(1);
+  }
+  to {
+    transform: translate(-50%, -50%) scale(1.05);
+  }
+}
+
+@media (max-width: 768px) {
+  .dice-panel {
+    padding: 32px;
+  }
+
+  .dice-roll {
+    width: 100%;
+  }
+
+  .dice-info {
+    text-align: center;
+  }
+
+  .chance-labels {
+    font-size: 12px;
+  }
+
+  .chance-track {
+    padding: 24px 32px;
+  }
+
+  .chance-track-inner {
+    height: clamp(64px, 16vw, 86px);
+  }
+}
