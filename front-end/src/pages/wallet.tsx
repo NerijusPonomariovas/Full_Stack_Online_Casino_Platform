@@ -17,11 +17,10 @@ export default function Wallet() {
   const [userData, setUserData] = useState<UserData | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [accountBalance, setAccountBalance] = useState<number | null>(null);
-  const [wager, setWager] = useState<number>(0); // Track the deposit amount
-  const [transactionOutcome, setTransactionOutcome] = useState<"win" | "lose">("win"); // Static for now, could be dynamic
   const [loading, setLoading] = useState<boolean>(false); // For button loading state
   const [showLogin, setShowLogin] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
+  const [statusMessage, setStatusMessage] = useState<string>("");
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -53,34 +52,28 @@ export default function Wallet() {
   }, [searchParams]);
 
   const handleDeposit = async () => {
-    updateWalletBalance("50", "win")
-    if (wager <= 0) {
-      alert("Please enter a valid deposit amount.");
-      return;
-    }
-
+    console.log("Pressed");
     setLoading(true);
-
+    setStatusMessage("Processing deposit...");
     try {
-      const result = await updateWalletBalance("60", "win");
-
-      if ('balance' in result) {
-        setAccountBalance(result.balance); // Update balance after deposit
-        alert("Deposit successful!");
-      } else {
-        alert(result.message); // Display error message
+      const result = await updateWalletBalance("50", "win");
+      if('balance' in result) {
+        setStatusMessage("Deposit successful!");
+        setLoading(false);
+        console.log("New balance: ", result.balance);
+        window.location.reload();
       }
-    } catch (error) {
-      alert("Error occurred while processing the deposit. Please try again.");
+      window.location.reload();
+    }catch (error) {
+      console.error("Deposit failed: ", error);
     }
-
-    setLoading(false); // Disable the loading state
+    
   };
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-[#0a2e5c] via-[#0b3a6f] to-[#081c36] text-white p-5 overflow-x-hidden">
       {!isAuthenticated && (
-        <div className="fixed inset-0 bg-black bg-opacity-100 z-10 flex justify-center items-center">
+        <div className="fixed inset-0 bg-gradient-to-b from-[#102c56] via-[#0b3a6f] to-[#081c36] bg-opacity-100 z-10 flex justify-center items-center">
           <div className="bg-white p-6 rounded-lg w-11/12 sm:w-96 relative">
             <div className="flex items-center justify-between">
               <div className="flex items-center">
@@ -131,7 +124,7 @@ export default function Wallet() {
         {/* Actions */}
         <button
           onClick={handleDeposit}
-          disabled={loading || wager <= 0}
+          disabled={loading}
           className="w-full py-4 bg-blue-500 rounded-lg font-semibold hover:bg-blue-600 transition-all hover:-translate-y-0.5 hover:shadow-lg">
           {loading ? "Processing..." : `Deposit`}
         </button>
