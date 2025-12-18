@@ -28,7 +28,7 @@ export default function Home() {
   const navigate = useNavigate();
   const [showLogin, setShowLogin] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
-  const [balance, setBalance] = useState<number>(0);
+  const [balance, setBalance] = useState<number>(0.0);
 
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
@@ -145,7 +145,8 @@ export default function Home() {
     console.log(dealerValue);
     if (dealerValue > 21) {
       handleGamerOver({ type: "player", message: "Player wins" });
-      handleDeposit("loss");
+      handleDeposit("win");
+      console.log("win-ABOVE");
     }
   };
 
@@ -153,10 +154,11 @@ export default function Home() {
     if (betAmount === null) {
       return;
     }
-    const betAmountStr = (betAmount * 2).toString();
+    const betAmountStr = (betAmount * 2).toFixed(2).toString();
     if (outcome === "win") {
       try {
         updateWalletBalance(betAmountStr, outcome);
+        console.log("WIN update wallet balance called");
       } catch (error) {
         console.error("Failed to update wallet balance: ", error);
       }
@@ -164,6 +166,7 @@ export default function Home() {
     if (outcome === "loss") {
       try {
         updateWalletBalance(betAmount.toString(), outcome);
+        console.log("LOSS update wallet balance called");
       } catch (error) {
         console.error("Failed to update wallet balance: ", error);
       }
@@ -229,15 +232,18 @@ export default function Home() {
       switch (true) {
         case playerValue === 21:
           setResult({ type: "player", message: "BlackJack! Player won" });
-          updateWalletBalance((betAmount * 2).toString(), "win");
+          updateWalletBalance((betAmount * 2.5).toFixed(2).toString(), "win");
+          console.log("Blackjack win, balance updated");
           break;
         case playerValue > 21:
           setResult({ type: "dealer", message: "Dealer Wins" });
           handleDeposit("loss");
+          console.log("LOSS");
           break;
         case dealerValue < playerValue:
           playerStand();
           handleDeposit("win");
+          console.log("win");
           break;
         case dealerValue === playerValue && dealerHand.length <= 5:
           setResult({ type: "", message: "Draw" });
@@ -245,6 +251,7 @@ export default function Home() {
         case dealerValue > playerValue && dealerValue <= 21:
           setResult({ type: "dealer", message: "Dealer Wins" });
           handleDeposit("loss");
+          console.log("LOSS");
           break;
         default:
           break;

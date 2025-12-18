@@ -27,7 +27,7 @@ export default function Navbar() {
       const getBalance = async () => {
         const result = await fetchWalletBalance();
         if('balance' in result) {
-          setAccountBalance(result.balance);
+          setAccountBalance(parseFloat(result.balance.toFixed(2)));
         } else {
           console.error("Failed to fetch wallet balance:", result.message);
         }

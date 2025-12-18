@@ -148,7 +148,7 @@
         (var(--chance-stop) / 100)
   );
   transform: translate(-50%, -50%);
-  width: clamp(36px, 7.8vw, 48px);
+  width: clamp(4.5px, 1vw, 6px);
   pointer-events: none;
 }
 
