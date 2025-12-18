@@ -108,7 +108,7 @@ const Dice = () => {
           resolve(didWin ? 'win' : 'loss');
           if (didWin) {
             const finalValue = payout - betAmount!;
-            updateWalletBalance((finalValue).toString(), "win");
+            updateWalletBalance(finalValue.toString(), "win");
             console.log("WIN update wallet balance called");
           } else {
             updateWalletBalance(wager.toFixed(2).toString(), "loss");
