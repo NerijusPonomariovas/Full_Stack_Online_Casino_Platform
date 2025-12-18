@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Link, replace, useNavigate, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { useEffect, useState } from "react";
 import "./Home.css";
 import Login from "./Login";
 import Register from "./Register";
@@ -45,7 +45,7 @@ export default function Home() {
             <img src={imgCat} alt="CAT game" />
           </Link>
 
-          <Link to="/games/mice" className="gamecard" aria-label="Play MICE">
+          <Link to="/games/dice" className="gamecard" aria-label="Play MICE">
             <img src={imgMice} alt="MICE game" />
           </Link>
 

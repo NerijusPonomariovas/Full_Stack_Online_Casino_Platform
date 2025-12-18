@@ -34,7 +34,7 @@ const Games: React.FC = () => {
       title: 'MICE',
       image: gameMice,
       label: 'CATARIS ORIGINAL',
-      link: "/games/mice"
+      link: "/games/dice"
     },
     {
       id: 3,
