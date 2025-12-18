@@ -43,23 +43,23 @@ export default function Home() {
   }, [searchParams]);
 
   useEffect(() => {
-      const token = localStorage.getItem("token");
-      setIsAuthenticated(!!token);
-  
-      if (token) {
-        const getBalance = async () => {
-          const result = await fetchWalletBalance();
-          if('balance' in result) {
-            setBalance(result.balance);
-            console.log('Account Balance in BettingPanel:', result.balance);
-          } else {  
-            console.error("Failed to fetch wallet balance:", result.message);
-          }
-        };
-        getBalance();
-        // Fetch user balance if authenticated
-      }
-    }, []);
+    const token = localStorage.getItem("token");
+    setIsAuthenticated(!!token);
+
+    if (token) {
+      const getBalance = async () => {
+        const result = await fetchWalletBalance();
+        if ('balance' in result) {
+          setBalance(result.balance);
+          console.log('Account Balance in blackjack:', result.balance);
+        } else {
+          console.error("Failed to fetch wallet balance:", result.message);
+        }
+      };
+      getBalance();
+      // Fetch user balance if authenticated
+    }
+  }, []);
 
   const closeAuthModal = () => {
     setShowLogin(false);
@@ -79,11 +79,6 @@ export default function Home() {
   });
   const [newGame, setNewGame] = useState(false);
   const [dealerRevealed, setDealerRevealed] = useState(false);
-  const [hasPair, setHasPair] = useState(false);
-  const [isSplit, setIsSplit] = useState(false);
-  const [leftHand, setLeftHand] = useState<CardDeck[]>([]);
-  const [rightHand, setRightHand] = useState<CardDeck[]>([]);
-  const [activeHand, setActiveHand] = useState<"left" | "right">("left");
 
 
   const getRandomCardFromDeck = () => {
@@ -124,9 +119,9 @@ export default function Home() {
     setGameOver(true);
     setResult(result);
     setTimeout(() => {
-    setBetAmount(null); // Reset bet amount
-    setGameStarted(false); // Disable the "Go" button after game ends
-  }, 500); // Adjust delay as needed
+      setBetAmount(null); // Reset bet amount
+      setGameStarted(false); // Disable the "Go" button after game ends
+    }, 500); // Adjust delay as needed
   };
 
   const dealCardToPlayer = () => {
@@ -150,8 +145,30 @@ export default function Home() {
     console.log(dealerValue);
     if (dealerValue > 21) {
       handleGamerOver({ type: "player", message: "Player wins" });
+      handleDeposit("loss");
     }
   };
+
+  const handleDeposit = async (outcome: "win" | "loss") => {
+    if (betAmount === null) {
+      return;
+    }
+    const betAmountStr = (betAmount * 2).toString();
+    if (outcome === "win") {
+      try {
+        updateWalletBalance(betAmountStr, outcome);
+      } catch (error) {
+        console.error("Failed to update wallet balance: ", error);
+      }
+    }
+    if (outcome === "loss") {
+      try {
+        updateWalletBalance(betAmount.toString(), outcome);
+      } catch (error) {
+        console.error("Failed to update wallet balance: ", error);
+      }
+    }
+  }
 
   const startGame = () => {
     if (betAmount && betAmount > 0) {
@@ -172,6 +189,16 @@ export default function Home() {
     }
   };
 
+  const resetGame = () => {
+    setPlayerHand([]);
+    setDealerHand([]);
+    setGameOver(false);
+    setResult({ type: "", message: "" });
+    setResult({ type: "", message: "" });
+    setNewGame(false);
+    setGameDeck(combinations);
+    setDealerRevealed(false);
+  }
 
   const playerValue = calculateHandValue(playerHand);
   const dealerValue = calculateHandValue(dealerHand);
@@ -198,24 +225,26 @@ export default function Home() {
       setDealerRevealed(false);
     }
     if (gameOver && dealerHand.length <= 5) {
+      if(betAmount === null) return;
       switch (true) {
         case playerValue === 21:
           setResult({ type: "player", message: "BlackJack! Player won" });
-          updateWalletBalance((balance - betAmount!) + betAmount! * 2.5, "win"); // Payout 3:2 for Blackjack
+          updateWalletBalance((betAmount * 2).toString(), "win");
           break;
         case playerValue > 21:
           setResult({ type: "dealer", message: "Dealer Wins" });
-          updateWalletBalance(balance - betAmount!, "lose");
+          handleDeposit("loss");
           break;
         case dealerValue < playerValue:
           playerStand();
+          handleDeposit("win");
           break;
         case dealerValue === playerValue && dealerHand.length <= 5:
           setResult({ type: "", message: "Draw" });
           break;
         case dealerValue > playerValue && dealerValue <= 21:
           setResult({ type: "dealer", message: "Dealer Wins" });
-          updateWalletBalance(balance - betAmount!, "lose");
+          handleDeposit("loss");
           break;
         default:
           break;
@@ -223,27 +252,10 @@ export default function Home() {
     }
   }, [playerHand, dealerHand, gameOver]);
 
-  useEffect(() => {
-    if (playerHand.length === 2) {
-      const firstHandValue = getCardValue(playerHand[0]);
-      const secondHandValue = getCardValue(playerHand[1]);
-      if (firstHandValue === secondHandValue) {
-        setHasPair(false);
-        console.log("Player has a pair");
-      } else {
-        setHasPair(false);
-      }
-    } else {
-      setHasPair(false);
-    }
-  }, [playerHand]);
-
   // *** LOGIKA AKTYWNOŚCI PRZYCISKÓW ***
   const canHit = !gameOver && !newGame;
   const canStand = !gameOver && !newGame;
-  const canDouble = !gameOver && !newGame && playerHand.length === 2;
   const canReset = newGame || gameOver;
-
 
   return (
     <main className="home h-screen overflow-hidden">
@@ -265,9 +277,9 @@ export default function Home() {
       )}
       <div className="flex w-screen min-h-screen justify-center items-start">
         <div className="w-full flex justify-center">
-          <BettingPanel betAmount={betAmount} setBetAmount={setBetAmount} startGame={startGame} gameOver={gameOver} gameStarted={gameStarted}>
+          <BettingPanel betAmount={betAmount} setBetAmount={setBetAmount} startGame={resetGame} gameOver={gameOver} gameStarted={gameStarted}>
             <div className="w-full h-full flex">
-                <div className="w-full h-full sm:rounded-none md:rounded-tr-2xl relative flex justify-center">
+              <div className="w-full h-full sm:rounded-none md:rounded-tr-2xl relative flex justify-center">
                 <img
                   src={cardDeck}
                   alt="Card deck"
@@ -294,54 +306,29 @@ export default function Home() {
                       status={playerStatus}
                     />
                     {/*Button panel blet*/}
-                  <div className="flex justify-center mt-6">
-                    <div className="grid grid-cols-2 gap-3 p-4 rounded-xl bg-[#003366] border border-[#0a1a2f]">
-                      {/* HIT */}
-                      <button
-                        className={`w-24 h-12 flex items-center justify-center text-white font-semibold rounded-lg shadow-md
+                    <div className="flex justify-center mt-6">
+                      <div className="grid grid-cols-2 gap-3 p-4 rounded-xl bg-[#003366] border border-[#0a1a2f]">
+                        {/* HIT */}
+                        <button
+                          className={`w-24 h-12 flex items-center justify-center text-white font-semibold rounded-lg shadow-md
       bg-green-500 ${!canHit ? "opacity-40 cursor-not-allowed" : ""}`}
-                        onClick={dealCardToPlayer}
-                        disabled={!canHit}
-                      >
-                        Hit
-                      </button>
-                      {/* STAND */}
-                      <button
-                        className={`w-24 h-12 flex items-center justify-center text-white font-semibold rounded-lg shadow-md
+                          onClick={dealCardToPlayer}
+                          disabled={!canHit}
+                        >
+                          Hit
+                        </button>
+                        {/* STAND */}
+                        <button
+                          className={`w-24 h-12 flex items-center justify-center text-white font-semibold rounded-lg shadow-md
       bg-red-500 ${!canStand ? "opacity-40 cursor-not-allowed" : ""}`}
-                        onClick={playerStand}
-                        disabled={!canStand}
-                      >
-                        Stand
-                      </button>
-
-                      {/* DOUBLE */}
-                      <button
-                        className={`w-24 h-12 flex items-center justify-center text-white font-semibold rounded-lg shadow-md
-      bg-yellow-500 ${!canDouble ? "opacity-40 cursor-not-allowed" : ""}`}
-                        onClick={() => {
-                          dealCardToPlayer();
-                          playerStand();
-                        }}
-                        disabled={!canDouble}
-                      >
-                        Double
-                      </button>
-                      {/* RESET 
-                      <button
-                        className={`w-24 h-12 flex items-center justify-center text-white font-semibold rounded-lg shadow-md
-      bg-blu  e-500 ${!canReset ? "opacity-40 cursor-not-allowed" : ""}`}
-                        onClick={resetGame}
-                        disabled={!canReset}
-                      >
-                        Reset
-                      </button>
-                      */}
+                          onClick={playerStand}
+                          disabled={!canStand}
+                        >
+                          Stand
+                        </button>
+                      </div>
                     </div>
                   </div>
-                  </div>
-
-                  
                 </div>
               </div>
             </div>

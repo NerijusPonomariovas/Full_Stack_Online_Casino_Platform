@@ -62,7 +62,10 @@ export default function BettingPanel({ children, betAmount, setBetAmount, startG
   const isGoButtonActive = betAmount !== null && betAmount > 0 && !gameOver && betAmount <= balance;
 
   const handleGoButtonClick = () => {
-    if (isGoButtonActive) {
+    if (gameOver) {
+      startGame();
+      setBetPlaced(true); // Mark that the bet has been placed
+    } else if (isAuthenticated) {
       startGame();
       setBetPlaced(true); // Mark that the bet has been placed
     }
@@ -185,7 +188,7 @@ export default function BettingPanel({ children, betAmount, setBetAmount, startG
         </div>
 
         {/* RIGHT PANEL – STÓŁ */}
-        <div className="bg-[#184890] relative w-full md:rounded-tr-4xl flex items-center justify-center">
+        <div className={`bg-[#184890] relative w-full md:rounded-tr-4xl flex items-center justify-center ${!betPlaced ? 'pointer-events-none' : ''}`}>
           {!betPlaced && (
             <div
               className="absolute inset-0 flex items-center justify-center text-2xl font-bold text-white md:rounded-tr-4xl bg-[#184890] bg-opacity-100"

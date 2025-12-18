@@ -61,13 +61,11 @@ export default function Wallet() {
         setStatusMessage("Deposit successful!");
         setLoading(false);
         console.log("New balance: ", result.balance);
-        window.location.reload();
       }
       window.location.reload();
     }catch (error) {
       console.error("Deposit failed: ", error);
     }
-    
   };
 
   return (

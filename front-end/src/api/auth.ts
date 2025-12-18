@@ -212,9 +212,9 @@ export const fetchWalletBalance = async (): Promise<WalletBalanceResponse | Auth
   }
 }
 
-export const updateWalletBalance = async (wager: string, outcome: "win" | "lose"): Promise<WalletBalanceResponse | AuthError> => {
+export const updateWalletBalance = async (wager: string, outcome: "win" | "loss"): Promise<WalletBalanceResponse | AuthError> => {
   try {
-    console.log("nigga");
+    console.log("AUTH shit",wager);
     // Get the JWT token from localStorage
     const token = localStorage.getItem('token');
     if (!token) {
@@ -250,7 +250,7 @@ export const updateWalletBalance = async (wager: string, outcome: "win" | "lose"
     }
   } catch (error: any) {
     // Handle error response
-    console.error('Error during wallet balance update:');
+    //console.error('Error during wallet balance update:');
     if (error.response) {
       console.error('Error response:', error.response.data);
       return {
@@ -264,7 +264,7 @@ export const updateWalletBalance = async (wager: string, outcome: "win" | "lose"
         message: 'Wallet balance update failed: No response received from the server',
       };
     } else {
-      console.error('Error:', error.message);
+      //console.error('Error:', error.message);
       return {
         type: 'unknown_error',
         message: error.message || 'Wallet balance update failed: An unknown error occurred',
