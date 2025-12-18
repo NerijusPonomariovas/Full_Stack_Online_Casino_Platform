@@ -3,6 +3,10 @@ import BettingPanel from '../components/BettingPanelBlackJack';
 import sliderBase from '../assets/Rectangle 62.png';
 import sliderHandle from '../assets/btn.png';
 import './Dice.css';
+import logo from "../assets/LOGO.svg";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import Login from "./Login";
+import Register from "./Register";
 
 const Dice = () => {
   const [chance, setChance] = useState(50);
@@ -13,6 +17,11 @@ const Dice = () => {
   const [betAmount, setBetAmount] = useState<number | null>(null);
   const [gameOver, setGameOver] = useState(false);
   const [gameStarted, setGameStarted] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [showLogin, setShowLogin] = useState(false);
+  const [showRegister, setShowRegister] = useState(false);
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
   const HOUSE_EDGE = 0.05;
   const payout = useMemo(
@@ -27,36 +36,65 @@ const Dice = () => {
       setMarkerValue(clampToRange(chance));
     }
   }, [chance, finalValue, isRolling]);
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    setIsAuthenticated(!!token);
+    const auth = searchParams.get("auth");
+    setShowLogin(auth === "login");
+    setShowRegister(auth === "register");
+  }, [searchParams]);
+  const closeAuthModal = () => {
+      setShowLogin(false);
+      setShowRegister(false);
+      navigate("/games/dice", { replace: true }); // clears ?auth=...
+    };
 
   const startGame = () => {
     setGameStarted(true);
     setGameOver(false);
   };
-    const handleRoll = () => {
-      if (isRolling) return;
-      setIsRolling(true);
-      setOutcome(null);
-      setFinalValue(null);
-      setMarkerValue(clampToRange(chance));
+  const handleRoll = () => {
+    if (isRolling) return;
+    setIsRolling(true);
+    setOutcome(null);
+    setFinalValue(null);
+    setMarkerValue(clampToRange(chance));
 
-      const animationSteps = 14;
-      let step = 0;
-      const interval = window.setInterval(() => {
-        step += 1;
-        const tempValue = clampToRange(Math.floor(Math.random() * 100) + 1);
-        setMarkerValue(tempValue);
-        if (step >= animationSteps) {
-          window.clearInterval(interval);
-          const roundedFinal = clampToRange(Math.floor(Math.random() * 100) + 1);
-          setMarkerValue(roundedFinal);
-          setFinalValue(roundedFinal);
-          setOutcome(roundedFinal <= chance ? 'win' : 'lose');
-          setIsRolling(false);
-        }
-      }, 70);
-    };
+    const animationSteps = 14;
+    let step = 0;
+    const interval = window.setInterval(() => {
+      step += 1;
+      const tempValue = clampToRange(Math.floor(Math.random() * 100) + 1);
+      setMarkerValue(tempValue);
+      if (step >= animationSteps) {
+        window.clearInterval(interval);
+        const roundedFinal = clampToRange(Math.floor(Math.random() * 100) + 1);
+        setMarkerValue(roundedFinal);
+        setFinalValue(roundedFinal);
+        setOutcome(roundedFinal <= chance ? 'win' : 'lose');
+        setIsRolling(false);
+      }
+    }, 70);
+  };
 
-    return (
+  return (
+    <main className="home h-screen overflow-hidden">
+      {!isAuthenticated && (
+        <div className="fixed inset-0 bg-gradient-to-b from-[#102c56] via-[#0b3a6f] to-[#081c36] bg-opacity-100 z-10 flex justify-center items-center">
+          <div className="bg-white p-6 rounded-lg w-11/12 sm:w-96 relative">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center">
+                <img
+                  src={logo}
+                  alt="Logo"
+                  className="w-16 h-auto" // Adjust the size of your logo
+                />
+                <p className="text-xl ml-4 text-gray-700">Please log in to play the game!</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
       <div className="dice-page">
         <BettingPanel betAmount={betAmount} setBetAmount={setBetAmount} startGame={startGame} gameOver={gameOver} gameStarted={gameStarted}>
           <div className="dice-panel">
@@ -142,7 +180,33 @@ const Dice = () => {
           </div>
         </BettingPanel>
       </div>
-    );
-  };
+      {/* LOGIN MODAL */}
+      {showLogin && (
+        <div className="modal" role="dialog" aria-modal="true" aria-labelledby="login-title">
+          <div className="modal__backdrop" onClick={closeAuthModal} />
+          <div className="modal__panel">
+            <button className="modal__close" onClick={closeAuthModal} aria-label="Close">
+              ×
+            </button>
+            <Login />
+          </div>
+        </div>
+      )}
 
-  export default Dice;
+      {/* REGISTER MODAL */}
+      {showRegister && (
+        <div className="modal" role="dialog" aria-modal="true" aria-labelledby="register-title">
+          <div className="modal__backdrop" onClick={closeAuthModal} />
+          <div className="modal__panel">
+            <button className="modal__close" onClick={closeAuthModal} aria-label="Close">
+              ×
+            </button>
+            <Register />
+          </div>
+        </div>
+      )}
+    </main>
+  );
+};
+
+export default Dice;
