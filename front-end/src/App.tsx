@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+
 import './App.css'
 import { Route, Routes, BrowserRouter } from 'react-router-dom'
 import AppLayout from "./layout/AppLayout";
@@ -9,7 +9,6 @@ import Games from './pages/Games';
 import Dice from './pages/Dice';
 import Promotions from './pages/promotion';
 import Wallet from './pages/wallet';
-import Navbar from './components/Navbar'; // Adjust the path accordingly
 import Cat from './pages/games/catGame/Cat';
 
 const App: React.FC = () => {

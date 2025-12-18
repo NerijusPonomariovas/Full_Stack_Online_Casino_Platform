@@ -8,7 +8,6 @@ import icTrophy from "../assets/trophy.png";
 import icWallet from "../assets/wallet.png";
 import icSettings from "../assets/settings.png";
 import icAccount from "../assets/account.png";
-import { fetchWalletBalance } from "../api/auth";
 import Cataris_coin from "../assets/Cataris_coin.svg";
 import { refreshBalance } from "../components/refreshBalance";
 

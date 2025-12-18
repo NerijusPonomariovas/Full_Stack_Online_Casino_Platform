@@ -53,6 +53,7 @@ export default function BettingPanelDice({
     if (isGoButtonActive) {
       startGame();
       setBetPlaced(true);
+      console.log(betPlaced);
     }
   };
 

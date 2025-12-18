@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { register } from '../api/auth';
 import React, { useState } from 'react'
-import login from './Login';
+
 
 interface RegisterProps {
     onClose?: () => void;
@@ -15,7 +15,7 @@ const Register: React.FC<RegisterProps> = ({onClose}) => {
     const [password, setPassword] = useState<string>('');
     const [confirmPassword, setConfirmPassword] = useState<string>('');
     const [error, setError] = useState<string>('');
-    const [passwordValid, setPasswordValid] = useState<boolean>(true);
+
 
     const navigate = useNavigate();
 
@@ -32,7 +32,6 @@ const Register: React.FC<RegisterProps> = ({onClose}) => {
         }
 
         if (!validatePassword(password)) {
-            setPasswordValid(false);
             setError("Password does not corresponds to the requirements");
             return;
         }

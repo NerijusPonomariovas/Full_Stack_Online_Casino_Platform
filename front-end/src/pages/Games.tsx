@@ -2,8 +2,8 @@
 import './Games.css';
 import Login from "./Login";
 import Register from "./Register";
-import React, { useEffect, useState } from "react";
-import { Link, replace, useNavigate, useSearchParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 
 // Import game images
 import gameCat from '../assets/games/game-cat.png';
@@ -29,7 +29,6 @@ const games: Game[] = [
     {
       id: 2,
       image: gameMice,
-      label: 'CATARIS ORIGINAL',
       link: "/games/dice"
     },
     {
