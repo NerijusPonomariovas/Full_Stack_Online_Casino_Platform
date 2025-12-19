@@ -11,6 +11,7 @@ import Promotions from './pages/promotion';
 import Wallet from './pages/wallet';
 import Cat from './pages/games/catGame/Cat';
 import PlinkoGame from './pages/Plinko';
+import Treat from './pages/games/treatGame/Treat';
 
 const App: React.FC = () => {
   return (
@@ -26,6 +27,7 @@ const App: React.FC = () => {
           <Route path="/wallet" element={<Wallet />} />
           <Route path="/games/cat" element={<Cat/>}/>
           <Route path="/games/plinko" element={<PlinkoGame/>}/>
+          <Route path="/games/treat" element={<Treat />} />
         </Route>
       </Routes>
     </BrowserRouter>
