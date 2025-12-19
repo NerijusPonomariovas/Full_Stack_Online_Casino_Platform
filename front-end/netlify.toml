@@ -12,6 +12,7 @@
   targetPort = 3000
 
 [[redirects]]
-  from = "/"
+  from = "/*"
   to = "/index.html"
   status = 200
+  force = true
