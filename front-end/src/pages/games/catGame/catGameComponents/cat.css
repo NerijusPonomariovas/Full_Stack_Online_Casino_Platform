@@ -38,7 +38,6 @@ canvas.game {
 
 #controls div {
   display: grid;
-  grid-template-columns: 50px 50px 50px;
   grid-template-rows: auto auto;
   grid-column-gap: 10px;
   grid-row-gap: 10px;
@@ -80,6 +79,7 @@ canvas.game {
   align-items: center;
   background-color: white;
   padding: 20px;
+  color: black;
 }
 
 #result-container button {
@@ -105,7 +105,7 @@ canvas.game {
   position: absolute;
   top: 20px;
   left: 20px;
-
+  width: 70px;
   font-size: 2em;
   color: white;
 }

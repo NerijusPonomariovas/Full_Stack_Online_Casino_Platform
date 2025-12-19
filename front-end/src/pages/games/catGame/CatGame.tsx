@@ -85,9 +85,7 @@ export default function Cat() {
       <canvas className="game"></canvas>
       <div id="controls">
         <div>
-          <button id="forward">▲</button>
           <button id="left">◀</button>
-          <button id="backward">▼</button>
           <button id="right">▶</button>
         </div>
       </div>
