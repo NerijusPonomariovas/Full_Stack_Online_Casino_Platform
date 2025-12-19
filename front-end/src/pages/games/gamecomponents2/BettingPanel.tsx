@@ -10,27 +10,27 @@ type BettingPanelProps = {
   gameStarted: boolean;
 };
 
-/* type WalletBalanceResponse = {
+type WalletBalanceResponse = {
   balance: number;
 };
 
 type AuthError = {
   type: string;
   message: string;
-}; */
+};
 
 
 export default function BettingPanel({ children, betAmount, setBetAmount, startGame, gameOver, gameStarted}: BettingPanelProps) {
   const [balance, setBalance] = useState<number>(0); // Example balance, replace with actual fetched balance
   const [mode, setMode] = useState("manual");
-/*   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null); // Error message state */
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null); // Error message state
   const [betPlaced, setBetPlaced] = useState<boolean>(false); // Track if the bet is placed
 
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    //setIsAuthenticated(!!token);
+    setIsAuthenticated(!!token);
 
     if (token) {
       const getBalance = async () => {
@@ -47,6 +47,17 @@ export default function BettingPanel({ children, betAmount, setBetAmount, startG
     }
   }, []);
 
+  const handleBetAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newBetAmount = e.target.value === "" ? null : Number(e.target.value);
+
+    if (newBetAmount !== null && newBetAmount > balance) {
+      setErrorMessage("Insufficient funds"); // Set error message if bet is greater than balance
+    } else {
+      setErrorMessage(null); // Clear error message when bet is valid
+    }
+
+    setBetAmount(newBetAmount);
+  };
 
   const isGoButtonActive = betAmount !== null && betAmount > 0 && !gameOver && betAmount <= balance;
 
@@ -61,7 +72,7 @@ export default function BettingPanel({ children, betAmount, setBetAmount, startG
     <div className="w-[95%] sm:w-[95%] md:ml-0 xl:w-6xl relative mt-110 md:mt-30 flex flex-col drop-shadow-2xl ">
       <div className="flex flex-col md:flex-row h-140">
         {/* LEFT PANEL */}
-        <div className="w-full md:w-64 bg-[#1c5ec3] text-white rounded-t-4xl md:rounded-tl-4xl md:rounded-tr-none p-4 space-y-3 shrink-0">
+        <div className="w-full md:w-64 bg-[#1c5ec3] text-white rounded-tl-4xl p-4 space-y-3 shrink-0">
           {/* Toggle Manual / Auto */}
           <div className="flex bg-[#102c56] rounded-4xl overflow-hidden h-12 w-full items-center pl-1 pr-1">
             <button
@@ -168,7 +179,7 @@ export default function BettingPanel({ children, betAmount, setBetAmount, startG
 
         {/* RIGHT PANEL – STÓŁ */}
         <div className="bg-[#184890] relative w-full md:rounded-tr-4xl flex items-center justify-center">
-          {betPlaced && (
+          {!betPlaced && (
             <div
               className="absolute inset-0 flex items-center justify-center text-2xl font-bold text-white md:rounded-tr-4xl bg-[#184890] bg-opacity-100"
               style={{ pointerEvents: "auto", zIndex: 20 }}
@@ -181,7 +192,7 @@ export default function BettingPanel({ children, betAmount, setBetAmount, startG
       </div>
 
       {/* BOTTOM PANEL */}
-      <div className="w-full bg-[#10305f] h-24 rounded-b-4xl flex items-center justify-center text-gray-300 text-sm relative mt-62 md:mt-0">
+      <div className="w-full bg-[#10305f] h-24 rounded-b-4xl flex items-center justify-center text-gray-300 text-sm relative mt-82 md:mt-0">
         Cataris
       </div>
     </div>
