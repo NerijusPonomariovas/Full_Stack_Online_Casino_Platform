@@ -1,0 +1,17 @@
+[build]
+  # The directory that contains the output of your build process
+  publish = "dist"
+  
+  # Command to build your site
+  command = "npm run build"
+
+[dev]
+  # Command to run the development server locally
+  command = "npm run dev"
+  port = 3000
+  targetPort = 3000
+
+[[redirects]]
+  from = "/"
+  to = "/index.html"
+  status = 200
