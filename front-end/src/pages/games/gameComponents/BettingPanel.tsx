@@ -179,7 +179,7 @@ export default function BettingPanel({ children, betAmount, setBetAmount, startG
 
         {/* RIGHT PANEL – STÓŁ */}
         <div className="bg-[#184890] relative w-full md:rounded-tr-4xl flex items-center justify-center">
-          {!betPlaced && (
+          {betPlaced && (
             <div
               className="absolute inset-0 flex items-center justify-center text-2xl font-bold text-white md:rounded-tr-4xl bg-[#184890] bg-opacity-100"
               style={{ pointerEvents: "auto", zIndex: 20 }}

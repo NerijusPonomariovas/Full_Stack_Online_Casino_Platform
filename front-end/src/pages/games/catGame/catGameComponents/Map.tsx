@@ -7,6 +7,7 @@ import { Car } from "./Car";
 import { Truck } from "./Truck";
 import { StopBollard } from "./StopBollard";
 import { tileSize } from "./constants";
+import { ManholeCover } from "./manholeCover";
 export const metadata: Row[] = [];
 
 export const updatedRows = new Set<number>();
@@ -93,11 +94,28 @@ export function updateRow(rowData: any, rowIndex: number) {
     if(vehicle.ref){
       map.remove(vehicle.ref);
       vehicle.ref = undefined;
-      console.log("removed!");
+      //console.log("removed!");
     }
   });
-}
+  }
 
+  /* const road = map.getObjectByName("road");
+    if (road) {
+      const manholeCover = road.getObjectByName("manholeCover")
+      if(manholeCover){
+        const stripeMesh1 = manholeCover.getObjectByName("stripeMesh1")
+        const stripeMesh2 = manholeCover.getObjectByName("stripeMesh2")
+        const stripeMesh3 = manholeCover.getObjectByName("stripeMesh3")
+        if(stripeMesh1 && stripeMesh2 && stripeMesh3){
+          manholeCover.remove(stripeMesh1);
+          manholeCover.remove(stripeMesh2);
+          manholeCover.remove(stripeMesh3);
+          console.log("stripeMeshes removed!");
+        }
+        console.log("manholeCover found!");
+      };
+    } */
+  
   metadata[rowIndex-1].type = "stopBollard";
   // Create a new road row
   const newRow = Road(rowIndex);
@@ -105,10 +123,41 @@ export function updateRow(rowData: any, rowIndex: number) {
   // Add stop bollard to the new row
   const stopBollard = StopBollard();
   stopBollard.position.set(-42, 0, 0); // Adjust position of stop bollard
-  newRow.add(stopBollard);
-
+  newRow.add(stopBollard)
+  
+  const manholeCover = ManholeCover();
+  manholeCover.position.set(0, 0, 0);
+  /* const stripeMesh1 = manholeCover.getObjectByName("stripeMesh1");
+  if (stripeMesh1 && 'material' in stripeMesh1) {
+    const material = stripeMesh1.material as THREE.Material;
+    if ('color' in material) {
+      (material as any).color.set(0x123123);
+    }
+  } */
+  newRow.add(manholeCover);
   // Add the new row to the map
   map.add(newRow);
+
+  const prevRow = map.children.find((child: any) => child);
+  if(prevRow){
+    const road = map.getObjectByName("road");
+    console.log("asd");
+    if (road) {
+      const manholeCover = road.getObjectByName("manholeCover")
+      if(manholeCover){
+        const stripeMesh1 = manholeCover.getObjectByName("stripeMesh1")
+        const stripeMesh2 = manholeCover.getObjectByName("stripeMesh2")
+        const stripeMesh3 = manholeCover.getObjectByName("stripeMesh3")
+        if(stripeMesh1 && stripeMesh2 && stripeMesh3){
+          manholeCover.remove(stripeMesh1);
+          manholeCover.remove(stripeMesh2);
+          manholeCover.remove(stripeMesh3);
+          console.log("stripeMeshes removed!");
+        }
+        console.log("manholeCover found!");
+      };
+    }
+  }
 
   // Mark this row as updated
   updatedRows.add(rowIndex);

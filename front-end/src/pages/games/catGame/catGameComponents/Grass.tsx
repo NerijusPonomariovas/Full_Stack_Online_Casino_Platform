@@ -11,7 +11,6 @@ export function Grass({ rowIndex }: {rowIndex: number}) {
   );
   foundation.position.z = 1.5;
   foundation.receiveShadow = true;
-  //grass.add(StopBollard());
   grass.add(foundation);
 
   return grass;
