@@ -1,5 +1,5 @@
 import { useEffect, useState, type ReactNode } from "react";
-import { fetchWalletBalance } from "../../../api/auth";
+import { fetchWalletBalance } from "../api/auth";
 
 type BettingPanelProps = {
   children?: ReactNode;

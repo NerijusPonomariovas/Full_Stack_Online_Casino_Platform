@@ -201,7 +201,7 @@ export default function PlinkoGame() {
             <div className="w-full h-full sm:rounded-none md:rounded-tr-2xl self-start flex justify-center relative">
               <canvas
                 ref={canvasRef}
-                className="plinko-canvas w-full"
+                className="plinko-canvas w-full justify-center"
                 style={{
                   backgroundColor: 'transparent',
                   cursor: 'pointer',
