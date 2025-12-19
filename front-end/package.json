@@ -19,7 +19,8 @@
     "react-dom": "^19.1.1",
     "react-router-dom": "^7.9.5",
     "tailwindcss": "^4.1.16",
-    "three": "^0.181.1"
+    "three": "^0.181.1",
+    "vite-plugin-static-copy": "^3.1.4"
   },
   "devDependencies": {
     "@eslint/js": "^9.36.0",
