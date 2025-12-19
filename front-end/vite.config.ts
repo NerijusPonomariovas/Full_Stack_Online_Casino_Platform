@@ -10,8 +10,5 @@ export default defineConfig({
   plugins: [
     react(),
     tailwindcss()
-  ],
-  esbuild: {
-    logLevel: 'silent',
-  }
+  ]
 })

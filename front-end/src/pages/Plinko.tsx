@@ -174,6 +174,7 @@ export default function PlinkoGame() {
 
   const handleCanvasClick = () => {
     dropBall();
+    console.log(balance);
   };
 
   return (
