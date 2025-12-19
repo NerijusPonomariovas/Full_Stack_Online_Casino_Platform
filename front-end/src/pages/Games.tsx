@@ -44,7 +44,7 @@ const games: Game[] = [
     {
       id: 5,
       image: gamePlinko,
-      link: "/games/ball-of-yarn"
+      link: "/games/plinko"
     },
     {
       id: 6,
