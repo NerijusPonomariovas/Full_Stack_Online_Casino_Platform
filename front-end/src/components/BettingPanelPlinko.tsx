@@ -59,10 +59,10 @@ export default function BettingPanel({ children, betAmount, setBetAmount, startG
   } , [gameOver, setBetAmount]);
 
   return (
-    <div className="w-[95%] sm:w-[95%] md:ml-0 xl:w-6xl relative mt-110 md:mt-10 flex flex-col drop-shadow-2xl ">
+    <div className="w-[95%] sm:w-[95%] md:ml-0 xl:w-6xl relative mt-10 md:mt-10 flex flex-col drop-shadow-2xl ">
       <div className="flex flex-col md:flex-row h-auto">
         {/* LEFT PANEL */}
-        <div className="w-full md:w-64 bg-[#1c5ec3] text-white rounded-tl-4xl p-4 space-y-3 shrink-0">
+        <div className="w-full md:w-64 bg-[#1c5ec3] text-white rounded-t-4xl md:rounded-tl-4xl md:rounded-tr-none p-4 space-y-3 shrink-0">
           {/* Toggle Manual / Auto */}
           <div className="flex bg-[#102c56] rounded-4xl overflow-hidden h-12 w-full items-center pl-1 pr-1">
             <button
@@ -171,7 +171,7 @@ export default function BettingPanel({ children, betAmount, setBetAmount, startG
         <div className={`bg-[#184890] relative w-full md:rounded-tr-4xl flex items-center justify-center ${!betPlaced ? 'pointer-events-none' : ''}`}>
           {!betPlaced && (
             <div
-              className="absolute inset-0 flex items-center justify-center text-2xl font-bold text-white md:rounded-tr-4xl bg-[#184890] bg-opacity-100"
+              className="absolute w-full inset-0 flex items-center justify-center text-2xl font-bold text-white md:rounded-tr-4xl bg-[#184890]"
               style={{ pointerEvents: "auto", zIndex: 10 }}
             >
               <div>Please place your bet to start the game.</div>
@@ -182,7 +182,7 @@ export default function BettingPanel({ children, betAmount, setBetAmount, startG
       </div>
 
       {/* BOTTOM PANEL */}
-      <div className="w-full bg-[#10305f] h-24 rounded-b-4xl flex items-center justify-center text-gray-300 text-sm relative mt-82 md:mt-0">
+      <div className="w-full bg-[#10305f] h-24 rounded-b-4xl flex items-center justify-center text-gray-300 text-sm relative md:mt-0">
         Cataris
       </div>
     </div>

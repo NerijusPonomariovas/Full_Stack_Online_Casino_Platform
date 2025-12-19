@@ -75,15 +75,15 @@ export default function PlinkoGame() {
       const displayHeight = Math.round(HEIGHT * scale);
 
       // Set CSS display size to maintain aspect ratio responsively
-      canvas.style.width = `${displayWidth}px`;
+      canvas.style.width = `${displayWidth/1.1}px`;
       canvas.style.height = `${displayHeight}px`;
 
       // Set internal pixel buffer according to scale and devicePixelRatio
-      canvas.width = Math.round(WIDTH * 1.6 * dpr);
+      canvas.width = Math.round(WIDTH * 1.7 * dpr);
       canvas.height = Math.round(HEIGHT * scale * dpr);
 
       // Map logical drawing coordinates (0..WIDTH/HEIGHT) to the scaled canvas
-      ctx.setTransform(scale * dpr, 0, 0, scale * dpr, 0, 0);
+      ctx.setTransform(scale * dpr, 0, 0, scale * dpr, 225, 0);
       ctx.clearRect(0, 0, WIDTH, HEIGHT);
     };
 
@@ -180,7 +180,7 @@ export default function PlinkoGame() {
   return (
     <main className="home flow">
       {!isAuthenticated && (
-        <div className="fixed inset-0 bg-gradient-to-b from-[#102c56] via-[#0b3a6f] to-[#081c36] bg-opacity-100 z-10 flex justify-center items-center">
+        <div className="fixed inset-0 bg-linear-to-b from-[#102c56] via-[#0b3a6f] to-[#081c36] bg-opacity-100 z-10 flex justify-center items-center">
           <div className="bg-white p-6 rounded-lg w-11/12 sm:w-96 relative">
             <div className="flex items-center justify-between">
               <div className="flex items-center">
@@ -195,13 +195,13 @@ export default function PlinkoGame() {
           </div>
         </div>
       )}
-      <div className="min-h-screen flex items-center justify-center p-4">
-        <div className="flex flex-col lg:flex-row items-center justify-center w-full">
+      <div className="w-screen flex items-center justify-center">
+        <div className="flex items-center justify-center w-full">
           <BettingPanel betAmount={betAmount} setBetAmount={setBetAmount} startGame={resetGame} gameOver={gameOver} gameStarted={gameStarted}>
-            <div className="w-full h-full sm:rounded-none md:rounded-tr-2xl self-start flex justify-center relative">
+            {/* <div className="w-full h-full sm:rounded-none md:rounded-tr-2xl flex justify-center items-center relative"> */}
               <canvas
                 ref={canvasRef}
-                className="plinko-canvas w-full justify-center"
+                className="plinko-canvas"
                 style={{
                   backgroundColor: 'transparent',
                   cursor: 'pointer',
@@ -209,7 +209,7 @@ export default function PlinkoGame() {
                 }}
                 onClick={handleCanvasClick}
               />
-            </div>
+            {/* //</div> */}
           </BettingPanel>
         </div>
       </div>
