@@ -79,11 +79,11 @@ export default function PlinkoGame() {
       canvas.style.height = `${displayHeight}px`;
 
       // Set internal pixel buffer according to scale and devicePixelRatio
-      canvas.width = Math.round(WIDTH * 1.7 * dpr);
+      canvas.width = Math.round(WIDTH * 1.71 * dpr);
       canvas.height = Math.round(HEIGHT * scale * dpr);
 
       // Map logical drawing coordinates (0..WIDTH/HEIGHT) to the scaled canvas
-      ctx.setTransform(scale * dpr, 0, 0, scale * dpr, 225, 0);
+      ctx.setTransform(scale * dpr, 0, 0, scale * dpr, 212, 0);
       ctx.clearRect(0, 0, WIDTH, HEIGHT);
     };
 
