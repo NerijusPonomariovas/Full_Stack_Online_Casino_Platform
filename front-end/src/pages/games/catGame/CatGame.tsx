@@ -34,6 +34,7 @@ export default function Cat() {
     function initializeGame() {
       initializePlayer();
       initializeMap();
+      
       if (scoreDOM) scoreDOM.innerText = "0";
       if (resultDOM) resultDOM.style.visibility = "hidden";
     }

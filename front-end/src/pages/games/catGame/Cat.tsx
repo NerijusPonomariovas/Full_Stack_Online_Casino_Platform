@@ -61,7 +61,7 @@ export default function Home() {
       <div className="flex justify-center items-center w-screen h-150">
         <div className="w-full justify-center items-center flex h-150">
           <BettingPanel betAmount={betAmount} setBetAmount={setBetAmount} startGame={startGame} gameOver={gameOver} gameStarted={gameStarted}>
-            <div id="game-container" className="w-full h-full sm:rounded-none md:rounded-tr-2xl">
+            <div id="game-container" className="w-full h-full sm:rounded-none md:rounded-t-2xl">
               <Cat />
             </div>
           </BettingPanel>

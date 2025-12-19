@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import { metadata as rows } from "./Map";
 import { player, position } from "./Player";
+import { updateWalletBalance } from "../../../../api/auth";
 
 let resultDOM: HTMLElement | null = null;
 let finalScoreDOM: HTMLElement | null = null;
@@ -27,6 +28,9 @@ export function hitTest() {
         if (!resultDOM || !finalScoreDOM) return;
         resultDOM.style.visibility = "visible";
         finalScoreDOM.innerText = position.currentRow.toString();
+        const addScore = position.currentRow.toString();
+        updateWalletBalance(addScore, "win");
+        console.log(position.currentRow)
         console.log("hit!");
       }
     });
