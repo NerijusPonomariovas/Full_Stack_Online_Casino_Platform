@@ -152,47 +152,49 @@ const Treat = () => {
   }, [betAmount, hasBet, multiplier, outcome]);
 
   return (
-    <div className="treat-page">
-      <TreatBettingPanel
-        betAmount={betAmount}
-        setBetAmount={setBetAmount}
-        startGame={startGame}
-        gameOver={roundFinished}
-        gameStarted={gameStarted}
-        gameActive={gameActive}
-        onCashOut={handleCashOut}
-        autoCashout={autoCashout}
-        setAutoCashout={(value) => setAutoCashout(Math.max(0, Math.min(value, TOTAL_CELLS)))}
-        mineCount={mineCount}
-        setMineCount={setMineCount}
-        profit={profit}
-        multiplier={multiplier}
-      >
-        <div className="treat-layout">
-          <div className="treat-controls">
-          </div>
+    <main className='home flex'>
 
-          <div className="treat-content">
-            <TreatBoard grid={grid} onReveal={handleReveal} disabled={disableReveals} />
+        <TreatBettingPanel
+          betAmount={betAmount}
+          setBetAmount={setBetAmount}
+          startGame={startGame}
+          gameOver={roundFinished}
+          gameStarted={gameStarted}
+          gameActive={gameActive}
+          onCashOut={handleCashOut}
+          autoCashout={autoCashout}
+          setAutoCashout={(value) => setAutoCashout(Math.max(0, Math.min(value, TOTAL_CELLS)))}
+          mineCount={mineCount}
+          setMineCount={setMineCount}
+          profit={profit}
+          multiplier={multiplier}
+        >
+          <div className="treat-layout">
+            <div className="treat-controls">
+            </div>
 
-            {warning && (
-              <p className="treat-warning">{warning}</p>
-            )}
+            <div className="treat-content">
+              <TreatBoard grid={grid} onReveal={handleReveal} disabled={disableReveals} />
 
-            <div className="treat-stats">
-              <p>
-                Safe picks: {revealedSafes}/{safeCells}
-              </p>
-              {outcome && (
-                <p className={`treat-outcome treat-outcome--${outcome}`}>
-                            {outcome === 'win' ? 'You win!' : outcome === 'stopped' ? 'Game was stopped.' : 'You hit a trap!'}
-                </p>
+              {warning && (
+                <p className="treat-warning">{warning}</p>
               )}
+
+              <div className="treat-stats">
+                <p>
+                  Safe picks: {revealedSafes}/{safeCells}
+                </p>
+                {outcome && (
+                  <p className={`treat-outcome treat-outcome--${outcome}`}>
+                              {outcome === 'win' ? 'You win!' : outcome === 'stopped' ? 'Game was stopped.' : 'You hit a trap!'}
+                  </p>
+                )}
+              </div>
             </div>
           </div>
-        </div>
-  </TreatBettingPanel>
-    </div>
+        </TreatBettingPanel>
+    </main>
+    
   );
 };
 

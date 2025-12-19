@@ -178,7 +178,7 @@ export default function PlinkoGame() {
   };
 
   return (
-    <main className="home h-screen overflow-hidden">
+    <main className="home flow">
       {!isAuthenticated && (
         <div className="fixed inset-0 bg-gradient-to-b from-[#102c56] via-[#0b3a6f] to-[#081c36] bg-opacity-100 z-10 flex justify-center items-center">
           <div className="bg-white p-6 rounded-lg w-11/12 sm:w-96 relative">
@@ -195,7 +195,7 @@ export default function PlinkoGame() {
           </div>
         </div>
       )}
-      <div className="min-h-screen flex items-center justify-center p-4" style={{ background: 'linear-gradient(180deg, #0A1F3D 0%, #1E3A5F 100%)' }}>
+      <div className="min-h-screen flex items-center justify-center p-4">
         <div className="flex flex-col lg:flex-row items-center justify-center w-full">
           <BettingPanel betAmount={betAmount} setBetAmount={setBetAmount} startGame={resetGame} gameOver={gameOver} gameStarted={gameStarted}>
             <div className="w-full h-full sm:rounded-none md:rounded-tr-2xl self-start flex justify-center relative">

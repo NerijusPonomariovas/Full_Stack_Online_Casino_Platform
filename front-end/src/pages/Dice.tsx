@@ -129,7 +129,7 @@ const Dice = () => {
   };
 
   return (
-    <main className="home h-screen overflow-hidden">
+    <main className="home flow">
       {!isAuthenticated && (
         <div className="fixed inset-0 bg-linear-to-b from-[#102c56] via-[#0b3a6f] to-[#081c36] bg-opacity-100 z-10 flex justify-center items-center">
           <div className="bg-white p-6 rounded-lg w-11/12 sm:w-96 relative">

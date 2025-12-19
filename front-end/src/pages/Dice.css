@@ -1,8 +1,6 @@
 .dice-page {
   min-height: calc(100vh - 120px);
   padding: 48px 24px 80px;
-  background: radial-gradient(circle at top, rgba(255, 255, 255, 0.08), transparent 45%),
-    linear-gradient(180deg, #051430 0%, #0a1f3d 40%, #1e3a5f 100%);
   display: flex;
   justify-content: center;
   align-items: flex-start;
