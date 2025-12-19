@@ -1,4 +1,4 @@
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, type ReactNode } from "react";
 import { fetchWalletBalance } from "../../../api/auth";
 
 type BettingPanelProps = {
@@ -20,12 +20,10 @@ type AuthError = {
 }; */
 
 
-export default function BettingPanel({ children, betAmount, setBetAmount, startGame, gameOver, gameStarted}: BettingPanelProps) {
-  const [balance, setBalance] = useState<number>(0); // Example balance, replace with actual fetched balance
-  const [mode, setMode] = useState("manual");
+export default function BettingPanel({ children, /* betAmount, */ /* setBetAmount, */ /* startGame, gameOver, */ /* gameStarted */}: BettingPanelProps) {
+ /*  const [balance, setBalance] = useState<number>(0); */ // Example balance, replace with actual fetched balance
 /*   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null); // Error message state */
-  const [betPlaced, setBetPlaced] = useState<boolean>(false); // Track if the bet is placed
 
 
   useEffect(() => {
@@ -36,7 +34,6 @@ export default function BettingPanel({ children, betAmount, setBetAmount, startG
       const getBalance = async () => {
         const result = await fetchWalletBalance();
         if('balance' in result) {
-          setBalance(result.balance);
           console.log('Account Balance in BettingPanel:', result.balance);
         } else {  
           console.error("Failed to fetch wallet balance:", result.message);
@@ -46,16 +43,6 @@ export default function BettingPanel({ children, betAmount, setBetAmount, startG
       // Fetch user balance if authenticated
     }
   }, []);
-
-
-  const isGoButtonActive = betAmount !== null && betAmount > 0 && !gameOver && betAmount <= balance;
-
-  const handleGoButtonClick = () => {
-    if (isGoButtonActive) {
-      startGame();
-      setBetPlaced(true); // Mark that the bet has been placed
-    }
-  };
 
   return (
     <div className="w-[95%] sm:w-[95%] md:ml-0 xl:w-6xl relative mt-110 md:mt-30 flex flex-col drop-shadow-2xl ">
