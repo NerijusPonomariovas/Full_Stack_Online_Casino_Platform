@@ -29,7 +29,7 @@ export default function TreatBettingPanel({ children, betAmount, setBetAmount, s
     if (token) {
       const getBalance = async () => {
         const result = await fetchWalletBalance();
-        if('balance' in result) {
+        if ('balance' in result) {
           setBalance(result.balance);
           console.log('Account Balance in TreatBettingPanel:', result.balance);
         } else {
@@ -37,6 +37,8 @@ export default function TreatBettingPanel({ children, betAmount, setBetAmount, s
         }
       };
       getBalance();
+      window.addEventListener("balance:refresh", getBalance);
+      return () => window.removeEventListener("balance:refresh", getBalance);
     }
   }, []);
 
@@ -56,7 +58,11 @@ export default function TreatBettingPanel({ children, betAmount, setBetAmount, s
       startGame();
     }
   };
-
+  useEffect(() => {
+    if (_gameOver) {
+      setBetAmount(null);
+    }
+  }, [_gameOver, setBetAmount]);
   return (
     <div className="w-[95%] sm:w-[95%] xl:w-6xl max-w-7xl mx-auto relative mt-30 flex flex-col drop-shadow-2xl ">
       <div className="flex flex-col md:flex-row h-140">
@@ -65,22 +71,20 @@ export default function TreatBettingPanel({ children, betAmount, setBetAmount, s
           {/* Toggle Manual / Auto */}
           <div className="flex bg-[#102c56] rounded-4xl overflow-hidden h-12 w-full items-center pl-1 pr-1">
             <button
-              className={`flex-1 rounded-4xl h-[82%] ${
-                mode === "manual" ? "bg-[#184fa2]" : ""
-              }`}
+              className={`flex-1 rounded-4xl h-[82%] ${mode === "manual" ? "bg-[#184fa2]" : ""
+                }`}
               onClick={() => setMode("manual")}
             >
               Manual
             </button>
             <button
-              className={`flex-1 rounded-4xl h-[82%] ${
-                mode === "auto" ? "bg-[#184fa2]" : ""
-              }`}
+              className={`flex-1 rounded-4xl h-[82%] ${mode === "auto" ? "bg-[#184fa2]" : ""
+                }`}
               onClick={() => setMode("auto")}
             >
               Auto
             </button>
-          </div>  
+          </div>
 
           {/* Bet Amount */}
           <div>
@@ -96,7 +100,7 @@ export default function TreatBettingPanel({ children, betAmount, setBetAmount, s
                 }
                 className="w-full bg-[#102c56] p-2 rounded-l-sm text-left focus:outline-none"
                 disabled={gameStarted}
-                                placeholder=""
+                placeholder=""
                 onKeyDown={(e) => {
                   const allowedKeys = [
                     "Backspace",
@@ -143,12 +147,11 @@ export default function TreatBettingPanel({ children, betAmount, setBetAmount, s
           {/* Bet / Go / Cash Out */}
           <div className="flex flex-row gap-2 mt-3">
 
-            <button className={`flex-1 py-2 rounded-lg text-black shadow-md font-semibold transition duration-300 ease-in-out ${
-                gameActive
-                  ? "bg-[#ffb347] hover:bg-[#ffca7a]"
-                  : isGoButtonActive && !gameStarted
-                    ? "bg-[#2cbf2a] hover:bg-[#33de30]"
-                    : "bg-[#2cbf2a] opacity-50 cursor-not-allowed"
+            <button className={`flex-1 py-2 rounded-lg text-black shadow-md font-semibold transition duration-300 ease-in-out ${gameActive
+                ? "bg-[#ffb347] hover:bg-[#ffca7a]"
+                : isGoButtonActive && !gameStarted
+                  ? "bg-[#2cbf2a] hover:bg-[#33de30]"
+                  : "bg-[#2cbf2a] opacity-50 cursor-not-allowed"
               }`}
               onClick={handleGoButtonClick}
               disabled={gameActive ? false : !isGoButtonActive || gameStarted}>

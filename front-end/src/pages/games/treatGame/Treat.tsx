@@ -1,8 +1,13 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import TreatBettingPanel from '../../../components/TreatBettingPanel';
 import TreatBoard from './TreatBoard';
 import type { TreatCellData } from './TreatCell';
 import './Treat.css';
+import Login from "../../Login";
+import Register from "../../Register";
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { updateWalletBalance } from "../../../api/auth";
+import logo from "../../../assets/LOGO.svg";
 
 const GRID_SIZE = 5;
 const TOTAL_CELLS = GRID_SIZE * GRID_SIZE;
@@ -41,9 +46,28 @@ const Treat = () => {
   const [outcome, setOutcome] = useState<'win' | 'lose' | 'stopped' | null>(null);
   const [gameStarted, setGameStarted] = useState(false);
   const [warning, setWarning] = useState<string | null>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [showLogin, setShowLogin] = useState(false);
+  const [showRegister, setShowRegister] = useState(false);
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const [settled, setSettled] = useState(false);
 
   const gameActive = gameStarted && !roundFinished;
   const hasBet = betAmount !== null && betAmount > 0;
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    setIsAuthenticated(!!token);
+
+  }, []);
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    setIsAuthenticated(!!token);
+    const auth = searchParams.get("auth");
+    setShowLogin(auth === "login");
+    setShowRegister(auth === "register");
+  }, [searchParams]);
 
   const startGame = useCallback(() => {
     if (!hasBet) {
@@ -59,12 +83,20 @@ const Treat = () => {
     setRoundFinished(false);
     setGameStarted(true);
     setWarning(null);
+    setSettled(false);
   }, [hasBet, mineCount]);
+  const closeAuthModal = () => {
+    setShowLogin(false);
+    setShowRegister(false);
+    navigate("/games/treat", { replace: true }); // clears ?auth=...
+  };
 
   const disableReveals = useMemo(
     () => roundFinished,
     [roundFinished]
   );
+
+
 
   const handleReveal = useCallback(
     (rowIndex: number, columnIndex: number) => {
@@ -132,9 +164,9 @@ const Treat = () => {
   }, [gameActive, revealedSafes]);
 
   const multiplier = useMemo(() => {
-  if (!hasBet) return 1;
-  if (outcome === 'lose') return 0;
-  if (outcome === 'stopped') return 1;
+    if (!hasBet) return 1;
+    if (outcome === 'lose') return 0;
+    if (outcome === 'stopped') return 1;
 
     const ratio = safeCells > 0 ? revealedSafes / safeCells : 0;
     const computed = 1 + ratio;
@@ -142,18 +174,63 @@ const Treat = () => {
   }, [hasBet, outcome, revealedSafes, safeCells]);
 
   const profit = useMemo(() => {
-  if (!hasBet) return 0;
-  if (outcome === 'lose') return 0;
-  if (outcome === 'stopped') return 0;
-
+    if (!hasBet) return 0;
+    if (outcome === 'lose') {
+      return 0;
+    }
+    if (outcome === 'stopped') {
+      return 0;
+    }
     const baseBet = betAmount ?? 0;
-    const value = baseBet * multiplier;
+    const value = baseBet * multiplier - baseBet;
     return Number.isFinite(value) ? Number(value.toFixed(2)) : 0;
   }, [betAmount, hasBet, multiplier, outcome]);
 
-  return (
-    <main className='home flex'>
+  useEffect(() => {
+    if (!roundFinished) return;
+    if (settled) return;
+    if (!hasBet || betAmount == null || outcome == null) return;
 
+    setSettled(true);
+    if (outcome === 'lose') {
+      const finalValue = betAmount.toFixed(2).toString();
+      updateWalletBalance(finalValue!, "loss");
+      console.log("Final Value on Lose:", finalValue);
+      setTimeout(() => {
+        window.dispatchEvent(new Event("balance:refresh"));
+      }, 50);
+      return;
+    } 
+    if (outcome === 'win') {
+      const finalValue = (betAmount * multiplier - betAmount).toFixed(2).toString();
+      console.log("Final Value on Win:", finalValue);
+      updateWalletBalance(finalValue!, "win");
+      setTimeout(() => {
+        window.dispatchEvent(new Event("balance:refresh"));
+      }, 50);
+      return;
+    }
+  }, [roundFinished, settled, hasBet, betAmount, outcome, multiplier]);
+
+  return (
+    <main className="home flow">
+      {!isAuthenticated && (
+        <div className="fixed inset-0 bg-linear-to-b from-[#102c56] via-[#0b3a6f] to-[#081c36] bg-opacity-100 z-10 flex justify-center items-center">
+          <div className="bg-white p-6 rounded-lg w-11/12 sm:w-96 relative">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center">
+                <img
+                  src={logo}
+                  alt="Logo"
+                  className="w-16 h-auto" // Adjust the size of your logo
+                />
+                <p className="text-xl ml-4 text-gray-700">Please log in to play the game!</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      <div className='home flex'>
         <TreatBettingPanel
           betAmount={betAmount}
           setBetAmount={setBetAmount}
@@ -186,15 +263,39 @@ const Treat = () => {
                 </p>
                 {outcome && (
                   <p className={`treat-outcome treat-outcome--${outcome}`}>
-                              {outcome === 'win' ? 'You win!' : outcome === 'stopped' ? 'Game was stopped.' : 'You hit a trap!'}
+                    {outcome === 'win' ? 'You win!' : outcome === 'stopped' ? 'Game was stopped.' : 'You hit a trap!'}
                   </p>
                 )}
               </div>
             </div>
           </div>
         </TreatBettingPanel>
+        {/* LOGIN MODAL */}
+        {showLogin && (
+          <div className="modal" role="dialog" aria-modal="true" aria-labelledby="login-title">
+            <div className="modal__backdrop" onClick={closeAuthModal} />
+            <div className="modal__panel">
+              <button className="modal__close" onClick={closeAuthModal} aria-label="Close">
+                ×
+              </button>
+              <Login />
+            </div>
+          </div>
+        )}
+        {/* REGISTER MODAL */}
+        {showRegister && (
+          <div className="modal" role="dialog" aria-modal="true" aria-labelledby="register-title">
+            <div className="modal__backdrop" onClick={closeAuthModal} />
+            <div className="modal__panel">
+              <button className="modal__close" onClick={closeAuthModal} aria-label="Close">
+                ×
+              </button>
+              <Register />
+            </div>
+          </div>
+        )}
+      </div>
     </main>
-    
   );
 };
 
