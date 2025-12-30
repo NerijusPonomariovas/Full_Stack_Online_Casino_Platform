@@ -9,7 +9,6 @@ import Login from "./Login";
 import Register from "./Register";
 import { updateWalletBalance } from "../api/auth";
 import { fetchWalletBalance } from "../api/auth";
-import { refreshBalance } from "../components/refreshBalance";
 
 const Dice = () => {
   const [chance, setChance] = useState(50);
@@ -27,7 +26,6 @@ const Dice = () => {
   const [balance, setBalance] = useState<number>(0.0);
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const [accountBalance, setAccountBalance] = useState<number | null>(null);
 
   const HOUSE_EDGE = 0.05;
   const multiplier = useMemo(
