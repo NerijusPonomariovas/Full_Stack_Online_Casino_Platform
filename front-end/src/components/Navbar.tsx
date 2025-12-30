@@ -12,7 +12,6 @@ import Cataris_coin from "../assets/Cataris_coin.svg";
 import { refreshBalance } from "../components/refreshBalance";
 
 
-
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
@@ -22,11 +21,20 @@ export default function Navbar() {
   useEffect(() => {
     const token = localStorage.getItem("token");
     setIsAuthenticated(!!token);
-
     if (token) {
       refreshBalance(setAccountBalance);
     }
   }, []);
+  useEffect(() => {
+  const onBalanceRefresh = () => {
+    const token = localStorage.getItem("token");
+    if (token) refreshBalance(setAccountBalance);
+  };
+  
+
+  window.addEventListener("balance:refresh", onBalanceRefresh);
+  return () => window.removeEventListener("balance:refresh", onBalanceRefresh);
+}, []);
 
   const handleLogout = () => {
     localStorage.removeItem('token');

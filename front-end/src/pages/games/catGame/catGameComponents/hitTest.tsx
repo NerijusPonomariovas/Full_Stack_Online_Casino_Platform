@@ -30,6 +30,9 @@ export function hitTest() {
         finalScoreDOM.innerText = position.currentRow.toString();
         const addScore = position.currentRow.toString();
         updateWalletBalance(addScore, "win");
+        setTimeout(() => {
+          window.dispatchEvent(new Event("balance:refresh"));
+        }, 50);
         console.log(position.currentRow)
         console.log("hit!");
       }

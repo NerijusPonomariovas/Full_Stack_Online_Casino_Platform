@@ -168,6 +168,9 @@ export default function PlinkoGame() {
     console.log(`All sink positions: ${sinkCenters.map((x, i) => `[${i}]=${x.toFixed(1)}`).join(', ')}`);
     const finalValue = (betAmount!*multipliers[chosenIndex] - betAmount!).toFixed(2).toString();
     updateWalletBalance(finalValue, "win");
+    setTimeout(() => {
+      window.dispatchEvent(new Event("balance:refresh"));
+    }, 700);
     // BallManager expects padded coordinates; pad the chosen center and pass target index
     ballManager.addBall(pad(clamped), chosenIndex);
   };

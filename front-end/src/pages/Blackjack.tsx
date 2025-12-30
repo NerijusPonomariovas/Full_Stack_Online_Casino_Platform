@@ -117,13 +117,14 @@ export default function Home() {
   };
 
   const handleGamerOver = (result: GameOverResult) => {
+    window.dispatchEvent(new Event("balance:refresh"));
     setGameOver(true);
     setResult(result);
+    setBetAmount(null);
+    setGameStarted(false);
     setTimeout(() => {
-      setBetAmount(null); // Reset bet amount
-      setGameStarted(false); // Disable the "Go" button after game ends
-      window.location.reload();
-    }, 5000); // Adjust delay as needed
+      window.dispatchEvent(new Event("balance:refresh"));
+    }, 500); 
   };
 
   const dealCardToPlayer = () => {
@@ -134,6 +135,9 @@ export default function Home() {
     console.log(playerValue);
     if (playerValue > 21) {
       handleGamerOver({ type: "dealer", message: "Dealer wins" });
+      handleDeposit("loss");
+      console.log("LOSS-ABOVE");
+      window.dispatchEvent(new Event("balance:refresh"));
     }
   };
 
@@ -149,6 +153,7 @@ export default function Home() {
       handleGamerOver({ type: "player", message: "Player wins" });
       handleDeposit("win");
       console.log("win-ABOVE");
+      window.dispatchEvent(new Event("balance:refresh"));
     }
   };
 
@@ -161,6 +166,7 @@ export default function Home() {
       try {
         updateWalletBalance(betAmountStr, outcome); 
         console.log("WIN update wallet balance called");
+        window.dispatchEvent(new Event("balance:refresh"));
       } catch (error) {
         console.error("Failed to update wallet balance: ", error);
       }
@@ -169,6 +175,7 @@ export default function Home() {
       try {
         updateWalletBalance(betAmount.toString(), outcome);
         console.log("LOSS update wallet balance called");
+        window.dispatchEvent(new Event("balance:refresh"));
       } catch (error) {
         console.error("Failed to update wallet balance: ", error);
       }
@@ -217,16 +224,19 @@ export default function Home() {
           setResult({ type: "player", message: "BlackJack! Player won" });
           updateWalletBalance((betAmount * 1.5).toFixed(2).toString(), "win");
           console.log("Blackjack win, balance updated");
+          window.dispatchEvent(new Event("balance:refresh"));
           break;
         case playerValue > 21:
           setResult({ type: "dealer", message: "Dealer Wins" });
           handleDeposit("loss");
           console.log("LOSS");
+          window.dispatchEvent(new Event("balance:refresh"));
           break;
         case dealerValue < playerValue:
           playerStand();
           handleDeposit("win");
           console.log("win");
+          window.dispatchEvent(new Event("balance:refresh"));
           break;
         case dealerValue === playerValue && dealerHand.length <= 5:
           setResult({ type: "", message: "Draw" });
@@ -235,6 +245,7 @@ export default function Home() {
           setResult({ type: "dealer", message: "Dealer Wins" });
           handleDeposit("loss");
           console.log("LOSS");
+          window.dispatchEvent(new Event("balance:refresh"));
           break;
         default:
           break;

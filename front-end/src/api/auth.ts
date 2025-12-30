@@ -1,9 +1,9 @@
 
-
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import axios from 'axios';
 
 // Define the API URL
-const API_URL = 'https://monoauth.com/api'; // Update with your actual backend URL
+const API_URL = 'http://localhost:8080/api'; // Update with your actual backend URL
 
 // Interface for login response
 interface LoginResponse {

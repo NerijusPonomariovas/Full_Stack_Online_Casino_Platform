@@ -37,10 +37,6 @@ const Dice = () => {
   const clampToRange = (value: number) => Math.min(100, Math.max(1, Math.round(value)));
   const markerPercent = useMemo(() => Math.min(99, Math.max(1, markerValue)), [markerValue]);
 
-  const handleTransactionComplete = () => {
-  refreshBalance(setAccountBalance);
-  console.log(accountBalance);
-};
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -117,11 +113,15 @@ const Dice = () => {
             const finalValue = payout - betAmount!;
             updateWalletBalance(finalValue.toString(), "win");
             console.log("WIN update wallet balance called");
-            handleTransactionComplete();
+            setTimeout(() => {
+              window.dispatchEvent(new Event("balance:refresh"));
+            }, 50);
           } else {
             updateWalletBalance(wager.toFixed(2).toString(), "loss");
             console.log("LOSS update wallet balance called");
-            handleTransactionComplete();
+            setTimeout(() => {
+              window.dispatchEvent(new Event("balance:refresh"));
+            }, 50);
           }
         }
       }, 70);
