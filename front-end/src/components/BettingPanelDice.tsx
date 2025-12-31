@@ -38,11 +38,13 @@ export default function BettingPanelDice({
         }
       };
       getBalance();
+      window.addEventListener("balance:refresh", getBalance);
+      return () => window.removeEventListener("balance:refresh", getBalance);
     }
   }, []);
 
   const isGoButtonActive =
-    betAmount !== null && betAmount > 0 && !gameOver && betAmount <= balance;
+    betAmount !== null && betAmount > 0 && !gameStarted && betAmount <= balance;
 
   const profitValue =
     betAmount !== null && Number.isFinite(multiplier)
@@ -72,17 +74,15 @@ export default function BettingPanelDice({
           {/* Toggle Manual / Auto */}
           <div className="flex bg-[#102c56] rounded-4xl overflow-hidden h-12 w-full items-center pl-1 pr-1">
             <button
-              className={`flex-1 rounded-4xl h-[82%] ${
-                mode === "manual" ? "bg-[#184fa2]" : ""
-              }`}
+              className={`flex-1 rounded-4xl h-[82%] ${mode === "manual" ? "bg-[#184fa2]" : ""
+                }`}
               onClick={() => setMode("manual")}
             >
               Manual
             </button>
             <button
-              className={`flex-1 rounded-4xl h-[82%] ${
-                mode === "auto" ? "bg-[#184fa2]" : ""
-              }`}
+              className={`flex-1 rounded-4xl h-[82%] ${mode === "auto" ? "bg-[#184fa2]" : ""
+                }`}
               onClick={() => setMode("auto")}
             >
               Auto
@@ -142,13 +142,12 @@ export default function BettingPanelDice({
           {/* Go */}
           <div className="flex flex-row gap-2 mt-3">
             <button
-              className={`flex-1 py-2 rounded-lg text-black shadow-md font-semibold transition duration-300 ease-in-out ${
-                isGoButtonActive && !gameOver
+              className={`flex-1 py-2 rounded-lg text-black shadow-md font-semibold transition duration-300 ease-in-out ${isGoButtonActive
                   ? "bg-[#2cbf2a] hover:bg-[#33de30]"
                   : "bg-[#2cbf2a] opacity-50 cursor-not-allowed"
-              }`}
+                }`}
               onClick={handleGoButtonClick}
-              disabled={!isGoButtonActive || gameOver}
+              disabled={!isGoButtonActive}
             >
               Go
             </button>
@@ -175,7 +174,7 @@ export default function BettingPanelDice({
       </div>
 
       {/* BOTTOM PANEL */}
-     <div className="w-full bg-[#10305f] h-24 rounded-b-4xl flex items-center justify-center text-gray-300 text-sm relative md:mt-0">
+      <div className="w-full bg-[#10305f] h-24 rounded-b-4xl flex items-center justify-center text-gray-300 text-sm relative md:mt-0">
         Cataris
       </div>
     </div>

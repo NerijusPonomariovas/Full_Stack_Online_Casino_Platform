@@ -12,7 +12,7 @@ type BettingPanelProps = {
 
 
 export default function BettingPanel({ children, betAmount, setBetAmount, startGame, gameOver, gameStarted}: BettingPanelProps) {
-  const [balance, setBalance] = useState<number>(0.0); // Example balance, replace with actual fetched balance
+  const [balance, setBalance] = useState<number>(0.0); 
   const [mode, setMode] = useState("manual");
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [betPlaced, setBetPlaced] = useState<boolean>(false); // Track if the bet is placed
@@ -38,7 +38,7 @@ export default function BettingPanel({ children, betAmount, setBetAmount, startG
   }, []);
 
 
-  const isGoButtonActive = betAmount !== null && betAmount > 0 && !gameOver && betAmount <= balance;
+  const isGoButtonActive = betAmount !== null && betAmount > 0 && !gameStarted && betAmount <= balance;
 
   const handleGoButtonClick = () => {
     if (gameOver) {
@@ -145,12 +145,12 @@ export default function BettingPanel({ children, betAmount, setBetAmount, startG
           <div className="flex flex-row gap-2 mt-3">
 
             <button className={`flex-1 py-2 rounded-lg text-black shadow-md font-semibold transition duration-300 ease-in-out ${
-                isGoButtonActive && !gameOver
+                isGoButtonActive
                   ? "bg-[#2cbf2a] hover:bg-[#33de30]" // Active: Brighter on hover
                   : "bg-[#2cbf2a] opacity-50 cursor-not-allowed" // Disabled: Darker, not clickable
               }`}
               onClick={handleGoButtonClick}
-              disabled={!isGoButtonActive ||gameOver}>
+              disabled={!isGoButtonActive}>
               Go
             </button>
           </div>

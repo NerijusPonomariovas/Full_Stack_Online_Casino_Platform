@@ -12,6 +12,7 @@ import cardDeck from "../assets/DECK-CARDS.svg";
 import logo from "../assets/LOGO.svg";
 import { updateWalletBalance } from "../api/auth";
 import { fetchWalletBalance } from "../api/auth";
+import meowJack from "../assets/games/game-meowjack.png";
 
 type CardDeck = {
   suit: string;
@@ -124,7 +125,7 @@ export default function Home() {
     setGameStarted(false);
     setTimeout(() => {
       window.dispatchEvent(new Event("balance:refresh"));
-    }, 500); 
+    }, 500);
   };
 
   const dealCardToPlayer = () => {
@@ -164,7 +165,7 @@ export default function Home() {
     const betAmountStr = (betAmount.toFixed(2)).toString();
     if (outcome === "win") {
       try {
-        updateWalletBalance(betAmountStr, outcome); 
+        updateWalletBalance(betAmountStr, outcome);
         console.log("WIN update wallet balance called");
         window.dispatchEvent(new Event("balance:refresh"));
       } catch (error) {
@@ -218,13 +219,15 @@ export default function Home() {
       setDealerRevealed(false);
     }
     if (gameOver && dealerHand.length <= 5) {
-      if(betAmount === null) return;
+      if (betAmount === null) return;
       switch (true) {
         case playerValue === 21:
           setResult({ type: "player", message: "BlackJack! Player won" });
           updateWalletBalance((betAmount * 1.5).toFixed(2).toString(), "win");
           console.log("Blackjack win, balance updated");
-          window.dispatchEvent(new Event("balance:refresh"));
+          setTimeout(() => {
+            window.dispatchEvent(new Event("balance:refresh"));
+          }, 500);
           break;
         case playerValue > 21:
           setResult({ type: "dealer", message: "Dealer Wins" });
@@ -258,7 +261,7 @@ export default function Home() {
   const canStand = !gameOver && !newGame;
 
   return (
-    <main className="home h-screen overflow-hidden">
+    <main className="home min-h-screen bg-gradient-to-b from-[#102c56] via-[#0b3a6f] to-[#081c36]">
       {!isAuthenticated && (
         <div className="fixed inset-0 bg-gradient-to-b from-[#102c56] via-[#0b3a6f] to-[#081c36] bg-opacity-100 z-10 flex justify-center items-center">
           <div className="bg-white p-6 rounded-lg w-11/12 sm:w-96 relative">
@@ -335,6 +338,59 @@ export default function Home() {
           </BettingPanel>
         </div>
       </div>
+      {/* DESCRIPTION CARD UNDER GAME */}
+      <section className="mt-8 w-full max-w-[1200px] mx-auto px-4 pb-10">
+        <div className="rounded-2xl bg-[#0f2f57]/80 shadow-xl border border-white/10 p-6">
+          <div className="flex items-center gap-6">
+            <h2 className="text-white text-2xl font-extrabold tracking-wide">
+              MEOW-JACK
+            </h2>
+            <span className="text-white/60 font-semibold text-sm">
+              CATARIS ORIGINAL
+            </span>
+          </div>
+
+          <div className="mt-4 text-white/90 font-semibold">Description</div>
+
+          <div className="mt-3 flex gap-6 flex-col md:flex-row">
+            {/* LEFT IMAGE */}
+            <img
+              src={meowJack}
+              alt="Logo"
+              className="w-[140px] md:w-[140px] h-auto rounded-xl shadow-lg"
+            />
+
+            {/* TEXT */}
+            <p className="text-white/80 leading-8 text-lg">
+              MEOW-JACK is Cataris Casino’s modern take on the classic blackjack experience, blending familiar rules with a clean, intuitive interface and fast-paced gameplay. Designed for both casual players and seasoned strategists, the game delivers a smooth, responsive flow where every decision matters. Clear visuals, balanced odds, and instant feedback ensure an engaging experience from the first hand to the last card.
+            </p>
+          </div>
+
+          {/* SECTIONS */}
+          <div className="mt-6 space-y-5">
+            <div>
+              <h3 className="text-white font-bold">GamePlay</h3>
+              <p className="mt-2 text-white/75 leading-6 text-md">
+                The objective is simple: beat the dealer by reaching a hand value closer to 21 without exceeding it. Players can hit, stand, and strategically manage their moves based on probability and risk. MEOW-JACK follows traditional blackjack mechanics while maintaining a streamlined structure that keeps rounds efficient and immersive.
+              </p>
+            </div>
+
+            <div>
+              <h3 className="text-white font-bold">Strategy & Fairness</h3>
+              <p className="mt-2 text-white/75 leading-6 text-md">
+                MEOW-JACK is built around transparent mechanics and predictable rules, allowing players to rely on strategy rather than chance alone. Card values, dealer behavior, and payouts are clearly defined, giving players full control over their decisions. The game logic ensures fair outcomes while rewarding smart play and calculated risk.
+              </p>
+            </div>
+
+            <div>
+              <h3 className="text-white font-bold">Cataris Original</h3>
+              <p className="mt-2 text-white/75 leading-6 text-md">
+                As a Cataris original title, MEOW-JACK reflects our commitment to clean design, reliable performance, and player-first mechanics. No unnecessary complexity - just a refined blackjack experience built for modern online play.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
       {/* LOGIN MODAL */}
       {showLogin && (
         <div className="modal" role="dialog" aria-modal="true" aria-labelledby="login-title">

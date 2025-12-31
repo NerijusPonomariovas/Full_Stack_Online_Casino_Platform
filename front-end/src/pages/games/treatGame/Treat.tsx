@@ -8,6 +8,7 @@ import Register from "../../Register";
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { updateWalletBalance } from "../../../api/auth";
 import logo from "../../../assets/LOGO.svg";
+import treat from "../../../assets/games/game-treat.png";
 
 const GRID_SIZE = 5;
 const TOTAL_CELLS = GRID_SIZE * GRID_SIZE;
@@ -200,7 +201,7 @@ const Treat = () => {
         window.dispatchEvent(new Event("balance:refresh"));
       }, 50);
       return;
-    } 
+    }
     if (outcome === 'win') {
       const finalValue = (betAmount * multiplier - betAmount).toFixed(2).toString();
       console.log("Final Value on Win:", finalValue);
@@ -230,72 +231,127 @@ const Treat = () => {
           </div>
         </div>
       )}
-      <div className='home flex'>
-        <TreatBettingPanel
-          betAmount={betAmount}
-          setBetAmount={setBetAmount}
-          startGame={startGame}
-          gameOver={roundFinished}
-          gameStarted={gameStarted}
-          gameActive={gameActive}
-          onCashOut={handleCashOut}
-          autoCashout={autoCashout}
-          setAutoCashout={(value) => setAutoCashout(Math.max(0, Math.min(value, TOTAL_CELLS)))}
-          mineCount={mineCount}
-          setMineCount={setMineCount}
-          profit={profit}
-          multiplier={multiplier}
-        >
-          <div className="treat-layout">
-            <div className="treat-controls">
-            </div>
+      <div className='flex w-screen min-h-screen justify-center items-start'>
+        <div className='w-full flex justify-center'>
+          <TreatBettingPanel
+            betAmount={betAmount}
+            setBetAmount={setBetAmount}
+            startGame={startGame}
+            gameOver={roundFinished}
+            gameStarted={gameStarted}
+            gameActive={gameActive}
+            onCashOut={handleCashOut}
+            autoCashout={autoCashout}
+            setAutoCashout={(value) => setAutoCashout(Math.max(0, Math.min(value, TOTAL_CELLS)))}
+            mineCount={mineCount}
+            setMineCount={setMineCount}
+            profit={profit}
+            multiplier={multiplier}
+          >
+            <div className="treat-layout">
+              <div className="treat-controls">
+              </div>
 
-            <div className="treat-content">
-              <TreatBoard grid={grid} onReveal={handleReveal} disabled={disableReveals} />
+              <div className="treat-content">
+                <TreatBoard grid={grid} onReveal={handleReveal} disabled={disableReveals} />
 
-              {warning && (
-                <p className="treat-warning">{warning}</p>
-              )}
-
-              <div className="treat-stats">
-                <p>
-                  Safe picks: {revealedSafes}/{safeCells}
-                </p>
-                {outcome && (
-                  <p className={`treat-outcome treat-outcome--${outcome}`}>
-                    {outcome === 'win' ? 'You win!' : outcome === 'stopped' ? 'Game was stopped.' : 'You hit a trap!'}
-                  </p>
+                {warning && (
+                  <p className="treat-warning">{warning}</p>
                 )}
+
+                <div className="treat-stats">
+                  <p>
+                    Safe picks: {revealedSafes}/{safeCells}
+                  </p>
+                  {outcome && (
+                    <p className={`treat-outcome treat-outcome--${outcome}`}>
+                      {outcome === 'win' ? 'You win!' : outcome === 'stopped' ? 'Game was stopped.' : 'You hit a trap!'}
+                    </p>
+                  )}
+                </div>
               </div>
             </div>
-          </div>
-        </TreatBettingPanel>
-        {/* LOGIN MODAL */}
-        {showLogin && (
-          <div className="modal" role="dialog" aria-modal="true" aria-labelledby="login-title">
-            <div className="modal__backdrop" onClick={closeAuthModal} />
-            <div className="modal__panel">
-              <button className="modal__close" onClick={closeAuthModal} aria-label="Close">
-                ×
-              </button>
-              <Login />
-            </div>
-          </div>
-        )}
-        {/* REGISTER MODAL */}
-        {showRegister && (
-          <div className="modal" role="dialog" aria-modal="true" aria-labelledby="register-title">
-            <div className="modal__backdrop" onClick={closeAuthModal} />
-            <div className="modal__panel">
-              <button className="modal__close" onClick={closeAuthModal} aria-label="Close">
-                ×
-              </button>
-              <Register />
-            </div>
-          </div>
-        )}
+          </TreatBettingPanel>
+        </div>
       </div>
-    </main>
+      {/* DESCRIPTION CARD UNDER GAME */}
+      <section className="mt-8 w-full max-w-[1200px] mx-auto px-4 pb-10">
+        <div className="rounded-2xl bg-[#0f2f57]/80 shadow-xl border border-white/10 p-6">
+          <div className="flex items-center gap-6">
+            <h2 className="text-white text-2xl font-extrabold tracking-wide">
+              TREAT
+            </h2>
+            <span className="text-white/60 font-semibold text-sm">
+              CATARIS ORIGINAL
+            </span>
+          </div>
+
+          <div className="mt-4 text-white/90 font-semibold">Description</div>
+
+          <div className="mt-3 flex gap-6 flex-col md:flex-row">
+            {/* LEFT IMAGE */}
+            <img
+              src={treat}
+              alt="Logo"
+              className="w-[140px] md:w-[140px] h-auto rounded-xl shadow-lg"
+            />
+
+            {/* TEXT */}
+            <p className="text-white/80 leading-8 text-lg">
+              TREAT is a fast-paced risk-and-reward grid game where every move counts. Reveal safe tiles, build your progress, and decide when to secure your winnings before hitting a trap. Designed for players who enjoy strategic control and calculated risk, TREAT delivers a clean, responsive experience with instant feedback on every action.
+            </p>
+          </div>
+
+          {/* SECTIONS */}
+          <div className="mt-6 space-y-5">
+            <div>
+              <h3 className="text-white font-bold">GamePlay</h3>
+              <p className="mt-2 text-white/75 leading-6 text-md">
+                At the start of each round, players choose a bet amount and the number of traps hidden on the board. Revealing a safe tile increases progress and potential profit, while uncovering a trap immediately ends the round. Players can cash out at any time to lock in their winnings based on their current progress.
+              </p>
+            </div>
+
+            <div>
+              <h3 className="text-white font-bold">Auto Cashout</h3>
+              <p className="mt-2 text-white/75 leading-6 text-md">
+                The auto cashout feature allows players to automatically secure a win after reaching a selected number of safe picks. This option is ideal for maintaining consistent strategies, managing risk, and reducing emotional decision-making during fast sessions.
+              </p>
+            </div>
+
+            <div>
+              <h3 className="text-white font-bold">Cataris Original</h3>
+              <p className="mt-2 text-white/75 leading-6 text-md">
+                As a Cataris original title, TREAT focuses on transparency, smooth performance, and player-driven outcomes. No hidden mechanics, no unnecessary complexity - just a refined grid game built for modern online play.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+      {/* LOGIN MODAL */}
+      {showLogin && (
+        <div className="modal" role="dialog" aria-modal="true" aria-labelledby="login-title">
+          <div className="modal__backdrop" onClick={closeAuthModal} />
+          <div className="modal__panel">
+            <button className="modal__close" onClick={closeAuthModal} aria-label="Close">
+              ×
+            </button>
+            <Login />
+          </div>
+        </div>
+      )}
+      {/* REGISTER MODAL */}
+      {showRegister && (
+        <div className="modal" role="dialog" aria-modal="true" aria-labelledby="register-title">
+          <div className="modal__backdrop" onClick={closeAuthModal} />
+          <div className="modal__panel">
+            <button className="modal__close" onClick={closeAuthModal} aria-label="Close">
+              ×
+            </button>
+            <Register />
+          </div>
+        </div>
+      )}
+    </main >
   );
 };
 

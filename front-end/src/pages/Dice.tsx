@@ -9,6 +9,7 @@ import Login from "./Login";
 import Register from "./Register";
 import { updateWalletBalance } from "../api/auth";
 import { fetchWalletBalance } from "../api/auth";
+import mice from '../assets/games/game-mice.png';
 
 const Dice = () => {
   const [chance, setChance] = useState(50);
@@ -145,87 +146,143 @@ const Dice = () => {
         </div>
       )}
       <div className="dice-page">
-        <BettingPanelDice betAmount={betAmount} setBetAmount={setBetAmount} startGame={handleRoll} gameOver={gameOver} gameStarted={gameStarted} multiplier={multiplier}>
-          <div className="dice-panel">
-            <section className="dice-slider">
-              <div
-                className="chance-visual"
-                style={{ '--chance-stop': `${chance}` } as CSSProperties}
-              >
-                <div
-                  className="chance-track"
-                  style={{ backgroundImage: `url(${sliderBase})` }}
-                >
+        <div className="flex w-screen min-h-screen justify-center items-start ">
+          <div className="w-full flex justify-center">
+            <BettingPanelDice betAmount={betAmount} setBetAmount={setBetAmount} startGame={handleRoll} gameOver={gameOver} gameStarted={gameStarted} multiplier={multiplier}>
+              <div className="dice-panel">
+                <section className="dice-slider">
                   <div
-                    className="chance-track-inner"
-                    style={{
-
-                      '--chance-stop': `${chance}`,
-                    } as CSSProperties}
+                    className="chance-visual"
+                    style={{ '--chance-stop': `${chance}` } as CSSProperties}
                   >
-                    <div className="chance-value">
-                      <span>{chance}%</span>
-                    </div>
-                    <div className="chance-lane">
+                    <div
+                      className="chance-track"
+                      style={{ backgroundImage: `url(${sliderBase})` }}
+                    >
                       <div
-                        className={`chance-marker ${isRolling ? 'rolling' : outcome ?? ''}`}
-                        style={{ '--marker-position': `${markerPercent}` } as CSSProperties}
+                        className="chance-track-inner"
+                        style={{
+
+                          '--chance-stop': `${chance}`,
+                        } as CSSProperties}
                       >
-                        <span>{markerValue}%</span>
+                        <div className="chance-value">
+                          <span>{chance}%</span>
+                        </div>
+                        <div className="chance-lane">
+                          <div
+                            className={`chance-marker ${isRolling ? 'rolling' : outcome ?? ''}`}
+                            style={{ '--marker-position': `${markerPercent}` } as CSSProperties}
+                          >
+                            <span>{markerValue}%</span>
+                          </div>
+                        </div>
+                        <div className={`chance-handle ${isRolling ? 'rolling' : ''}`}>
+                          <img src={sliderHandle} alt="Chance handle" draggable={false} />
+                        </div>
                       </div>
                     </div>
-                    <div className={`chance-handle ${isRolling ? 'rolling' : ''}`}>
-                      <img src={sliderHandle} alt="Chance handle" draggable={false} />
-                    </div>
+                    <input
+                      type="range"
+                      min={5}
+                      max={95}
+                      value={chance}
+                      onChange={(event) => setChance(Number(event.target.value))}
+                      onInput={(event) => setChance(Number(event.currentTarget.value))}
+                      className="chance-input"
+                      aria-label="Adjust win probability"
+                    />
                   </div>
-                </div>
-                <input
-                  type="range"
-                  min={5}
-                  max={95}
-                  value={chance}
-                  onChange={(event) => setChance(Number(event.target.value))}
-                  onInput={(event) => setChance(Number(event.currentTarget.value))}
-                  className="chance-input"
-                  aria-label="Adjust win probability"
-                />
-              </div>
-              <div className="chance-labels">
-                <span>
-                  Winning chances <strong>{chance}%</strong>
-                </span>
-              </div>
-            </section>
-
-            <section className="dice-result">
-              <div className="dice-actions">
-                <div className={`dice-roll-value ${outcome ?? ''}`}>
-                  <div className="dice-roll-value-header">
-                    <span>Roll landed at</span>
-                    <span className="dice-roll-value-number">
-                      {finalValue !== null
-                        ? `${finalValue}%`
-                        : isRolling
-                          ? 'Rolling…'
-                          : '—'}
+                  <div className="chance-labels">
+                    <span>
+                      Winning chances <strong>{chance}%</strong>
                     </span>
                   </div>
-                  <div className="dice-roll-value-outcome">
-                    {isRolling
-                      ? ''
-                      : finalValue !== null
-                        ? outcome === 'win'
-                          ? `Win! Payout ${payoutAmount !== null ? payoutAmount : '—'}`
-                          : 'Lost...'
-                        : 'Set your odds and roll the dice.'}
-                  </div>
-                </div>
-              </div>
-            </section>
+                </section>
 
+                <section className="dice-result">
+                  <div className="dice-actions">
+                    <div className={`dice-roll-value ${outcome ?? ''}`}>
+                      <div className="dice-roll-value-header">
+                        <span>Roll landed at</span>
+                        <span className="dice-roll-value-number">
+                          {finalValue !== null
+                            ? `${finalValue}%`
+                            : isRolling
+                              ? 'Rolling…'
+                              : '—'}
+                        </span>
+                      </div>
+                      <div className="dice-roll-value-outcome">
+                        {isRolling
+                          ? ''
+                          : finalValue !== null
+                            ? outcome === 'win'
+                              ? `Win! Payout ${payoutAmount !== null ? payoutAmount : '—'}`
+                              : 'Lost...'
+                            : 'Set your odds and roll the dice.'}
+                      </div>
+                    </div>
+                  </div>
+                </section>
+              </div>
+            </BettingPanelDice>
           </div>
-        </BettingPanelDice>
+        </div>
       </div>
+      {/* DESCRIPTION CARD UNDER GAME */}
+      <section className="mt-8 w-full max-w-[1200px] mx-auto px-4 pb-10">
+        <div className="rounded-2xl bg-[#0f2f57]/80 shadow-xl border border-white/10 p-6">
+          <div className="flex items-center gap-6">
+            <h2 className="text-white text-2xl font-extrabold tracking-wide">
+              MICE
+            </h2>
+            <span className="text-white/60 font-semibold text-sm">
+              CATARIS ORIGINAL
+            </span>
+          </div>
+
+          <div className="mt-4 text-white/90 font-semibold">Description</div>
+
+          <div className="mt-3 flex gap-6 flex-col md:flex-row">
+            {/* LEFT IMAGE */}
+            <img
+              src={mice}
+              alt="Logo"
+              className="w-[140px] md:w-[140px] h-auto rounded-xl shadow-lg"
+            />
+
+            {/* TEXT */}
+            <p className="text-white/80 leading-8 text-lg">
+              MEOW-JACK is Cataris Casino’s modern take on the classic blackjack experience, blending familiar rules with a clean, intuitive interface and fast-paced gameplay. Designed for both casual players and seasoned strategists, the game delivers a smooth, responsive flow where every decision matters. Clear visuals, balanced odds, and instant feedback ensure an engaging experience from the first hand to the last card.
+            </p>
+          </div>
+
+          {/* SECTIONS */}
+          <div className="mt-6 space-y-5">
+            <div>
+              <h3 className="text-white font-bold">GamePlay</h3>
+              <p className="mt-2 text-white/75 leading-6 text-md">
+                The objective is simple: beat the dealer by reaching a hand value closer to 21 without exceeding it. Players can hit, stand, and strategically manage their moves based on probability and risk. MEOW-JACK follows traditional blackjack mechanics while maintaining a streamlined structure that keeps rounds efficient and immersive.
+              </p>
+            </div>
+
+            <div>
+              <h3 className="text-white font-bold">Strategy & Fairness</h3>
+              <p className="mt-2 text-white/75 leading-6 text-md">
+                MEOW-JACK is built around transparent mechanics and predictable rules, allowing players to rely on strategy rather than chance alone. Card values, dealer behavior, and payouts are clearly defined, giving players full control over their decisions. The game logic ensures fair outcomes while rewarding smart play and calculated risk.
+              </p>
+            </div>
+
+            <div>
+              <h3 className="text-white font-bold">Cataris Original</h3>
+              <p className="mt-2 text-white/75 leading-6 text-md">
+                As a Cataris original title, MEOW-JACK reflects our commitment to clean design, reliable performance, and player-first mechanics. No unnecessary complexity - just a refined blackjack experience built for modern online play.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
       {/* LOGIN MODAL */}
       {showLogin && (
         <div className="modal" role="dialog" aria-modal="true" aria-labelledby="login-title">
