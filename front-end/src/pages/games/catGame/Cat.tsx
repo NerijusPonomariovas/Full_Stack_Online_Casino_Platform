@@ -91,7 +91,7 @@ export default function Home() {
 
             {/* TEXT */}
             <p className="text-white/80 leading-8 text-lg">
-              MEOW-JACK is Cataris Casino’s modern take on the classic blackjack experience, blending familiar rules with a clean, intuitive interface and fast-paced gameplay. Designed for both casual players and seasoned strategists, the game delivers a smooth, responsive flow where every decision matters. Clear visuals, balanced odds, and instant feedback ensure an engaging experience from the first hand to the last card.
+              CAT is a fast-paced arcade-style game where timing, positioning, and anticipation define success. Navigate through dynamic paths, avoid obstacles, and guide your character safely across the board. With a clear visual layout and immediate response to player actions, CAT delivers a focused and engaging experience built around precision and flow.
             </p>
           </div>
 
@@ -100,21 +100,21 @@ export default function Home() {
             <div>
               <h3 className="text-white font-bold">GamePlay</h3>
               <p className="mt-2 text-white/75 leading-6 text-md">
-                The objective is simple: beat the dealer by reaching a hand value closer to 21 without exceeding it. Players can hit, stand, and strategically manage their moves based on probability and risk. MEOW-JACK follows traditional blackjack mechanics while maintaining a streamlined structure that keeps rounds efficient and immersive.
+                Players control movement through a structured playfield filled with moving elements and hazards. Each step forward requires attention to timing and spatial awareness, as obstacles shift and paths change. Progress is earned through careful navigation rather than speed alone, rewarding players who read the board and act decisively.
               </p>
             </div>
 
             <div>
-              <h3 className="text-white font-bold">Strategy & Fairness</h3>
+              <h3 className="text-white font-bold">Timing & Precision</h3>
               <p className="mt-2 text-white/75 leading-6 text-md">
-                MEOW-JACK is built around transparent mechanics and predictable rules, allowing players to rely on strategy rather than chance alone. Card values, dealer behavior, and payouts are clearly defined, giving players full control over their decisions. The game logic ensures fair outcomes while rewarding smart play and calculated risk.
+                At the core of CAT lies precise decision-making. Movement windows are clearly defined, but mistakes are unforgiving. Success depends on understanding patterns, predicting motion, and committing at the right moment. Every move carries consequence, making each successful run feel earned and controlled.
               </p>
             </div>
 
             <div>
               <h3 className="text-white font-bold">Cataris Original</h3>
               <p className="mt-2 text-white/75 leading-6 text-md">
-                As a Cataris original title, MEOW-JACK reflects our commitment to clean design, reliable performance, and player-first mechanics. No unnecessary complexity - just a refined blackjack experience built for modern online play.
+                As a Cataris original title, CAT emphasizes clean mechanics, visual clarity, and skill-based outcomes. No unnecessary systems, no hidden modifiers - just a refined arcade experience designed for players who value control, focus, and mastery.
               </p>
             </div>
           </div>

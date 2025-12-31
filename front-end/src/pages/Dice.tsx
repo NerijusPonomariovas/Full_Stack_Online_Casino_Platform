@@ -254,7 +254,7 @@ const Dice = () => {
 
             {/* TEXT */}
             <p className="text-white/80 leading-8 text-lg">
-              MEOW-JACK is Cataris Casino’s modern take on the classic blackjack experience, blending familiar rules with a clean, intuitive interface and fast-paced gameplay. Designed for both casual players and seasoned strategists, the game delivers a smooth, responsive flow where every decision matters. Clear visuals, balanced odds, and instant feedback ensure an engaging experience from the first hand to the last card.
+              MICE is a precision-based dice game where probability is fully in the player’s hands. Adjust your winning chances, place your bet, and roll the dice to see where it lands. With a clean interface and real-time feedback, MICE delivers a fast and transparent experience built around calculated risk and strategic control.
             </p>
           </div>
 
@@ -263,21 +263,21 @@ const Dice = () => {
             <div>
               <h3 className="text-white font-bold">GamePlay</h3>
               <p className="mt-2 text-white/75 leading-6 text-md">
-                The objective is simple: beat the dealer by reaching a hand value closer to 21 without exceeding it. Players can hit, stand, and strategically manage their moves based on probability and risk. MEOW-JACK follows traditional blackjack mechanics while maintaining a streamlined structure that keeps rounds efficient and immersive.
+                Players select a bet amount and set their desired winning chance using the probability slider. Higher chances offer safer outcomes with lower multipliers, while lower chances increase potential rewards at higher risk. Once the odds are set, roll the dice and compare the result against your chosen threshold.
               </p>
             </div>
 
             <div>
-              <h3 className="text-white font-bold">Strategy & Fairness</h3>
+              <h3 className="text-white font-bold">Probability & Control</h3>
               <p className="mt-2 text-white/75 leading-6 text-md">
-                MEOW-JACK is built around transparent mechanics and predictable rules, allowing players to rely on strategy rather than chance alone. Card values, dealer behavior, and payouts are clearly defined, giving players full control over their decisions. The game logic ensures fair outcomes while rewarding smart play and calculated risk.
+                The core of MICE lies in its adjustable odds system. Every change to the winning chance directly impacts the multiplier, allowing players to fine-tune their strategy in real time. This dynamic balance between risk and reward ensures that each roll is a deliberate decision rather than a random guess.
               </p>
             </div>
 
             <div>
               <h3 className="text-white font-bold">Cataris Original</h3>
               <p className="mt-2 text-white/75 leading-6 text-md">
-                As a Cataris original title, MEOW-JACK reflects our commitment to clean design, reliable performance, and player-first mechanics. No unnecessary complexity - just a refined blackjack experience built for modern online play.
+                As a Cataris original title, MICE focuses on speed, clarity, and player agency. No hidden variables, no unnecessary complexity - just a refined dice game designed for modern online play.
               </p>
             </div>
           </div>

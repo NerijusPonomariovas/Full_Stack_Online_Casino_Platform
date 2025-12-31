@@ -11,6 +11,7 @@ import Register from "./Register";
 import logo from "../assets/LOGO.svg";
 //import { baseURL } from "../utils/index";
 import { updateWalletBalance } from "../api/auth";
+import plinko from "../assets/games/Plinko.png"
 
 export default function PlinkoGame() {
   const [ballManager, setBallManager] = useState<BallManager>();
@@ -216,6 +217,59 @@ export default function PlinkoGame() {
           </BettingPanel>
         </div>
       </div>
+      {/* DESCRIPTION CARD UNDER GAME */}
+      <section className="mt-8 w-full max-w-[1200px] mx-auto px-4 pb-10">
+        <div className="rounded-2xl bg-[#0f2f57]/80 shadow-xl border border-white/10 p-6">
+          <div className="flex items-center gap-6">
+            <h2 className="text-white text-2xl font-extrabold tracking-wide">
+              BALL OF YARN
+            </h2>
+            <span className="text-white/60 font-semibold text-sm">
+              CATARIS ORIGINAL
+            </span>
+          </div>
+
+          <div className="mt-4 text-white/90 font-semibold">Description</div>
+
+          <div className="mt-3 flex gap-6 flex-col md:flex-row">
+            {/* LEFT IMAGE */}
+            <img
+              src={plinko}
+              alt="Logo"
+              className="w-[140px] md:w-[140px] h-auto rounded-xl shadow-lg"
+            />
+
+            {/* TEXT */}
+            <p className="text-white/80 leading-8 text-lg">
+              BALL OF YARN is a probability-driven drop game where outcomes unfold through controlled randomness. Release the ball from the top of the board and watch it bounce through a field of pins before landing in a multiplier zone. Simple to play yet rich in strategy, the game combines anticipation, distribution logic, and risk management in a clean, visually focused experience.
+            </p>
+          </div>
+
+          {/* SECTIONS */}
+          <div className="mt-6 space-y-5">
+            <div>
+              <h3 className="text-white font-bold">GamePlay</h3>
+              <p className="mt-2 text-white/75 leading-6 text-md">
+                Players start by placing a bet and releasing the ball of yarn onto the board. As the ball descends, it interacts with fixed pins that influence its path. The final payout is determined by the multiplier slot where the ball lands, ranging from low-risk central zones to high-reward edges.
+              </p>
+            </div>
+
+            <div>
+              <h3 className="text-white font-bold">Risk & Distribution</h3>
+              <p className="mt-2 text-white/75 leading-6 text-md">
+                BALL OF YARN is built around statistical distribution. Central slots offer more frequent, lower multipliers, while outer slots provide higher payouts at reduced probability. Players can choose how much risk they are willing to take by understanding the board layout and expected outcomes.
+              </p>
+            </div>
+
+            <div>
+              <h3 className="text-white font-bold">Cataris Original</h3>
+              <p className="mt-2 text-white/75 leading-6 text-md">
+                As a Cataris original title, BALL OF YARN emphasizes transparency, balance, and modern design. All multipliers are visible upfront, outcomes follow consistent logic, and players remain in full control of their decisions from drop to result.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
       {/* LOGIN MODAL */}
       {showLogin && (
         <div className="modal" role="dialog" aria-modal="true" aria-labelledby="login-title">
