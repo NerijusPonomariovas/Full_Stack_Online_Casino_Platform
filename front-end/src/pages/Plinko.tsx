@@ -23,7 +23,6 @@ export default function PlinkoGame() {
   const [balance, setBalance] = useState<number>(0.0);
   const [betAmount, setBetAmount] = useState<number | null>(null);
   const [gameOver, setGameOver] = useState(false);
-  const [gameStarted, setGameStarted] = useState(false);
 
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
@@ -108,7 +107,6 @@ export default function PlinkoGame() {
 
   const resetGame = () => {
     setGameOver(false);
-    setGameStarted(true);
     // Additional reset logic if needed
   }
 
@@ -201,7 +199,7 @@ export default function PlinkoGame() {
       )}
       <div className="w-screen flex items-center justify-center">
         <div className="flex items-center justify-center w-full">
-          <BettingPanel betAmount={betAmount} setBetAmount={setBetAmount} startGame={resetGame} gameOver={gameOver} gameStarted={gameStarted}>
+          <BettingPanel betAmount={betAmount} setBetAmount={setBetAmount} startGame={resetGame} gameOver={gameOver}>
             {/* <div className="w-full h-full sm:rounded-none md:rounded-tr-2xl flex justify-center items-center relative"> */}
               <canvas
                 ref={canvasRef}

@@ -20,20 +20,30 @@ export default function BettingPanel({ children, betAmount, setBetAmount, startG
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    setIsAuthenticated(!!token);
+    const authenticated = !!token
+    setIsAuthenticated(authenticated);
 
-    if (token) {
-      const getBalance = async () => {
-        const result = await fetchWalletBalance();
-        if('balance' in result) {
-          setBalance(parseFloat(result.balance.toFixed(2)));
-          console.log('Account Balance in BettingPanel:', result.balance);
-        } else {  
-          console.error("Failed to fetch wallet balance:", result.message);
-        }
-      };
+    if (!authenticated) return;
+
+    const getBalance = async () => {
+      const result = await fetchWalletBalance();
+      if ('balance' in result) {
+        setBalance(parseFloat(result.balance.toFixed(2)));
+        console.log('Account Balance in BettingPanel:', result.balance);
+      } else {
+        console.error("Failed to fetch wallet balance:", result.message);
+      }
+    };
+    getBalance();
+
+    const handleBalanceRefresh = () => {
       getBalance();
-      // Fetch user balance if authenticated
+    }
+    // Fetch user balance if authenticated
+    window.addEventListener("balance:refresh", handleBalanceRefresh);
+
+    return () => {
+      window.addEventListener("balance:refresh", handleBalanceRefresh);
     }
   }, []);
 

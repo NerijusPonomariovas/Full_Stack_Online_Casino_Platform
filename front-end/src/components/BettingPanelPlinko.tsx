@@ -7,11 +7,10 @@ type BettingPanelProps = {
   setBetAmount: (amount: number | null) => void;
   startGame: () => void;
   gameOver: boolean;
-  gameStarted: boolean;
 };
 
 
-export default function BettingPanel({ children, betAmount, setBetAmount, startGame, gameOver, gameStarted}: BettingPanelProps) {
+export default function BettingPanel({ children, betAmount, setBetAmount, startGame, gameOver }: BettingPanelProps) {
   const [balance, setBalance] = useState<number>(0.0); // Example balance, replace with actual fetched balance
   const [mode, setMode] = useState("manual");
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
@@ -20,20 +19,30 @@ export default function BettingPanel({ children, betAmount, setBetAmount, startG
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    setIsAuthenticated(!!token);
+    const authenticated = !!token
+    setIsAuthenticated(authenticated);
 
-    if (token) {
-      const getBalance = async () => {
-        const result = await fetchWalletBalance();
-        if('balance' in result) {
-          setBalance(parseFloat(result.balance.toFixed(2)));
-          console.log('Account Balance in BettingPanel:', result.balance);
-        } else {  
-          console.error("Failed to fetch wallet balance:", result.message);
-        }
-      };
+    if (!authenticated) return;
+
+    const getBalance = async () => {
+      const result = await fetchWalletBalance();
+      if ('balance' in result) {
+        setBalance(parseFloat(result.balance.toFixed(2)));
+        console.log('Account Balance in BettingPanel:', result.balance);
+      } else {
+        console.error("Failed to fetch wallet balance:", result.message);
+      }
+    };
+    getBalance();
+
+    const handleBalanceRefresh = () => {
       getBalance();
-      // Fetch user balance if authenticated
+    }
+    // Fetch user balance if authenticated
+    window.addEventListener("balance:refresh", handleBalanceRefresh);
+
+    return () => {
+      window.addEventListener("balance:refresh", handleBalanceRefresh);
     }
   }, []);
 
@@ -54,9 +63,11 @@ export default function BettingPanel({ children, betAmount, setBetAmount, startG
     if (gameOver) {
       //setBetPlaced(true); // Reset bet placed status when game is over
       setBetAmount(null); // Optionally reset bet amount
-      
+
     }
-  } , [gameOver, setBetAmount]);
+  }, [gameOver, setBetAmount]);
+
+  const shouldShowOverlay = !betPlaced || betAmount === null;
 
   return (
     <div className="w-[95%] sm:w-[95%] md:ml-0 xl:w-6xl relative mt-10 md:mt-10 flex flex-col drop-shadow-2xl ">
@@ -66,22 +77,20 @@ export default function BettingPanel({ children, betAmount, setBetAmount, startG
           {/* Toggle Manual / Auto */}
           <div className="flex bg-[#102c56] rounded-4xl overflow-hidden h-12 w-full items-center pl-1 pr-1">
             <button
-              className={`flex-1 rounded-4xl h-[82%] ${
-                mode === "manual" ? "bg-[#184fa2]" : ""
-              }`}
+              className={`flex-1 rounded-4xl h-[82%] ${mode === "manual" ? "bg-[#184fa2]" : ""
+                }`}
               onClick={() => setMode("manual")}
             >
               Manual
             </button>
             <button
-              className={`flex-1 rounded-4xl h-[82%] ${
-                mode === "auto" ? "bg-[#184fa2]" : ""
-              }`}
+              className={`flex-1 rounded-4xl h-[82%] ${mode === "auto" ? "bg-[#184fa2]" : ""
+                }`}
               onClick={() => setMode("auto")}
             >
               Auto
             </button>
-          </div>  
+          </div>
 
           {/* Bet Amount */}
           <div>
@@ -96,8 +105,7 @@ export default function BettingPanel({ children, betAmount, setBetAmount, startG
                   )
                 }
                 className="w-full bg-[#102c56] p-2 rounded-l-sm text-left focus:outline-none"
-                disabled={gameStarted}
-                                placeholder=""
+                placeholder=""
                 onKeyDown={(e) => {
                   const allowedKeys = [
                     "Backspace",
@@ -144,13 +152,12 @@ export default function BettingPanel({ children, betAmount, setBetAmount, startG
           {/* Go */}
           <div className="flex flex-row gap-2 mt-3">
 
-            <button className={`flex-1 py-2 rounded-lg bg-[#2cbf2a] text-black shadow-md font-semibold transition duration-300 ease-in-out ${
-                isGoButtonActive && !gameOver
-                  ? "bg-[#2cbf2a] hover:bg-[#33de30]" // Active: Brighter on hover
-                  : "bg-[#2cbf2a] opacity-50 cursor-not-allowed" // Disabled: Darker, not clickable
+            <button className={`flex-1 py-2 rounded-lg bg-[#2cbf2a] text-black shadow-md font-semibold transition duration-300 ease-in-out ${isGoButtonActive && !gameOver
+              ? "bg-[#2cbf2a] hover:bg-[#33de30]" // Active: Brighter on hover
+              : "bg-[#2cbf2a] opacity-50 cursor-not-allowed" // Disabled: Darker, not clickable
               }`}
               onClick={handleGoButtonClick}
-              disabled={!isGoButtonActive ||gameOver}>
+              disabled={!isGoButtonActive || gameOver}>
               Go
             </button>
           </div>
@@ -168,8 +175,8 @@ export default function BettingPanel({ children, betAmount, setBetAmount, startG
         </div>
 
         {/* RIGHT PANEL – STÓŁ */}
-        <div className={`bg-[#184890] relative w-full md:rounded-tr-4xl flex items-center justify-center ${!betPlaced ? 'pointer-events-none' : ''}`}>
-          {!betPlaced && (
+        <div className={`bg-[#184890] relative w-full md:rounded-tr-4xl flex items-center justify-center ${shouldShowOverlay ? 'pointer-events-none' : ''}`}>
+          {shouldShowOverlay && (
             <div
               className="absolute w-full inset-0 flex items-center justify-center text-2xl font-bold text-white md:rounded-tr-4xl bg-[#184890]"
               style={{ pointerEvents: "auto", zIndex: 10 }}
