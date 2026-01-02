@@ -41,7 +41,7 @@ export default function Home() {
     setIsAuthenticated(!!token);
   }, []);
   return (
-    <main className="home min-h-screen">
+    <main className="home">
       {!isAuthenticated && (
         <div className="fixed inset-0 bg-linear-to-b from-[#102c56] via-[#0b3a6f] to-[#081c36] bg-opacity-100 z-10 flex justify-center items-center">
           <div className="bg-white p-6 rounded-lg w-11/12 sm:w-96 relative">
@@ -58,7 +58,7 @@ export default function Home() {
           </div>
         </div>
       )}
-      <div className="flex justify-center items-center w-screen min-h-screen">
+      <div className="flex-col justify-center items-center w-screen mt-5 md:mt-15">
         <div className="w-full justify-center items-center flex h-150">
           <BettingPanel betAmount={betAmount} setBetAmount={setBetAmount} startGame={startGame} gameOver={gameOver} gameStarted={gameStarted}>
             <div id="game-container" className="w-full h-full sm:rounded-none md:rounded-t-2xl">
@@ -66,9 +66,8 @@ export default function Home() {
             </div>
           </BettingPanel>
         </div>
-      </div>
-      {/* DESCRIPTION CARD UNDER GAME */}
-      <section className="mt-8 w-full max-w-[1200px] mx-auto px-4 pb-10">
+        <div className="w-full flex justify-center items-center relative mt-80 md:mt-5">
+          <section className="mt-8 w-[95%] xl:w-6xl pb-10">
         <div className="rounded-2xl bg-[#0f2f57]/80 shadow-xl border border-white/10 p-6">
           <div className="flex items-center gap-6">
             <h2 className="text-white text-2xl font-extrabold tracking-wide">
@@ -120,6 +119,10 @@ export default function Home() {
           </div>
         </div>
       </section>
+        </div>
+      </div>
+      {/* DESCRIPTION CARD UNDER GAME */}
+      
       {/* LOGIN MODAL */}
       {showLogin && (
         <div className="modal" role="dialog" aria-modal="true" aria-labelledby="login-title">
