@@ -11,15 +11,16 @@ export class BallManager {
     private obstacles: Obstacle[]
     private sinks: Sink[]
     private requestId?: number;
-    private onFinish?: (index: number,startX?: number) => void;
+    private onFinish?: (index: number, startX?: number) => void;
     // Sink animation state: small downward offset that eases back
     private sinkOffsets: number[];
     private readonly sinkDropAmount = 8; // pixels
     private readonly sinkDecayFactor = 0.85; // per-frame decay
     // Simple audio for sink hit
     private audioCtx?: AudioContext;
+    //private ballSprite?: HTMLImageElement;
 
-    constructor(canvasRef: HTMLCanvasElement, onFinish?: (index: number,startX?: number) => void) {
+    constructor(canvasRef: HTMLCanvasElement, onFinish?: (index: number, startX?: number) => void) {
         this.balls = [];
         this.canvasRef = canvasRef;
         this.ctx = this.canvasRef.getContext("2d", { alpha: true })!;
@@ -31,6 +32,10 @@ export class BallManager {
         this.update();
         this.onFinish = onFinish;
     }
+    /*
+    public setBallSprite(img?: HTMLImageElement) {
+        this.ballSprite = img;
+    }*/
 
     addBall(startX?: number, targetSinkIndex?: number) {
         // Drop from higher to build momentum before hitting pegs
@@ -48,17 +53,25 @@ export class BallManager {
             spawnX = pad(clamped);
         }
 
-        const newBall = new Ball(spawnX, spawnY, ballRadius, 'red', this.ctx, this.obstacles, this.sinks, (index) => {
-            // Remove ball
-            this.balls = this.balls.filter(ball => ball !== newBall);
-            // Trigger sink bounce animation
-            if (index >= 0 && index < this.sinks.length) {
-                this.sinkOffsets[index] = Math.max(this.sinkOffsets[index], this.sinkDropAmount);
-                this.playSinkHitSound();
-            }
-            // External callback
-            this.onFinish?.(index, startX)
-        }, targetSinkIndex);
+        const newBall = new Ball(
+            spawnX,
+            spawnY,
+            ballRadius,
+            "red",
+            this.ctx,
+            this.obstacles,
+            this.sinks,
+            (index) => {
+                this.balls = this.balls.filter(ball => ball !== newBall);
+                if (index >= 0 && index < this.sinks.length) {
+                    this.sinkOffsets[index] = Math.max(this.sinkOffsets[index], this.sinkDropAmount);
+                    this.playSinkHitSound();
+                }
+                this.onFinish?.(index, startX);
+            },
+            targetSinkIndex,
+            //this.ballSprite
+        );
         this.balls.push(newBall);
     }
 
@@ -71,7 +84,7 @@ export class BallManager {
             this.ctx.closePath();
         });
     }
-  
+
     private getSinkBounds() {
         if (!this.sinks.length) {
             return { minBound: 0, maxBound: WIDTH };
@@ -84,27 +97,27 @@ export class BallManager {
 
     getColor(index: number) {
         if (index < 3 || index > this.sinks.length - 4) {
-            return {background: '#ff0303ff', color: 'black'};
+            return { background: '#ff0303ff', color: 'black' };
         }
         if (index < 6 || index > this.sinks.length - 7) {
-            return {background: '#ff5e00ff', color: 'black'};
+            return { background: '#ff5e00ff', color: 'black' };
         }
         if (index < 8 || index > this.sinks.length - 9) {
-            return {background: '#ffc400ff', color: 'black'};
+            return { background: '#ffc400ff', color: 'black' };
         }
         if (index < 12 || index > this.sinks.length - 13) {
-            return {background: '#ffe600ff', color: 'black'};
+            return { background: '#ffe600ff', color: 'black' };
         }
         if (index < 15 || index > this.sinks.length - 16) {
-            return {background: '#470cd1ff', color: 'black'};
+            return { background: '#470cd1ff', color: 'black' };
         }
-        return {background: '#ff0303ff', color: 'black'};
+        return { background: '#ff0303ff', color: 'black' };
     }
     drawSinks() {
         const SPACING = 7;
         const depth = 5;
         const radius = 5;
-        
+
         for (let i = 0; i < this.sinks.length; i++) {
             const sink = this.sinks[i];
             const width = sink.width - SPACING; // visual width (slightly narrower)
@@ -112,14 +125,14 @@ export class BallManager {
             const xCenter = unpad(sink.x);
             const x = xCenter - width / 2; // convert center to left for drawing
             const y = unpad(sink.y) - height / 2 + (this.sinkOffsets[i] || 0);
-            
+
             const baseColor = this.getColor(i).background;
-            
+
             // Draw back face (darker shadow)
             this.ctx.fillStyle = this.darkenColor(baseColor, 0.2);
             this.roundRect(this.ctx, x + depth, y + depth, width, height, radius);
             this.ctx.fill();
-            
+
             // Draw right side face (side shadow)
             this.ctx.fillStyle = this.darkenColor(baseColor, 0.375);
             this.ctx.beginPath();
@@ -133,7 +146,7 @@ export class BallManager {
             this.ctx.quadraticCurveTo(x + width, y + height, x + width, y + height - radius);
             this.ctx.closePath();
             this.ctx.fill();
-            
+
             // Draw bottom face (bottom shadow)
             this.ctx.fillStyle = this.darkenColor(baseColor, 0.3);
             this.ctx.beginPath();
@@ -147,18 +160,18 @@ export class BallManager {
             this.ctx.quadraticCurveTo(x + width, y + height, x + width, y + height - radius);
             this.ctx.closePath();
             this.ctx.fill();
-            
+
             // Draw front face with rounded corners (brightest)
             this.ctx.fillStyle = baseColor;
             this.roundRect(this.ctx, x, y, width, height, radius);
             this.ctx.fill();
-            
+
             // Draw border for definition
             this.ctx.strokeStyle = this.darkenColor(baseColor, 0.7);
             this.ctx.lineWidth = 1;
             this.roundRect(this.ctx, x, y, width, height, radius);
             this.ctx.stroke();
-            
+
             // Draw text
             this.ctx.fillStyle = this.getColor(i).color;
             this.ctx.font = 'bold 14px Arial';
@@ -168,7 +181,7 @@ export class BallManager {
             this.ctx.textAlign = 'left';
         }
     }
-    
+
     private roundRect(ctx: CanvasRenderingContext2D, x: number, y: number, width: number, height: number, radius: number) {
         ctx.beginPath();
         ctx.moveTo(x + radius, y);
@@ -182,7 +195,7 @@ export class BallManager {
         ctx.arcTo(x, y, x + radius, y, radius);
         ctx.closePath();
     }
-    
+
     private darkenColor(hexColor: string, factor: number): string {
         // Remove the 'ff' alpha channel if present
         const hex = hexColor.replace('ff', '');
@@ -235,7 +248,7 @@ export class BallManager {
             ball.draw();
         });
     }
-    
+
     update() {
         this.draw();
         this.requestId = requestAnimationFrame(this.update.bind(this));

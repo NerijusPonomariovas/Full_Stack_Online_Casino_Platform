@@ -12,6 +12,7 @@ import logo from "../assets/LOGO.svg";
 //import { baseURL } from "../utils/index";
 import { updateWalletBalance } from "../api/auth";
 import plinko from "../assets/games/Plinko.png"
+//import yarnBall from "../assets/ball.svg"; // <- tu podmień ścieżkę
 
 export default function PlinkoGame() {
   const [ballManager, setBallManager] = useState<BallManager>();
@@ -75,7 +76,7 @@ export default function PlinkoGame() {
       const displayHeight = Math.round(HEIGHT * scale);
 
       // Set CSS display size to maintain aspect ratio responsively
-      canvas.style.width = `${displayWidth/1.1}px`;
+      canvas.style.width = `${displayWidth / 1.1}px`;
       canvas.style.height = `${displayHeight}px`;
 
       // Set internal pixel buffer according to scale and devicePixelRatio
@@ -94,8 +95,14 @@ export default function PlinkoGame() {
     const ro = new ResizeObserver(resize);
     ro.observe(parent);
     window.addEventListener('resize', resize);
-
+    
     const manager = new BallManager(canvas as HTMLCanvasElement);
+    /*
+    const img = new Image();
+    img.src = yarnBall;
+    img.onload = () => {
+      manager.setBallSprite(img);
+    };*/
     setBallManager(manager);
 
     return () => {
@@ -165,7 +172,7 @@ export default function PlinkoGame() {
     const multipliers = [16, 9, 2, 1.4, 1.4, 1.2, 1.1, 1, 0.5, 1, 1.1, 1.2, 1.4, 1.4, 2, 9, 16];
     console.log(`Targeting sink ${chosenIndex} (${multipliers[chosenIndex]}x), weight: ${weights[chosenIndex]}`);
     console.log(`All sink positions: ${sinkCenters.map((x, i) => `[${i}]=${x.toFixed(1)}`).join(', ')}`);
-    const finalValue = (betAmount!*multipliers[chosenIndex] - betAmount!).toFixed(2).toString();
+    const finalValue = (betAmount! * multipliers[chosenIndex] - betAmount!).toFixed(2).toString();
     updateWalletBalance(finalValue, "win");
     setTimeout(() => {
       window.dispatchEvent(new Event("balance:refresh"));
@@ -201,16 +208,16 @@ export default function PlinkoGame() {
         <div className="flex items-center justify-center w-full">
           <BettingPanel betAmount={betAmount} setBetAmount={setBetAmount} startGame={resetGame} gameOver={gameOver}>
             {/* <div className="w-full h-full sm:rounded-none md:rounded-tr-2xl flex justify-center items-center relative"> */}
-              <canvas
-                ref={canvasRef}
-                className="plinko-canvas"
-                style={{
-                  backgroundColor: 'transparent',
-                  cursor: 'pointer',
-                  display: 'block'
-                }}
-                onClick={handleCanvasClick}
-              />
+            <canvas
+              ref={canvasRef}
+              className="plinko-canvas"
+              style={{
+                backgroundColor: 'transparent',
+                cursor: 'pointer',
+                display: 'block'
+              }}
+              onClick={handleCanvasClick}
+            />
             {/* //</div> */}
           </BettingPanel>
         </div>

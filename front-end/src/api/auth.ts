@@ -5,13 +5,16 @@ import axios from 'axios';
 // Define the API URL
 const API_URL = 'http://localhost:8080/api'; // Update with your actual backend URL
 
-// Interface for login response
 interface LoginResponse {
   token: string;
 }
 
 interface RegisterResponse {
-  message: string; // You can customize this as needed
+  message: string;
+}
+
+interface UpdateUserResponse {
+  message: string;
 }
 
 // Interface for error handling
@@ -214,7 +217,7 @@ export const fetchWalletBalance = async (): Promise<WalletBalanceResponse | Auth
 
 export const updateWalletBalance = async (wager: string, outcome: "win" | "loss"): Promise<WalletBalanceResponse | AuthError> => {
   try {
-    console.log("AUTH shit",wager);
+    console.log("AUTH shit", wager);
     // Get the JWT token from localStorage
     const token = localStorage.getItem('token');
     if (!token) {
@@ -270,5 +273,119 @@ export const updateWalletBalance = async (wager: string, outcome: "win" | "loss"
         message: error.message || 'Wallet balance update failed: An unknown error occurred',
       };
     }
+  }
+};
+
+interface UserInfoResponse {
+  username: string;
+  email: string;
+  balance: number;
+}
+
+export const fetchUserInfo = async (): Promise<UserInfoResponse | AuthError> => {
+  try {
+    // Token z localStorage (tak jak u Ciebie w wallet)
+    const token = localStorage.getItem("token");
+    if (!token) {
+      return {
+        type: "auth_error",
+        message: "No authentication token found. Please log in again.",
+      };
+    }
+
+    // GET /api/user/user_info
+    const response = await axios.get(`${API_URL}/user/user_info`, {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
+      },
+    });
+
+    console.log("Response status:", response.status);
+    console.log("Response data:", response.data);
+
+    if (response.status === 200 && response.data) {
+      return {
+        username: response.data.username,
+        email: response.data.email,
+        balance: Number(response.data.balance),
+      };
+    }
+
+    throw new Error("User info fetch failed: Invalid response");
+  } catch (error: any) {
+    console.error("Error during user info fetch:");
+    if (error.response) {
+      console.error("Error response:", error.response.data);
+      return {
+        type: "http_error",
+        message: `User info fetch failed: ${error.response.data.error || error.response.statusText}`,
+      };
+    } else if (error.request) {
+      console.error("Error request:", error.request);
+      return {
+        type: "network_error",
+        message: "User info fetch failed: No response received from the server",
+      };
+    } else {
+      console.error("Error:", error.message);
+      return {
+        type: "unknown_error",
+        message: error.message || "User info fetch failed: An unknown error occurred",
+      };
+    }
+  }
+};
+
+export const updateUserInfo = async (
+  username?: string,
+  email?: string
+): Promise<UpdateUserResponse | AuthError> => {
+  try {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      return {
+        type: "auth_error",
+        message: "No authentication token found. Please log in again.",
+      };
+    }
+
+    // payload zgodny z backendem
+    const payload: Record<string, string> = {};
+    if (username?.trim()) payload.username = username.trim();
+    if (email?.trim()) payload.email = email.trim();
+
+    const response = await axios.post(
+      `${API_URL}/user/update_user`,
+      payload,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        },
+      }
+    );
+
+    const data = response.data;
+
+    if (response.status === 200 || response.status === 201) {
+      if (typeof data === "string") return { message: data || "User updated successfully" };
+      if (data?.message) return { message: data.message };
+      return { message: "User updated successfully" };
+    }
+
+    return { type: "http_error", message: `User update failed: ${response.statusText}` };
+  } catch (error: any) {
+    if (error.response) {
+      const data = error.response.data;
+      return {
+        type: "http_error",
+        message: (typeof data === "string" ? data : data?.error) || error.response.statusText,
+      };
+    }
+    if (error.request) {
+      return { type: "network_error", message: "User update failed: No response received from the server" };
+    }
+    return { type: "unknown_error", message: error.message || "User update failed: Unknown error" };
   }
 };
