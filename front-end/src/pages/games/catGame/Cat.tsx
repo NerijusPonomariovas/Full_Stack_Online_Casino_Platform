@@ -61,7 +61,7 @@ export default function Home() {
       <div className="flex-col justify-center items-center w-screen mt-5 md:mt-15">
         <div className="w-full justify-center items-center flex h-150">
           <BettingPanel betAmount={betAmount} setBetAmount={setBetAmount} startGame={startGame} gameOver={gameOver} gameStarted={gameStarted}>
-            <div id="game-container" className="w-full h-full sm:rounded-none md:rounded-t-2xl">
+            <div id="game-container" className="w-full h-full sm:rounded-none md:rounded-tr-2xl">
               <Cat />
             </div>
           </BettingPanel>
@@ -97,7 +97,7 @@ export default function Home() {
           {/* SECTIONS */}
           <div className="mt-6 space-y-5">
             <div>
-              <h3 className="text-white font-bold">GamePlay</h3>
+              <h3 className="text-white font-bold">Gameplay</h3>
               <p className="mt-2 text-white/75 leading-6 text-md">
                 Players control movement through a structured playfield filled with moving elements and hazards. Each step forward requires attention to timing and spatial awareness, as obstacles shift and paths change. Progress is earned through careful navigation rather than speed alone, rewarding players who read the board and act decisively.
               </p>

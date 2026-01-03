@@ -72,7 +72,7 @@ export default function BettingPanel({ children, betAmount, setBetAmount, startG
     <div className="w-[95%] md:ml-0 xl:w-6xl relative mt-20 md:mt-0 flex flex-col drop-shadow-2xl ">
       <div className="grid grid-cols-1 grid-rows-auto md:grid-cols-[16rem_1fr] grid-rows-[35rem_1fr]">
         {/* LEFT PANEL */}
-        <div className="w-full md:w-64 h-75 md:h-auto mt-65 md:mt-0 bg-[#1c5ec3] text-white rounded-t-4xl md:rounded-tl-4xl md:rounded-tr-none p-4 space-y-3 shrink-0">
+        <div className="w-full md:w-64 h-75 md:h-auto mt-65 md:mt-0 bg-[#1c5ec3] text-white rounded-t-4xl md:rounded-tl-4xl md:rounded-tr-none p-4 space-y-3 shrink-0 border-l border-t border-white/10">
           {/* Toggle Manual / Auto */}
           <div className="flex bg-[#102c56] rounded-4xl overflow-hidden h-12 w-full items-center pl-1 pr-1">
             <button
@@ -110,6 +110,7 @@ export default function BettingPanel({ children, betAmount, setBetAmount, startG
                                 placeholder=""
                 onKeyDown={(e) => {
                   const allowedKeys = [
+                    "0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
                     "Backspace",
                     "Delete",
                     "ArrowLeft",
@@ -178,11 +179,11 @@ export default function BettingPanel({ children, betAmount, setBetAmount, startG
         </div>
 
         {/* RIGHT PANEL – STÓŁ */}
-        <div className={`bg-[#184890] relative w-full md:rounded-tr-4xl flex items-center justify-center ${!betPlaced ? 'pointer-events-none' : ''}`}>
+        <div className={`bg-[#184890] relative w-full md:rounded-tr-4xl flex items-center justify-center border-r border-t border-white/10 ${!betPlaced ? 'pointer-events-none' : ''}`}>
           {!betPlaced && (
             <div
               className="absolute inset-0 flex items-center justify-center text-2xl font-bold text-white md:rounded-tr-4xl bg-[#184890] bg-opacity-100"
-              style={{ pointerEvents: "auto", zIndex: 20 }}
+              style={{ pointerEvents: "auto", zIndex: 0 }}
             >
               <div>Please place your bet to start the game.</div>
             </div>
@@ -190,7 +191,7 @@ export default function BettingPanel({ children, betAmount, setBetAmount, startG
           {children}
         </div>
         {/* BOTTOM PANEL */}
-        <div className="w-full bg-[#10305f] h-24 rounded-b-4xl flex items-center justify-center text-gray-300 text-sm relative md:col-span-2">
+        <div className="w-full bg-[#10305f] h-24 rounded-b-4xl flex items-center justify-center text-gray-300 text-sm relative md:col-span-2 border-b border-l border-r border-white/10">
           Cataris
         </div>
       </div>
