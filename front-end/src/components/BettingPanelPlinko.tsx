@@ -42,21 +42,24 @@ export default function BettingPanel({ children, betAmount, setBetAmount, startG
     window.addEventListener("balance:refresh", handleBalanceRefresh);
 
     return () => {
-      window.addEventListener("balance:refresh", handleBalanceRefresh);
+      window.removeEventListener("balance:refresh", handleBalanceRefresh);
     }
   }, []);
 
 
   const isGoButtonActive = betAmount !== null && betAmount > 0 && !gameOver && betAmount <= balance;
+  const hasEnoughBalance =
+    isAuthenticated &&
+    betAmount !== null &&
+    betAmount > 0 &&
+    betAmount <= balance;
 
+  const isBoardActive = betPlaced && hasEnoughBalance;
   const handleGoButtonClick = () => {
-    if (gameOver) {
-      startGame();
-      setBetPlaced(true); // Mark that the bet has been placed
-    } else if (isAuthenticated) {
-      startGame();
-      setBetPlaced(true); // Mark that the bet has been placed
-    }
+    if(!hasEnoughBalance || gameOver) return;
+
+    startGame();
+    setBetPlaced(true);
   };
 
   useEffect(() => {
@@ -68,6 +71,7 @@ export default function BettingPanel({ children, betAmount, setBetAmount, startG
   }, [gameOver, setBetAmount]);
 
   const shouldShowOverlay = !betPlaced || betAmount === null;
+  
 
   return (
     <div className="w-[95%] sm:w-[95%] md:ml-0 xl:w-6xl relative mt-10 md:mt-10 flex flex-col drop-shadow-2xl ">
@@ -173,7 +177,7 @@ export default function BettingPanel({ children, betAmount, setBetAmount, startG
             />
           </div>
         </div>
-
+        
         {/* RIGHT PANEL – STÓŁ */}
         <div className={`bg-[#184890] relative w-full md:rounded-tr-4xl flex items-center justify-center ${shouldShowOverlay ? 'pointer-events-none' : ''}`}>
           {shouldShowOverlay && (
