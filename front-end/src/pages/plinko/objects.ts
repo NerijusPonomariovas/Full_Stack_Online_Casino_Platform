@@ -40,13 +40,14 @@ export const createObstacles = (): Obstacle[] => {
     const spacing = 50;
     const startY = 45;
     const verticalSpacing = 34;
+    const centerX = WIDTH / 2;
     
     for (let row = 1; row < 17; row++) {
         const numObstacles = row + 2;
         const y = startY + row * verticalSpacing;
         for (let col = 0; col < numObstacles; col++) {
             // Center pins to match sink grid (keep exact same base as sinks)
-            const x = WIDTH / 2.07 + spacing * (col - numObstacles / 2 + 0.5);
+            const x = centerX + spacing * (col - numObstacles / 2 + 0.5);
             obstacles.push({ x: pad(x), y: pad(y), radius: obstacleRadius });
         }   
     }
@@ -57,9 +58,10 @@ export const createSinks = (): Sink[] => {
     const sinks = [];
     const spacing = 50;
     const numSinks = NUM_SINKS;
+    const centerX = WIDTH / 2;
     
     for (let i = 0; i < numSinks; i++) {
-        const x = WIDTH / 2.07 + spacing * (i - 8);
+        const x = centerX + spacing * (i - 8);
         const y = 625;
         const width = sinkWidth;
         const height = width;
