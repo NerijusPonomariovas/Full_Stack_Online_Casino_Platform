@@ -1,26 +1,53 @@
-import { useEffect, useState } from "react";
-import { updateWalletBalance } from "../api/auth";
-import { fetchWalletBalance } from "../api/auth";
+import { useEffect, useMemo, useState } from "react";
+import { updateWalletBalance, fetchUserInfo, fetchWalletBalance, updateUserInfo } from "../api/auth";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import Login from "./Login";
 import Register from "./Register";
 import logo from "../assets/LOGO.svg";
-
 
 export default function Wallet() {
   const [searchParams] = useSearchParams();
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [accountBalance, setAccountBalance] = useState<number | null>(null);
   const [loading, setLoading] = useState<boolean>(false); // For button loading state
+  const [saving, setSaving] = useState<boolean>(false);
   const [showLogin, setShowLogin] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
+  const [username, setUsername] = useState<string>("-");
+  const [email, setEmail] = useState<string>("-");
+  const [editUsername, setEditUsername] = useState<string>("");
+  const [editEmail, setEditEmail] = useState<string>("");
+  const [saveSuccess, setSaveSuccess] = useState<string | null>(null);
   const navigate = useNavigate();
 
-    const closeAuthModal = () => {
-      setShowLogin(false);
-      setShowRegister(false);
-      navigate("/wallet", { replace: true }); // clears ?auth=...
-    };
+  const closeAuthModal = () => {
+    setShowLogin(false);
+    setShowRegister(false);
+    navigate("/wallet", { replace: true }); // clears ?auth=...
+  };
+  const getBalance = async () => {
+    const result = await fetchWalletBalance();
+    if ('balance' in result) {
+      setAccountBalance(result.balance);
+    } else {
+      console.error("Failed to fetch wallet balance:", result.message);
+    }
+  };
+  const getUserInfo = async () => {
+    const result = await fetchUserInfo();
+    if ("username" in result) {
+      setUsername(result.username);
+      setEmail(result.email);
+
+      setEditEmail(result.email ?? "");
+      setEditUsername(result.username ?? "");
+    } else {
+      console.error("Failed to fetch user info:", result.message);
+    }
+  };
+  const hasChanges = useMemo(() => {
+    return editUsername.trim() !== (username ?? "").trim() || editEmail.trim() !== (email ?? "").trim();
+  }, [editUsername, editEmail, username, email]);
 
   useEffect(() => {
     const auth = searchParams.get("auth");
@@ -30,33 +57,79 @@ export default function Wallet() {
     setIsAuthenticated(!!token);
 
     if (token) {
-      const getBalance = async () => {
-        const result = await fetchWalletBalance();
-        if ('balance' in result) {
-          setAccountBalance(result.balance);
-        } else {
-          console.error("Failed to fetch wallet balance:", result.message);
-        }
-      };
       getBalance();
+      getUserInfo();
       // Fetch user balance if authenticated
     }
   }, [searchParams]);
+  useEffect(() => {
+    window.addEventListener("balance:refresh", getBalance);
+    return () => window.removeEventListener("balance:refresh", getBalance);
+  }, []);
 
   const handleDeposit = async () => {
     console.log("Pressed");
     setLoading(true);
     try {
-      const result = await updateWalletBalance("50", "win");
-      if('balance' in result) {
-        setLoading(false);
+      await updateWalletBalance("50", "win");
+      await getBalance();
+      const result = await fetchWalletBalance();
+      if ('balance' in result) {
+        setAccountBalance(result.balance);
         console.log("New balance: ", result.balance);
+        await getBalance();
       }
-      window.location.reload();
-    }catch (error) {
+      else {
+        console.error("Deposit failed:", result.message);
+      }
+      //window.location.reload();
+    } catch (error) {
       console.error("Deposit failed: ", error);
+    } finally {
+      setLoading(false);
+      window.dispatchEvent(new Event("balance:refresh"));
     }
   };
+
+  const handleSaveUserInfo = async () => {
+    setSaveSuccess(null);
+
+    // lekkie sanity-checki po froncie (backend i tak powinien walidować)
+    const nextUsername = editUsername.trim();
+    const nextEmail = editEmail.trim();
+
+    if (!nextUsername && !nextEmail) {
+      console.error("Nothing to update.");
+      return;
+    }
+
+    setSaving(true);
+    try {
+      const result = await updateUserInfo(nextUsername, nextEmail);
+
+      if ("message" in result) {
+        setSaveSuccess(result.message || "Saved.");
+        await getUserInfo(); // source of truth
+      } else {
+        console.error("Save failed:")
+      }
+    } catch (e) {
+      console.error("Save failed")
+    } finally {
+      setSaving(false);
+    }
+  };
+  const handleReset = () => {
+    setSaveSuccess(null);
+    setEditUsername(username === "-" ? "" : username);
+    setEditEmail(email === "-" ? "" : email);
+  };
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
+  const isEmailValid = useMemo(() => {
+    if (!editEmail.trim()) return true; // pozwalamy na pusty (brak zmiany)
+    return emailRegex.test(editEmail.trim());
+  }, [editEmail]);
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-[#0a2e5c] via-[#0b3a6f] to-[#081c36] text-white p-5 overflow-x-hidden">
@@ -70,7 +143,7 @@ export default function Wallet() {
                   alt="Logo"
                   className="w-16 h-auto" // Adjust the size of your logo
                 />
-                <p className="text-xl ml-4 text-gray-700">Please log in to play the game!</p>
+                <p className="text-xl ml-4 text-gray-700">Please log in</p>
               </div>
             </div>
           </div>
@@ -90,14 +163,14 @@ export default function Wallet() {
           <div className="py-4 border-b border-[#1e4f8f]">
             <span className="text-sm text-[#7fb3ff]">Username</span>
             <div className="text-lg font-semibold text-white">
-              {"-"}
+              {username}
             </div>
           </div>
 
           <div className="py-4 border-b border-[#1e4f8f]">
             <span className="text-sm text-[#7fb3ff]">Email</span>
             <div className="text-lg font-semibold text-white">
-              {"-"}
+              {email}
             </div>
           </div>
 
@@ -117,6 +190,52 @@ export default function Wallet() {
           {loading ? "Processing..." : `Deposit`}
         </button>
       </div>
+      <aside className="max-w-2xl mx-auto p-5">
+
+        <h2 className="text-xl font-semibold text-[#dbeafe] mb-4">Edit profile</h2>
+        <div className="bg-[#0f2a44] rounded-xl p-6 mb-6 shadow-xl">
+          <label className="block text-sm text-[#7fb3ff] mb-1">Username</label>
+          <input
+            value={editUsername}
+            onChange={(e) => setEditUsername(e.target.value)}
+            className="w-full mb-4 px-3 py-2 rounded-lg bg-[#0b1f33] border border-[#1e4f8f] text-white outline-none focus:border-blue-400"
+            placeholder="Enter username"
+          />
+
+          <label className="block text-sm text-[#7fb3ff] mb-1">Email</label>
+          <input
+            value={editEmail}
+            onChange={(e) => setEditEmail(e.target.value)}
+            className="w-full mb-4 px-3 py-2 rounded-lg bg-[#0b1f33] border border-[#1e4f8f] text-white outline-none focus:border-blue-400"
+            placeholder="Enter email"
+          />
+          {saveSuccess && (
+            <div className="mb-3 text-sm text-green-300 bg-green-900/20 border border-green-600/30 rounded-lg p-2">
+              {saveSuccess}
+            </div>
+          )}
+        </div>
+        <div className="flex gap-3">
+          <button
+            onClick={handleSaveUserInfo}
+            disabled={saving || !hasChanges || !isEmailValid}
+            className="flex-1 py-3 bg-blue-500 rounded-lg font-semibold hover:bg-blue-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {saving ? "Saving..." : "Save changes"}
+          </button>
+
+          <button
+            onClick={handleReset}
+            disabled={saving}
+            className="py-3 px-4 bg-[#0b1f33] border border-[#1e4f8f] rounded-lg font-semibold hover:bg-[#0e2b45] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            Reset
+          </button>
+        </div>
+        <p className="text-xs text-[#7fb3ff] mt-3 opacity-80">
+          Changes are applied after confirmation and reloaded from backend.
+        </p>
+      </aside>
       {/* LOGIN MODAL */}
       {showLogin && (
         <div className="modal" role="dialog" aria-modal="true" aria-labelledby="login-title">
