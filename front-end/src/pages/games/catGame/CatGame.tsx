@@ -48,19 +48,21 @@ export default function Cat() {
       hitTest();
       animatePlayer();
       
-
-      if (position.currentRow >= 4) {
       // Example offsets; adjust to taste
       const offsetX = 200;
       const offsetY = 0; // behind the player
       const offsetZ = 150;  // above the player
-
-      camera.position.set(
-        player.position.x + offsetX,
-        player.position.y + offsetY,
-        player.position.z + offsetZ
-      );
-      camera.lookAt(player.position.x, player.position.y, player.position.z);
+      if (position.currentRow >= 7) {
+        camera.up.set(0,0,1);
+        camera.lookAt(0,294,0);
+        camera.position.set(200,294,150);
+      } else if(position.currentRow >= 4){
+        camera.position.set(
+          player.position.x + offsetX,
+          player.position.y + offsetY,
+          player.position.z + offsetZ
+        );
+        camera.lookAt(player.position.x, player.position.y, player.position.z);
       } else {
         camera.up.set(0,0,1);
         camera.lookAt(0,168,0);
@@ -72,17 +74,13 @@ export default function Cat() {
 
     renderer.setAnimationLoop(animate);
 
-    function kebab(){
-      console.log("kebab");
-    }
+document.querySelector("#retry")?.addEventListener("click", initializeGame);
 
-    document.querySelector("#retry")?.addEventListener("click", kebab);
-
-    // ✅ Optional cleanup
-    return () => {
-      renderer.dispose();
-      document.querySelector("#retry")?.removeEventListener("click", kebab);
-    };
+// In cleanup:
+return () => {
+  renderer.dispose();
+  document.querySelector("#retry")?.removeEventListener("click", initializeGame);
+};
   }, []);
 
   return (
@@ -99,7 +97,7 @@ export default function Cat() {
         <div id="result">
           <h1>Game Over!</h1>
           <p>Score: <span id="final-score">0</span></p>
-          <div id="retry">Retry</div>
+          <button id="retry">Retry</button>
         </div>
       </div>
     </div>

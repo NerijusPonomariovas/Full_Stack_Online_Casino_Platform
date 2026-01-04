@@ -41,7 +41,7 @@ function randomElement<T>(array: T[]): T {
 
 function generateCarLaneMetadata(): Row {
   const direction = true;
-  const speed = randomElement([125, 156, 188]);
+  const speed = randomElement([125, 156, 400]);
 
   const occupiedTiles = new Set<number>();
 

@@ -31,7 +31,7 @@ export function initializeMap() {
 }
 
 export function addRows() {
-  const newMetadata = generateRows(20);
+  const newMetadata = generateRows(10);
 
   const startIndex = metadata.length;
   metadata.push(...newMetadata);
@@ -58,6 +58,9 @@ export function addRows() {
       map.add(row);
       rowMeshes.set(rowIndex, row);
     }
+    const grass = Grass({rowIndex:11});
+    map.add(grass);
+    rowMeshes.set(11, grass);
   });
 }
 
@@ -214,9 +217,9 @@ function removeManholeStripes(rowIndex: number) {
     //console.warn(`ManholeCover not found in row ${rowIndex}`);
     return;
   }
-  manholeCover.traverse((child) => {
+/*   manholeCover.traverse((child) => {
   //console.log(child.name, child);
-});
+}); */
 
   //console.log(`Removing stripes from ManholeCover in row ${rowIndex}`);
   //console.log("ManholeCover children before removal:", manholeCover.children);

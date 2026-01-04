@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import { endsUpInValidPosition } from "./endsUpInValidPosition";
-import { metadata as rows, addRows } from "./Map";
+import { metadata as rows} from "./Map";
 import type { MoveDirection } from "./types";
 import { updateRow, updatedRows} from "./Map";
 import {hitTest} from "./hitTest";
@@ -221,8 +221,8 @@ export function stepCompleted() {
   if (direction === "right") position.currentTile += 1; */
   hitTest();
 
-  // Add new rows if the player is running out of them
-  if (position.currentRow > rows.length - 10) addRows();
+/*   // Add new rows if the player is running out of them
+  if (position.currentRow > rows.length - 10) addRows(); */
 
   const scoreDOM = document.getElementById("score");
   if (!scoreDOM) return;
@@ -232,12 +232,18 @@ export function stepCompleted() {
   if (position.currentRow > score) {
     scoreDOM.innerText = position.currentRow.toString();
   }
-
-  const currentRowData = rows[position.currentRow];
-  if (
-    (currentRowData.type === "car" || currentRowData.type === "truck") &&
-    !updatedRows.has(position.currentRow)
-  ) {
-    updateRow( position.currentRow);
+  if(position.currentRow<11){
+    let currentRowData;
+    if(position.currentRow===10){
+      currentRowData = rows[position.currentRow-1];
+    } else {
+      currentRowData = rows[position.currentRow];
+    }
+    if (
+      (currentRowData.type === "car" || currentRowData.type === "truck") &&
+      !updatedRows.has(position.currentRow)
+    ) {
+      updateRow( position.currentRow);
+    }
   }
 }
