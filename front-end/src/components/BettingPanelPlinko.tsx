@@ -15,7 +15,7 @@ export default function BettingPanel({ children, betAmount, setBetAmount, startG
   const [balance, setBalance] = useState<number>(0.0); // Example balance, replace with actual fetched balance
   const [mode, setMode] = useState("manual");
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-  const [betPlaced, setBetPlaced] = useState<boolean>(false); // Track if the bet is placed
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
 
   useEffect(() => {
@@ -55,17 +55,18 @@ export default function BettingPanel({ children, betAmount, setBetAmount, startG
     betAmount > 0 &&
     betAmount <= balance;
 
-  const isBoardActive = betPlaced && hasEnoughBalance;
   const handleGoButtonClick = () => {
-    if(!hasEnoughBalance || gameOver) return;
+    if(!hasEnoughBalance || gameOver || isButtonDisabled) return;
 
     // Locally deduct to prevent rapid clicks driving balance negative before refresh
     if (betAmount !== null) {
       setBalance((prev) => Math.max(0, prev - betAmount));
     }
 
+    setIsButtonDisabled(true);
+    setTimeout(() => setIsButtonDisabled(false), 300);
+
     startGame();
-    setBetPlaced(true);
     // Align ball drop with balance refresh timing
     setTimeout(() => dropBall(), 300);
   };
@@ -164,25 +165,14 @@ export default function BettingPanel({ children, betAmount, setBetAmount, startG
           {/* Go */}
           <div className="flex flex-row gap-2 mt-3">
 
-            <button className={`flex-1 py-2 rounded-lg bg-[#2cbf2a] text-black shadow-md font-semibold text-sm md:text-base transition duration-300 ease-in-out ${isGoButtonActive && !gameOver
+            <button className={`flex-1 py-2 rounded-lg bg-[#2cbf2a] text-black shadow-md font-semibold text-sm md:text-base transition duration-300 ease-in-out ${isGoButtonActive && !gameOver && !isButtonDisabled
               ? "bg-[#2cbf2a] hover:bg-[#33de30] cursor-pointer" // Active: Brighter on hover
               : "bg-[#2cbf2a] opacity-50 cursor-not-allowed" // Disabled: Darker, not clickable
               }`}
               onClick={handleGoButtonClick}
-              disabled={!isGoButtonActive || gameOver}>
+              disabled={!isGoButtonActive || gameOver || isButtonDisabled}>
               Go
             </button>
-          </div>
-
-          {/* Profit */}
-          <div className="mt-3">
-            <p className="text-xs md:text-sm text-white">Total profit (1.00x)</p>
-            <input
-              type="number"
-              readOnly
-              value={0.0}
-              className="w-full bg-[#2f6ed0] p-2 rounded-lg text-left text-white text-sm md:text-base mt-1 shadow-md"
-            />
           </div>
         </div>
         

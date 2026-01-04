@@ -51,7 +51,7 @@ export default function PlinkoGame() {
         const result = await fetchWalletBalance();
         if ('balance' in result) {
           setBalance(result.balance);
-          console.log('Account Balance in plinko:', result.balance);
+          console.log('Account Balance in plinko:', balance);
         } else {
           console.error("Failed to fetch wallet balance:", result.message);
         }
