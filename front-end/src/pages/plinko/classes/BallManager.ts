@@ -69,7 +69,6 @@ export class BallManager {
                 }
                 this.onFinish?.(index, startX);
             },
-            targetSinkIndex,
             //this.ballSprite
         );
         this.balls.push(newBall);
