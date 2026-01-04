@@ -28,7 +28,7 @@ export default function PlinkoGame() {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
   useEffect(() => {
-    const auth = searchParams.get("auth");
+    const auth = searchParams.get("auth"); 
     setShowLogin(auth === "login");
     setShowRegister(auth === "register");
 
@@ -70,21 +70,27 @@ export default function PlinkoGame() {
     const dpr = window.devicePixelRatio || 1;
 
     const resize = () => {
-      const parentWidth = parent.clientWidth || WIDTH; // fallback to logical width
-      const scale = parentWidth / WIDTH;
-      const displayWidth = Math.round(parentWidth);
-      const displayHeight = Math.round(HEIGHT * scale);
+      // Get the actual available width from the parent container
+      const parentWidth = parent.clientWidth;
+      if (!parentWidth || parentWidth < 100) return;
+      
+      // Calculate scale to fit within parent with minimal margin
+      const marginWidth = 2; // Very small margin
+      const availableWidth = Math.max(parentWidth - marginWidth, 300);
+      const scale = Math.min(1, availableWidth / WIDTH);
+      const displayWidth = WIDTH * scale;
+      const displayHeight = HEIGHT * scale;
 
-      // Set CSS display size to maintain aspect ratio responsively
-      canvas.style.width = `${displayWidth / 1.1}px`;
+      // Set CSS display size
+      canvas.style.width = `${displayWidth}px`;
       canvas.style.height = `${displayHeight}px`;
 
       // Set internal pixel buffer according to scale and devicePixelRatio
-      canvas.width = Math.round(WIDTH * 1.71 * dpr);
-      canvas.height = Math.round(HEIGHT * scale * dpr);
+      canvas.width = Math.round(displayWidth * dpr);
+      canvas.height = Math.round(displayHeight * dpr);
 
-      // Map logical drawing coordinates (0..WIDTH/HEIGHT) to the scaled canvas
-      ctx.setTransform(scale * dpr, 0, 0, scale * dpr, 212, 0);
+      // Map logical drawing coordinates to the scaled canvas
+      ctx.setTransform(dpr * scale, 0, 0, dpr * scale, 0, 0);
       ctx.clearRect(0, 0, WIDTH, HEIGHT);
     };
 
@@ -181,42 +187,39 @@ export default function PlinkoGame() {
     ballManager.addBall(pad(clamped), chosenIndex);
   };
 
-  const handleCanvasClick = () => {
-    dropBall();
-    console.log(balance);
-  };
-
   return (
     <main className="home flow">
-      {!isAuthenticated && (
+    {!isAuthenticated && (
         <div className="fixed inset-0 bg-linear-to-b from-[#102c56] via-[#0b3a6f] to-[#081c36] bg-opacity-100 z-10 flex justify-center items-center">
-          <div className="bg-white p-6 rounded-lg w-11/12 sm:w-96 relative">
+          <div className="bg-white p-4 sm:p-6 rounded-lg w-11/12 sm:w-96 relative">
             <div className="flex items-center justify-between">
-              <div className="flex items-center">
+              <div className="flex items-center gap-2 sm:gap-4">
                 <img
                   src={logo}
                   alt="Logo"
-                  className="w-16 h-auto" // Adjust the size of your logo
+                  className="w-12 sm:w-16 h-auto"
                 />
-                <p className="text-xl ml-4 text-gray-700">Please log in to play the game!</p>
+                <p className="text-base sm:text-xl text-gray-700">Please log in to play the game!</p>
               </div>
             </div>
           </div>
         </div>
       )}
-      <div className="w-screen flex items-center justify-center">
-        <div className="flex items-center justify-center w-full">
-          <BettingPanel betAmount={betAmount} setBetAmount={setBetAmount} startGame={resetGame} gameOver={gameOver}>
+      <div className="w-full flex items-center justify-center py-4">
+        <div className="flex items-center justify-center w-full max-w-screen-xl px-2 sm:px-4">
+          <BettingPanel betAmount={betAmount} setBetAmount={setBetAmount} startGame={resetGame} dropBall={dropBall} gameOver={gameOver}>
             {/* <div className="w-full h-full sm:rounded-none md:rounded-tr-2xl flex justify-center items-center relative"> */}
             <canvas
               ref={canvasRef}
               className="plinko-canvas"
               style={{
                 backgroundColor: 'transparent',
-                cursor: 'pointer',
-                display: 'block'
+                cursor: 'default',
+                display: 'block',
+                maxWidth: '100%',
+                height: 'auto',
+                margin: '0 auto'
               }}
-              onClick={handleCanvasClick}
             />
             {/* //</div> */}
           </BettingPanel>
