@@ -22,8 +22,6 @@ export class Ball {
   private sinks: Sink[]
   private onFinish: (index: number) => void;
   private finished: boolean;
-  private targetSinkIndex?: number;
-  private maxObstacleY: number;
   private lastY: number;
   private stuckFrames: number;
   private totalFrames: number;
@@ -34,7 +32,7 @@ export class Ball {
   private lowestSinkTop: number;
   //private sprite?: HTMLImageElement;
 
-  constructor(x: number, y: number, radius: number, color: string, ctx: CanvasRenderingContext2D, obstacles: Obstacle[], sinks: Sink[], onFinish: (index: number) => void, targetSinkIndex?: number, /*sprite?: HTMLImageElement*/) {
+  constructor(x: number, y: number, radius: number, color: string, ctx: CanvasRenderingContext2D, obstacles: Obstacle[], sinks: Sink[], onFinish: (index: number) => void, /*sprite?: HTMLImageElement*/) {
     this.x = x;
     this.y = y;
     this.radius = radius;
@@ -46,9 +44,7 @@ export class Ball {
     this.sinks = sinks;
     this.onFinish = onFinish;
     this.finished = false;
-    this.targetSinkIndex = targetSinkIndex;
     //this.sprite = sprite
-    this.maxObstacleY = obstacles.length ? Math.max(...obstacles.map(o => unpad(o.y) + o.radius)) : 0;
     this.lastY = y;
     this.stuckFrames = 0;
     this.totalFrames = 0;
