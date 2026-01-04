@@ -241,12 +241,12 @@ export class BallManager {
         this.drawObstacles();
         this.updateSinkAnimations();
         this.drawSinks();
-        // Remove any finished balls to prevent lingering or jitter
-        this.balls = this.balls.filter(b => !b.isFinished());
+        // Keep balls visible even after reaching sinks
+        // this.balls = this.balls.filter(b => !b.isFinished());
         this.balls.forEach(ball => {
             ball.update();
             ball.draw();
-        });
+        }); 
     }
 
     update() {

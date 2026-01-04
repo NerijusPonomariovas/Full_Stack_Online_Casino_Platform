@@ -73,7 +73,6 @@ export class Ball {
   }
 
   draw() {
-    if (this.finished) return;
     this.ctx.beginPath();
     this.ctx.arc(unpad(this.x), unpad(this.y), this.radius, 0, Math.PI * 2);
     this.ctx.fillStyle = this.color;
@@ -109,6 +108,8 @@ export class Ball {
     this.vy += gravity;
     this.totalFrames++;
 
+    // Disabled emergency teleport - let ball fall naturally
+    /*
     // Emergency teleport if ball takes too long
     if (this.totalFrames > 150 && this.targetSinkIndex !== undefined && this.targetSinkIndex >= 0 && this.targetSinkIndex < this.sinks.length) {
       const sink = this.sinks[this.targetSinkIndex];
@@ -120,6 +121,7 @@ export class Ball {
       this.onFinish(this.targetSinkIndex);
       return;
     }
+    */
 
     // Apply velocity updates
     this.x += this.vx;
@@ -187,6 +189,9 @@ export class Ball {
     // Collision with sinks - use cached value for performance
     const ballBottom = unpad(this.y) + this.radius;
 
+    // Let ball fall naturally without premature guidance/teleporting
+    // Removed guidance logic to prevent mid-fall teleportation
+    /*
     // Subtle guidance ONLY near sinks (85% down) to let plinko physics work naturally
     if (!this.finished && this.targetSinkIndex !== undefined && this.targetSinkIndex >= 0 && this.targetSinkIndex < this.sinks.length) {
       const sink = this.sinks[this.targetSinkIndex];
@@ -211,62 +216,59 @@ export class Ball {
         }
       }
     }
+    */
+    
+    // Lightly damp sideways drift near sinks to reduce mis-routing at low gravity
+    if (!this.finished && ballBottom >= this.lowestSinkTop - 30) {
+      this.vx *= 0.7;
+    }
 
-    // Finalize when reaching sink band: snap to target if set
-    if (!this.finished && ballBottom >= this.lowestSinkTop - 20) {
-      // If we have a target sink, force finish to that specific sink and place ball visually at that sink
-      if (this.targetSinkIndex !== undefined && this.targetSinkIndex >= 0 && this.targetSinkIndex < this.sinks.length) {
-        const sink = this.sinks[this.targetSinkIndex];
-        this.x = sink.x;
-        this.y = sink.y;
+    // Finish only when ball physically enters a sink rectangle
+    if (!this.finished) {
+      for (let i = 0; i < this.sinks.length; i++) {
+        const sink = this.sinks[i];
+        const sinkTop = unpad(sink.y) - sink.height / 2;
+        const sinkBottom = sinkTop + sink.height;
+        const sinkLeft = unpad(sink.x) - sink.width / 2;
+        const sinkRight = unpad(sink.x) + sink.width / 2;
 
-        this.finished = true;
-        this.vx = 0;
-        this.vy = 0;
-        this.onFinish(this.targetSinkIndex);
-      } else {
-        // No target - use physical collision detection
-        for (let i = 0; i < this.sinks.length; i++) {
-          const sink = this.sinks[i];
-          const sinkTop = unpad(sink.y) - sink.height / 2;
-
-          if (
-            unpad(this.x) >= unpad(sink.x) - sink.width / 2 &&
-            unpad(this.x) <= unpad(sink.x) + sink.width / 2 &&
-            ballBottom >= sinkTop - 15 &&
-            ballBottom <= sinkTop + sink.height
-          ) {
-            this.x = sink.x;
-            this.y = sink.y;
-            this.finished = true;
-            this.vx = 0;
-            this.vy = 0;
-            this.onFinish(i);
-            break;
-          }
-        }
-
-        // Fallback: snap to nearest if past sink line
-        if (!this.finished && ballBottom > this.lowestSinkTop + 5) {
-          let nearest = 0;
-          let best = Number.MAX_VALUE;
-          for (let i = 0; i < this.sinks.length; i++) {
-            const dx = Math.abs(unpad(this.x) - unpad(this.sinks[i].x));
-            if (dx < best) {
-              best = dx;
-              nearest = i;
-            }
-          }
-          const sink = this.sinks[nearest];
+        if (
+          ballBottom >= sinkTop &&
+          ballBottom <= sinkBottom + 4 &&
+          unpad(this.x) >= sinkLeft &&
+          unpad(this.x) <= sinkRight
+        ) {
           this.x = sink.x;
           this.y = sink.y;
           this.finished = true;
           this.vx = 0;
           this.vy = 0;
-          this.onFinish(nearest);
+          this.onFinish(i);
+          break;
         }
       }
+
+      // Safety: if the ball passes well below sinks, snap to nearest to avoid endless fall
+      if (!this.finished && ballBottom > this.lowestSinkTop + 200) {
+        let nearest = 0;
+        let best = Number.MAX_VALUE;
+        for (let i = 0; i < this.sinks.length; i++) {
+          const dx = Math.abs(unpad(this.x) - unpad(this.sinks[i].x));
+          if (dx < best) {
+            best = dx;
+            nearest = i;
+          }
+        }
+        const sink = this.sinks[nearest];
+        this.x = sink.x;
+        this.y = sink.y;
+        this.finished = true;
+        this.vx = 0;
+        this.vy = 0;
+        this.onFinish(nearest);
+      }
     }
+
   }
 
 }

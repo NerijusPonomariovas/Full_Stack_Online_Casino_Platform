@@ -59,10 +59,15 @@ export default function BettingPanel({ children, betAmount, setBetAmount, startG
   const handleGoButtonClick = () => {
     if(!hasEnoughBalance || gameOver) return;
 
+    // Locally deduct to prevent rapid clicks driving balance negative before refresh
+    if (betAmount !== null) {
+      setBalance((prev) => Math.max(0, prev - betAmount));
+    }
+
     startGame();
     setBetPlaced(true);
-    // Drop the ball immediately after pressing Go
-    setTimeout(() => dropBall(), 100);
+    // Align ball drop with balance refresh timing
+    setTimeout(() => dropBall(), 300);
   };
 
   useEffect(() => {
