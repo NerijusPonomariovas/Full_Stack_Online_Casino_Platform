@@ -27,6 +27,11 @@ export default function PlinkoGame() {
 
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
+  const lastBetRef = useRef<number | null>(null);
+
+  // Multipliers aligned with sinks (left to right)
+  const multipliers = [16, 9, 2, 1.4, 1.4, 1.2, 1.1, 1, 0.5, 1, 1.1, 1.2, 1.4, 1.4, 2, 9, 16];
+
   useEffect(() => {
     const auth = searchParams.get("auth"); 
     setShowLogin(auth === "login");
@@ -102,7 +107,16 @@ export default function PlinkoGame() {
     ro.observe(parent);
     window.addEventListener('resize', resize);
     
-    const manager = new BallManager(canvas as HTMLCanvasElement);
+    const manager = new BallManager(canvas as HTMLCanvasElement, (sinkIndex) => {
+      const wager = lastBetRef.current;
+      if (wager === null || sinkIndex === undefined || sinkIndex < 0 || sinkIndex >= multipliers.length) return;
+      const multiplier = multipliers[sinkIndex];
+      const payout = (wager * multiplier).toFixed(2).toString();
+      updateWalletBalance(payout, "win");
+      setTimeout(() => {
+        window.dispatchEvent(new Event("balance:refresh"));
+      }, 700);
+    });
     /*
     const img = new Image();
     img.src = yarnBall;
@@ -124,7 +138,14 @@ export default function PlinkoGame() {
   }
 
   const dropBall = () => {
-    if (!ballManager) return;
+    if (!ballManager || betAmount === null || betAmount <= 0) return;
+
+    // Deduct wager upfront
+    lastBetRef.current = betAmount;
+    updateWalletBalance(betAmount.toFixed(2), "loss");
+    setTimeout(() => {
+      window.dispatchEvent(new Event("balance:refresh"));
+    }, 300);
 
     // Use WIDTH / 2.055 for both obstacles and sinks to keep perfect alignment
     const spacing = 50;
@@ -178,11 +199,6 @@ export default function PlinkoGame() {
     const multipliers = [16, 9, 2, 1.4, 1.4, 1.2, 1.1, 1, 0.5, 1, 1.1, 1.2, 1.4, 1.4, 2, 9, 16];
     console.log(`Targeting sink ${chosenIndex} (${multipliers[chosenIndex]}x), weight: ${weights[chosenIndex]}`);
     console.log(`All sink positions: ${sinkCenters.map((x, i) => `[${i}]=${x.toFixed(1)}`).join(', ')}`);
-    const finalValue = (betAmount! * multipliers[chosenIndex] - betAmount!).toFixed(2).toString();
-    updateWalletBalance(finalValue, "win");
-    setTimeout(() => {
-      window.dispatchEvent(new Event("balance:refresh"));
-    }, 700);
     // BallManager expects padded coordinates; pad the chosen center and pass target index
     ballManager.addBall(pad(clamped), chosenIndex);
   };
