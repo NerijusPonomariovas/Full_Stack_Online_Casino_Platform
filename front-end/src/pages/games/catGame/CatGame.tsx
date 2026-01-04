@@ -18,7 +18,7 @@ export default function Cat() {
     scene.add(player);
     scene.add(map);
 
-    const ambientLight = new THREE.AmbientLight();
+    const ambientLight = new THREE.AmbientLight(0xffffff, 1);
     scene.add(ambientLight);
 
     const dirLight = DirectionalLight();
@@ -72,12 +72,16 @@ export default function Cat() {
 
     renderer.setAnimationLoop(animate);
 
-    document.querySelector("#retry")?.addEventListener("click", initializeGame);
+    function kebab(){
+      console.log("kebab");
+    }
+
+    document.querySelector("#retry")?.addEventListener("click", kebab);
 
     // ✅ Optional cleanup
     return () => {
       renderer.dispose();
-      document.querySelector("#retry")?.removeEventListener("click", initializeGame);
+      document.querySelector("#retry")?.removeEventListener("click", kebab);
     };
   }, []);
 
@@ -95,7 +99,7 @@ export default function Cat() {
         <div id="result">
           <h1>Game Over!</h1>
           <p>Score: <span id="final-score">0</span></p>
-          <button id="retry">Retry</button>
+          <div id="retry">Retry</div>
         </div>
       </div>
     </div>

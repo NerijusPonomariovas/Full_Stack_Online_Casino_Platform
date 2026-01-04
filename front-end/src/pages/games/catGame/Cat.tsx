@@ -43,7 +43,7 @@ export default function Home() {
   return (
     <main className="home">
       {!isAuthenticated && (
-        <div className="fixed inset-0 bg-linear-to-b from-[#102c56] via-[#0b3a6f] to-[#081c36] bg-opacity-100 z-10 flex justify-center items-center">
+        <div className="fixed inset-0 bg-linear-to-b from-[#102c56] via-[#0b3a6f] to-[#081c36] bg-opacity-100 z-0 flex justify-center items-center">
           <div className="bg-white p-6 rounded-lg w-11/12 sm:w-96 relative">
             <div className="flex items-center justify-between">
               <div className="flex items-center">
@@ -68,7 +68,7 @@ export default function Home() {
         </div>
         <div className="w-full flex justify-center items-center relative mt-80 md:mt-5">
           <section className="mt-8 w-[95%] xl:w-6xl pb-10">
-        <div className="rounded-2xl bg-[#0f2f57]/80 shadow-xl border border-white/10 p-6">
+        <div className="rounded-2xl bg-[#10305f]/80 shadow-xl border border-white/10 p-6">
           <div className="flex items-center gap-6">
             <h2 className="text-white text-2xl font-extrabold tracking-wide">
               CAT

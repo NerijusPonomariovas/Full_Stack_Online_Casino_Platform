@@ -6,8 +6,8 @@ import { Road } from "./Road";
 import { Car } from "./Car";
 import { Truck } from "./Truck";
 import { StopBollard } from "./StopBollard";
-import { tileSize } from "./constants";
-import { ManholeCover } from "./manholeCover";
+
+
 export const metadata: Row[] = [];
 
 export const updatedRows = new Set<number>();
@@ -155,7 +155,6 @@ function hasVehicles(row: Row): row is (
 
   export function updateRow(rowIndex: number) {
   if (updatedRows.has(rowIndex)) return;
-  removeManholeStripes(rowIndex-1);
 
   const metaIndex = rowIndex - 1;
   const oldRowMeta = metadata[metaIndex];
@@ -191,6 +190,7 @@ function hasVehicles(row: Row): row is (
 
   // 5) Mark updated
   updatedRows.add(rowIndex);
+  removeManholeStripes(rowIndex-1);
 }
 
 function removeManholeStripes(rowIndex: number) {
@@ -201,7 +201,7 @@ function removeManholeStripes(rowIndex: number) {
     return;
   }
 
-  console.log("Row children:", row.children);
+  //console.log("Row children:", row.children);
 
   // Try to get the manhole cover object
   /* const road = row.getObjectByName("road");
@@ -211,36 +211,36 @@ function removeManholeStripes(rowIndex: number) {
   } */
   const manholeCover = row.getObjectByName("manholeCover");
   if (!manholeCover) {
-    console.warn(`ManholeCover not found in row ${rowIndex}`);
+    //console.warn(`ManholeCover not found in row ${rowIndex}`);
     return;
   }
   manholeCover.traverse((child) => {
-  console.log(child.name, child);
+  //console.log(child.name, child);
 });
 
-  console.log(`Removing stripes from ManholeCover in row ${rowIndex}`);
-  console.log("ManholeCover children before removal:", manholeCover.children);
+  //console.log(`Removing stripes from ManholeCover in row ${rowIndex}`);
+  //console.log("ManholeCover children before removal:", manholeCover.children);
 
   // Now safely remove the stripes
   ["stripeMesh1", "stripeMesh2", "stripeMesh3"].forEach((name) => {
     const stripe = manholeCover.getObjectByName(name);
     if (stripe) {
-        console.log(`Found ${name} in manholeCover`);
+        //console.log(`Found ${name} in manholeCover`);
         disposeObject(stripe);
       stripe.parent?.remove(stripe);
-      console.log(`Removed ${name}`);
+      //console.log(`Removed ${name}`);
     } else {
-      console.warn(`${name} not found in ManholeCover of row ${rowIndex}`);
+      //console.warn(`${name} not found in ManholeCover of row ${rowIndex}`);
     }
   });
 
   ["stripeMesh1", "stripeMesh2", "stripeMesh3"].forEach((name) => {
     const stripe = manholeCover.getObjectByName(name);
     if (!stripe) {
-  console.log(`${name} successfully removed.`);
-      console.log(`Removed ${name}`);
+  //console.log(`${name} successfully removed.`);
+      //console.log(`Removed ${name}`);
     } else {
-  console.log(`${name} still exists.`);
+  //console.log(`${name} still exists.`);
     }
   });
 
