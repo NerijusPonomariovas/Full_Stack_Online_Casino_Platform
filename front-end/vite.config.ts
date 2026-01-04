@@ -12,12 +12,12 @@ export default defineConfig({
     react(),
     tailwindcss(),
     viteStaticCopy({
-       targets: [
-         {
-           src: 'src/assets/*',  // Source directory
-           dest: 'src/assets'         // Destination directory in dist/
-         }
-       ]
-     })
+      targets: [
+        {
+          src: 'src/assets/*',  // Source directory
+          dest: 'src/assets'         // Destination directory in dist/
+        }
+      ]
+    })
   ]
 })
