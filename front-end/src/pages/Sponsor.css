@@ -1,0 +1,293 @@
+.sponsor-page {
+    background: linear-gradient(180deg, #0b2a52 0%, #0a1f3b 100%);
+    min-height: 100dvh;
+    color: #fff;
+    padding: 20px;
+}
+
+.sponsor-page__container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+.sponsor-page__back-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #dbeafe;
+    padding: 12px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    margin-bottom: 40px;
+    transition: all 0.3s ease;
+}
+
+.sponsor-page__back-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-1px);
+}
+
+.sponsor-page__content {
+    text-align: center;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    padding: 60px 40px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sponsor-page__logo {
+    width: auto;
+    height: 180px;
+    margin: 0 auto 30px;
+    display: block;
+    filter: brightness(0) invert(1);
+}
+
+.sponsor-page__title {
+    font-size: 36px;
+    font-weight: 700;
+    color: #dbeafe;
+    margin-bottom: 30px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.sponsor-page__description {
+    max-width: 600px;
+    margin: 0 auto 40px;
+    font-size: 18px;
+    line-height: 1.6;
+    color: #dbeafe;
+}
+
+.sponsor-page__description p {
+    margin-bottom: 20px;
+}
+
+.sponsor-page__actions {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.sponsor-page__link {
+    display: inline-block;
+    padding: 16px 32px;
+    background: linear-gradient(135deg, #1e40af, #3b82f6);
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 16px;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+}
+
+.sponsor-page__link:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+    filter: brightness(1.05);
+}
+
+@media (max-width: 768px) {
+    .sponsor-page__container {
+        padding: 20px 10px;
+    }
+
+    .sponsor-page__content {
+        padding: 40px 20px;
+    }
+
+    .sponsor-page__title {
+        font-size: 28px;
+    }
+
+    .sponsor-page__description {
+        font-size: 16px;
+    }
+
+    .sponsor-page__actions {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
+/* CREATORS SECTION */
+.creators-section {
+    margin: 50px 0;
+    text-align: center;
+}
+
+.creators-section__title {
+    font-size: 28px;
+    font-weight: 700;
+    color: #dbeafe;
+    margin-bottom: 30px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.creators-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-bottom: 40px;
+    justify-content: center;
+}
+
+.creator-card {
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+}
+
+.creator-card:hover {
+    transform: translateY(-5px);
+    background: rgba(255, 255, 255, 0.12);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+.creator-card__avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  margin: 0 auto 15px;
+  border: 3px solid rgba(255, 255, 255, 0.2);
+  overflow: hidden; /* kluczowe: ucina obraz do koła */
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.creator-card__avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;      /* wypełnia koło bez deformacji */
+  object-position: center; /* centruje kadr */
+  display: block;
+  filter: brightness(0) invert(1);
+}
+
+.creator-card__info {
+    text-align: center;
+}
+
+.creator-card__name {
+    font-size: 18px;
+    font-weight: 600;
+    color: #dbeafe;
+    margin-bottom: 5px;
+}
+
+.creator-card__role {
+    font-size: 14px;
+    color: #93c5fd;
+    font-weight: 500;
+}
+
+/* MEOWSPACE SPONSOR SECTION */
+.meowspace-sponsor {
+    margin-top: 60px;
+    padding-top: 40px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    text-align: center;
+}
+
+.meowspace-sponsor__title {
+    font-size: 24px;
+    font-weight: 600;
+    color: #dbeafe;
+    margin-bottom: 20px;
+}
+
+.meowspace-sponsor__content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.meowspace-sponsor__link {
+    display: inline-block;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.meowspace-sponsor__link:hover {
+    transform: scale(1.05);
+}
+
+.meowspace-sponsor__logo {
+    max-width: 200px;
+    max-height: 80px;
+    width: auto;
+    height: auto;
+    transition: all 0.3s ease;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+}
+
+.meowspace-sponsor__link:hover .meowspace-sponsor__logo {
+    transform: scale(1.05);
+    filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.3));
+}
+
+.meowspace-sponsor__content {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+}
+
+.meowspace-sponsor__link:hover .meowspace-sponsor__content {
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+.meowspace-sponsor__brand-text {
+    font-size: 28px;
+    font-weight: 700;
+    color: #dbeafe;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+}
+
+.meowspace-sponsor__link:hover .meowspace-sponsor__brand-text {
+    color: #93c5fd;
+    text-shadow: 0 4px 8px rgba(59, 130, 246, 0.4);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .creators-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+        margin-bottom: 40px;
+    }
+
+    .creator-card {
+        width: 100%;
+        max-width: 260px;
+    }
+
+    .creator-card__avatar {
+        width: 60px;
+        height: 60px;
+    }
+
+    .creator-card__name {
+        font-size: 16px;
+    }
+
+    .creator-card__role {
+        font-size: 13px;
+    }
+
+    .meowspace-sponsor__content {
+        flex-direction: column;
+        gap: 15px;
+    }
+}

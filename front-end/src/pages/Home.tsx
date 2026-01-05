@@ -11,6 +11,7 @@ import gameCat from '../assets/games/game-cat.png';
 import gameMice from '../assets/games/game-mice.png';
 import gameTreat from '../assets/games/game-treat.png';
 import gameMeowJack from '../assets/games/game-meowjack.png';
+import sponsorLogo from '../assets/LOGO.svg'; // Using existing logo as sponsor logo
 
 
 export default function Home() {
@@ -59,6 +60,22 @@ export default function Home() {
           </Link>
         </div>
       </section>
+
+      {/* SPONSOR SECTION */}
+      <section className="sponsor">
+        <div className="sponsor__container">
+          <h3 className="sponsor__title">Credits:</h3>
+          <button 
+            className="sponsor__button"
+            onClick={() => navigate('/about')}
+            aria-label="Visit our sponsor"
+          >
+            <img src={sponsorLogo} alt="Sponsor Logo" className="sponsor__logo" />
+            <span className="sponsor__text">About Us</span>
+          </button>
+        </div>
+      </section>
+
       {/* LOGIN MODAL */}
       {showLogin && (
         <div className="modal" role="dialog" aria-modal="true" aria-labelledby="login-title">

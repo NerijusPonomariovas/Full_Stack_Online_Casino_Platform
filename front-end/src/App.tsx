@@ -13,6 +13,7 @@ import Cat from './pages/games/catGame/Cat';
 import PlinkoGame from './pages/Plinko';
 import Treat from './pages/games/treatGame/Treat';
 import Roulette from "./pages/Roulette"
+import Sponsor from './pages/Sponsor';
 
 const App: React.FC = () => {
   return (
@@ -30,6 +31,7 @@ const App: React.FC = () => {
           <Route path="/games/plinko" element={<PlinkoGame/>}/>
           <Route path="/games/treat" element={<Treat />} />
           <Route path="/games/roulette" element={<Roulette/>} />
+          <Route path="/about" element={<Sponsor />} />
         </Route>
       </Routes>
     </BrowserRouter>
