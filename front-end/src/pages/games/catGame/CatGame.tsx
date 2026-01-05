@@ -127,7 +127,7 @@ return () => {
       <div id="result-container">
         <div id="result">
           <h1>Game Over!</h1>
-          <p>Score: <span id="final-score">0</span></p>
+          <p><span id="final-score" className="text-white pointer-events-none"></span></p>
           <button id="retry" onClick={onRetry}>Retry</button>
         </div>
       </div>

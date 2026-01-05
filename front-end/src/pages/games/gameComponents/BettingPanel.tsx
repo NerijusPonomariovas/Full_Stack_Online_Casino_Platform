@@ -1,5 +1,6 @@
 import { useEffect, useState, type ReactNode } from "react";
 import { fetchWalletBalance } from "../../../api/auth";
+import { startRun } from "../catGame/catGameComponents/runState";
 
 type BettingPanelProps = {
   children?: ReactNode;
@@ -13,7 +14,7 @@ type BettingPanelProps = {
 
 export default function BettingPanel({ children, betAmount, setBetAmount, startGame, gameOver, gameStarted}: BettingPanelProps) {
   const [balance, setBalance] = useState<number>(0.0); 
-  const [mode, setMode] = useState("manual");
+  //const [mode, setMode] = useState("manual");
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [betPlaced, setBetPlaced] = useState<boolean>(false); // Track if the bet is placed
 
@@ -52,10 +53,14 @@ export default function BettingPanel({ children, betAmount, setBetAmount, startG
 
   const handleGoButtonClick = () => {
     if (gameOver) {
+      //console.log(betAmount);
       startGame();
+      startRun(betAmount ?? 0);
       setBetPlaced(true); // Mark that the bet has been placed
     } else if (isAuthenticated) {
+      //console.log(betAmount);
       startGame();
+      startRun(betAmount ?? 0);
       setBetPlaced(true); // Mark that the bet has been placed
     }
   };
@@ -74,7 +79,7 @@ export default function BettingPanel({ children, betAmount, setBetAmount, startG
         {/* LEFT PANEL */}
         <div className="w-full md:w-64 h-75 md:h-auto mt-65 md:mt-0 bg-[#1c5ec3] text-white rounded-t-4xl md:rounded-tl-4xl md:rounded-tr-none p-4 space-y-3 shrink-0 border-l border-t border-white/10">
           {/* Toggle Manual / Auto */}
-          <div className="flex bg-[#102c56] rounded-4xl overflow-hidden h-12 w-full items-center pl-1 pr-1">
+{/*           <div className="flex bg-[#102c56] rounded-4xl overflow-hidden h-12 w-full items-center pl-1 pr-1">
             <button
               className={`flex-1 rounded-4xl h-[82%] ${
                 mode === "manual" ? "bg-[#184fa2]" : ""
@@ -91,7 +96,7 @@ export default function BettingPanel({ children, betAmount, setBetAmount, startG
             >
               Auto
             </button>
-          </div>  
+          </div>   */}
 
           {/* Bet Amount */}
           <div>
@@ -182,7 +187,7 @@ export default function BettingPanel({ children, betAmount, setBetAmount, startG
         <div className={`bg-[#184890] relative w-full md:rounded-tr-4xl flex items-center justify-center border-r border-t border-white/10 ${!betPlaced ? 'pointer-events-none' : ''}`}>
           {!betPlaced && (
             <div
-              className="absolute w-full h-full flex items-center justify-center text-2xl font-bold text-white md:rounded-tr-4xl bg-[#184890] z-0 pointer-none"
+              className="absolute w-full h-full flex items-center justify-center text-2xl font-bold text-white md:rounded-tr-4xl bg-[#184890] z-20 pointer-none"
             >
               <div>Please place your bet to start the game.</div>
             </div>

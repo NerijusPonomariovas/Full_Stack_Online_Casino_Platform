@@ -1,12 +1,14 @@
 import * as THREE from "three";
 import { metadata as rows } from "./Map";
-import { player, position, queueMove } from "./Player";
+import { player, position } from "./Player";
 import { updateWalletBalance } from "../../../../api/auth";
+import { runState, settleRun, multipliers } from "./runState";
 
 //let resultDOM: HTMLElement | null = null;
 //let finalScoreDOM: HTMLElement | null = null;
 
 export function hitTest() {
+  if(runState.settled) return;
   const resultDOM = document.getElementById("result-container");
   const finalScoreDOM = document.getElementById("final-score");
 
@@ -18,24 +20,31 @@ export function hitTest() {
     const playerBoundingBox = new THREE.Box3();
     playerBoundingBox.setFromObject(player);
 
-    row.vehicles.forEach(({ ref }) => {
+    for(const {ref} of row.vehicles){
       if (!ref || !ref.visible) return;  // Skip invisible vehicles
 
       const vehicleBoundingBox = new THREE.Box3();
       vehicleBoundingBox.setFromObject(ref);
       if (playerBoundingBox.intersectsBox(vehicleBoundingBox)) {
         if (!resultDOM || !finalScoreDOM) return;
+
+        settleRun();
+
+        const idx = position.currentRow-1/* Math.max(0, Math.min(position.currentRow, multipliers.length - 1)) */;
+        const multiplier = multipliers[idx];
+        const payout = Math.floor(runState.bet * multiplier)-runState.bet;
+        console.log(payout + " " + multiplier);
         window.dispatchEvent(new Event("game:over"));
         resultDOM.style.visibility = "visible";
         finalScoreDOM.innerText = position.currentRow.toString();
-        const addScore = position.currentRow.toString();
-        updateWalletBalance(addScore, "win");
+        updateWalletBalance(String(payout), "win");
         setTimeout(() => {
           window.dispatchEvent(new Event("balance:refresh"));
         }, 50);
         console.log(position.currentRow)
         console.log("hit!");
+        break;
       }
-    });
+    };
   }
 }
