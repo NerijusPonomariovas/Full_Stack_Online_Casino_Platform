@@ -3,7 +3,7 @@
 import axios from 'axios';
 
 // Define the API URL
-const API_URL = 'http://78.56.50.205/cataris/api'; // Update with your actual backend URL
+const API_URL = '/cataris/api'; // Update with your actual backend URL
 
 interface LoginResponse {
   token: string;

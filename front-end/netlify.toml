@@ -12,6 +12,7 @@
   targetPort = 3000
 
 [[redirects]]
-  from = "/*"
-  to = "/index.html"
+  from = "/cataris/api/*"
+  to = "http://78.56.50.205/cataris/api/:splat"
   status = 200
+  force = true
