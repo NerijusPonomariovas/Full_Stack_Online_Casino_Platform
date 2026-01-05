@@ -14,6 +14,7 @@ canvas.game {
   height: 100%;
   display: block;
   background: transparent;
+  z-index: 10;
 }
 
 #controls {
@@ -24,6 +25,7 @@ canvas.game {
   display: flex;
   gap: 8px;
   align-items: center;
+  pointer-events: all;
 }
 
 /* Small visual tweaks for control buttons */
@@ -34,6 +36,7 @@ canvas.game {
   padding: 8px 10px;
   border-radius: 8px;
   font-size: 16px;
+  pointer-events: all;
 }
 
 #controls div {
@@ -42,10 +45,12 @@ canvas.game {
   grid-column-gap: 10px;
   grid-row-gap: 10px;
   margin-bottom: 20px;
+  pointer-events: all;
 }
 
 #controls button:first-of-type {
   grid-column: 1/-1;
+  pointer-events: all;
 }
 
 #score {
@@ -77,14 +82,10 @@ canvas.game {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: white;
-  padding: 20px;
   color: black;
 }
 
 #result-container button {
-    background-color: red;
-    padding: 20px 50px 20px 50px;
     font-family: inherit;
     font-size: inherit;
     cursor: pointer;
@@ -99,6 +100,7 @@ canvas.game {
   align-items: center;
   justify-content: center;
   visibility: hidden;
+  pointer-events: none;
 }
 
 #score {

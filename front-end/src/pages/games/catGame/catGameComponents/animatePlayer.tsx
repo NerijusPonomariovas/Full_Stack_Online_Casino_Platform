@@ -36,7 +36,7 @@ function setPosition(progress: number) {
 /*   if (movesQueue[0] === "left") endX -= tileSize;
   if (movesQueue[0] === "right") endX += tileSize; */
   if (movesQueue[0] === "forward") endY += tileSize;
-  if (movesQueue[0] === "backward") endY -= tileSize;
+//  if (movesQueue[0] === "backward") endY -= tileSize;
 
   player.position.x = THREE.MathUtils.lerp(startX, endX, progress);
   player.position.y = THREE.MathUtils.lerp(startY, endY, progress);

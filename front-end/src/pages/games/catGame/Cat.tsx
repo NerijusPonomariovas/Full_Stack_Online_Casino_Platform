@@ -1,15 +1,16 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import "./BettingPanel.css";
 import Login from "../../Login";
 import Register from "../../Register";
 import BettingPanel from "../gameComponents/BettingPanel";
-import Cat from "./CatGame";
+import Cat, { type CatHandle } from "./CatGame";
 import logo from "../../../assets/LOGO.svg";
 import cat from "../../../assets/games/game-cat.png";
 
 // png imports
 export default function Home() {
+  const catRef = useRef<CatHandle | null>(null);
 
   const [betAmount, setBetAmount] = useState<number | null>(null);
   const [gameStarted, setGameStarted] = useState(false);
@@ -32,18 +33,30 @@ export default function Home() {
   };
 
   const startGame = () => {
+    if (!isAuthenticated) return;
+    if (!betAmount || betAmount <= 0) return;
     setGameStarted(true);
     setGameOver(false);
+    catRef.current?.initializeGame();
     // Add your game starting logic here
   };
   useEffect(() => {
     const token = localStorage.getItem("token");
     setIsAuthenticated(!!token);
   }, []);
+  useEffect(() => {
+      const handleGameOver = () => {
+        console.log("over!");
+        setGameOver(true);
+        setGameStarted(false);
+      }
+      window.addEventListener("game:over", handleGameOver);
+      return () => window.removeEventListener("game:over", handleGameOver);
+  }, []);
   return (
-    <main className="home min-h-screen">
+    <main className="home">
       {!isAuthenticated && (
-        <div className="fixed inset-0 bg-linear-to-b from-[#102c56] via-[#0b3a6f] to-[#081c36] bg-opacity-100 z-10 flex justify-center items-center">
+        <div className="fixed inset-0 bg-linear-to-b from-[#102c56] via-[#0b3a6f] to-[#081c36] bg-opacity-100 z-0 flex justify-center items-center">
           <div className="bg-white p-6 rounded-lg w-11/12 sm:w-96 relative">
             <div className="flex items-center justify-between">
               <div className="flex items-center">
@@ -58,18 +71,17 @@ export default function Home() {
           </div>
         </div>
       )}
-      <div className="flex justify-center items-center w-screen min-h-screen">
+      <div className="flex-col justify-center items-center w-screen mt-5 md:mt-15">
         <div className="w-full justify-center items-center flex h-150">
           <BettingPanel betAmount={betAmount} setBetAmount={setBetAmount} startGame={startGame} gameOver={gameOver} gameStarted={gameStarted}>
-            <div id="game-container" className="w-full h-full sm:rounded-none md:rounded-t-2xl">
-              <Cat />
+            <div id="game-container" className="w-full h-full sm:rounded-none md:rounded-tr-2xl">
+              <Cat ref={catRef}/>
             </div>
           </BettingPanel>
         </div>
-      </div>
-      {/* DESCRIPTION CARD UNDER GAME */}
-      <section className="mt-8 w-full max-w-[1200px] mx-auto px-4 pb-10">
-        <div className="rounded-2xl bg-[#0f2f57]/80 shadow-xl border border-white/10 p-6">
+        <div className="w-full flex justify-center items-center relative mt-80 md:mt-5">
+          <section className="mt-8 w-[95%] xl:w-6xl pb-10">
+        <div className="rounded-2xl bg-[#10305f]/80 shadow-xl border border-white/10 p-6">
           <div className="flex items-center gap-6">
             <h2 className="text-white text-2xl font-extrabold tracking-wide">
               CAT
@@ -98,7 +110,7 @@ export default function Home() {
           {/* SECTIONS */}
           <div className="mt-6 space-y-5">
             <div>
-              <h3 className="text-white font-bold">GamePlay</h3>
+              <h3 className="text-white font-bold">Gameplay</h3>
               <p className="mt-2 text-white/75 leading-6 text-md">
                 Players control movement through a structured playfield filled with moving elements and hazards. Each step forward requires attention to timing and spatial awareness, as obstacles shift and paths change. Progress is earned through careful navigation rather than speed alone, rewarding players who read the board and act decisively.
               </p>
@@ -120,6 +132,10 @@ export default function Home() {
           </div>
         </div>
       </section>
+        </div>
+      </div>
+      {/* DESCRIPTION CARD UNDER GAME */}
+      
       {/* LOGIN MODAL */}
       {showLogin && (
         <div className="modal" role="dialog" aria-modal="true" aria-labelledby="login-title">

@@ -8,7 +8,7 @@ export function Road(rowIndex: number) {
   road.name="road";
   const foundation = new THREE.Mesh(
     new THREE.PlaneGeometry(tilesPerRow * tileSize, tileSize),
-    new THREE.MeshLambertMaterial({ color: 0x454a59 })
+    new THREE.MeshLambertMaterial({ color: 0x102c56 })
   );
   foundation.receiveShadow = true;
   road.add(ManholeCover());

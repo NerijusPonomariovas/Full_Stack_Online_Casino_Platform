@@ -17,7 +17,7 @@ export function endsUpInValidPosition(
   if (
     finalPosition.rowIndex === -1 ||
     finalPosition.tileIndex === minTileIndex - 1 ||
-    finalPosition.tileIndex === maxTileIndex + 1
+    finalPosition.tileIndex === maxTileIndex + 1 || finalPosition.rowIndex === 12 // locks him in so that he doesn't go out of bounds
   ) {
     // Invalid move, ignore move command
     return false;
