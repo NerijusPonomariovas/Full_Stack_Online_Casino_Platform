@@ -11,13 +11,13 @@ export default defineConfig({
   plugins: [
     react(),
     tailwindcss(),
-    /* viteStaticCopy({
+    viteStaticCopy({
       targets: [
         {
           src: 'src/assets/*',  // Source directory
           dest: 'src/assets'         // Destination directory in dist/
         }
       ]
-    }) */
+    })
   ]
 })
