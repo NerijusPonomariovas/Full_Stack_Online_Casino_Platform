@@ -14,6 +14,7 @@ canvas.game {
   height: 100%;
   display: block;
   background: transparent;
+  z-index: 10;
 }
 
 #controls {
@@ -99,6 +100,7 @@ canvas.game {
   align-items: center;
   justify-content: center;
   visibility: hidden;
+  pointer-events: all;
 }
 
 #score {

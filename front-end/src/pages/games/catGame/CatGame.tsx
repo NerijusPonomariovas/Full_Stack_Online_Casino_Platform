@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef, useCallback } from "react";
 import * as THREE from "three";
 import { Renderer } from "./catGameComponents/Renderer";
 import { Camera } from "./catGameComponents/Camera";
@@ -12,6 +12,8 @@ import "./catGameComponents/collectUserInput";
 import "./catGameComponents/cat.css";
 
 export default function Cat() {
+  const initializeGameRef = useRef<() => void>(() => {});
+
   useEffect(() => {
     // Scene setup AFTER React has rendered the <canvas>
     const scene = new THREE.Scene();
@@ -25,19 +27,19 @@ export default function Cat() {
     dirLight.target = player;
     player.add(dirLight);
 
-    const scoreDOM = document.getElementById("score");
-    const resultDOM = document.getElementById("result-container");
-
     const camera = Camera();
     //player.add(camera);
 
     function initializeGame() {
       initializePlayer();
       initializeMap();
-      
+      const scoreDOM = document.getElementById("score");
+      const resultDOM = document.getElementById("result-container");
       if (scoreDOM) scoreDOM.innerText = "0";
       if (resultDOM) resultDOM.style.visibility = "hidden";
     }
+
+    initializeGameRef.current = initializeGame;  
 
     initializeGame();
 
@@ -74,13 +76,17 @@ export default function Cat() {
 
     renderer.setAnimationLoop(animate);
 
-document.querySelector("#retry")?.addEventListener("click", initializeGame);
+//document.querySelector("#retry")?.addEventListener("click", initializeGame);
 
 // In cleanup:
 return () => {
   renderer.dispose();
-  document.querySelector("#retry")?.removeEventListener("click", initializeGame);
+  //document.querySelector("#retry")?.removeEventListener("click", initializeGame);
 };
+  }, []);
+
+  const onRetry = useCallback(() => {
+    initializeGameRef.current();
   }, []);
 
   return (
@@ -88,8 +94,8 @@ return () => {
       <canvas className="game"></canvas>
       <div id="controls">
         <div>
-          <button id="left">◀</button>
-          <button id="right">▶</button>
+          {/* <button id="left">◀</button> */}
+          <button id="forward">▶</button>
         </div>
       </div>
       <div id="score">0</div>
@@ -97,7 +103,7 @@ return () => {
         <div id="result">
           <h1>Game Over!</h1>
           <p>Score: <span id="final-score">0</span></p>
-          <button id="retry">Retry</button>
+          <button id="retry" onClick={onRetry}>Retry</button>
         </div>
       </div>
     </div>

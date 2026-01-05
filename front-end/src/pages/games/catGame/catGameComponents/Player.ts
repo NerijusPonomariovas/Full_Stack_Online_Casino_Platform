@@ -5,7 +5,10 @@ import type { MoveDirection } from "./types";
 import { updateRow, updatedRows} from "./Map";
 import {hitTest} from "./hitTest";
 
-export const player = Player();
+const g = globalThis as any;
+
+export const player: THREE.Group = g.__CAT_PLAYER__ ?? (g.__CAT_PLAYER__ = Player());
+
 
 function Player() {
   const player = new THREE.Group();
@@ -216,7 +219,7 @@ export function stepCompleted() {
   const direction = movesQueue.shift();
 
   if (direction === "forward") position.currentRow += 1;
-  if (direction === "backward") position.currentRow -= 1;
+//  if (direction === "backward") position.currentRow -= 1;
 /*   if (direction === "left") position.currentTile -= 1;
   if (direction === "right") position.currentTile += 1; */
   hitTest();

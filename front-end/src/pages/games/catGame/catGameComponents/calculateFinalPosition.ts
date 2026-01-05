@@ -10,7 +10,7 @@ export function calculateFinalPosition(
         rowIndex: position.rowIndex + 1,
         tileIndex: position.tileIndex,
       };
-    if (direction === "backward")
+/*     if (direction === "backward")
       return {
         rowIndex: position.rowIndex - 1,
         tileIndex: position.tileIndex,
@@ -24,7 +24,7 @@ export function calculateFinalPosition(
       return {
         rowIndex: position.rowIndex,
         tileIndex: position.tileIndex + 1,
-      };
+      }; */
     return position;
   }, currentPosition);
 }
