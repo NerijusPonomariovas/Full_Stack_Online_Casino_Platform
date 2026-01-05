@@ -16,3 +16,8 @@
   to = "http://78.56.50.205/cataris/api/:splat"
   status = 200
   force = true
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
