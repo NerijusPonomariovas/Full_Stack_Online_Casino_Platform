@@ -8,13 +8,30 @@ import { DirectionalLight } from "./catGameComponents/DirectionalLight";
 import { animateVehicles } from "./catGameComponents/animateVehicles";
 import { animatePlayer } from "./catGameComponents/animatePlayer";
 import { hitTest } from "./catGameComponents/hitTest";
-import "./catGameComponents/collectUserInput";
+//import "./catGameComponents/collectUserInput";
 import "./catGameComponents/cat.css";
 
 export default function Cat() {
   const initializeGameRef = useRef<() => void>(() => {});
 
   useEffect(() => {
+    let inputEnabled = true;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if(!inputEnabled) return;
+      if (event.key === "ArrowRight") {
+        event.preventDefault();
+        queueMove("forward");
+      }
+    };
+
+    const onGameOver = () => {
+      inputEnabled = false; // disables controls instantly
+    };
+
+    window.addEventListener("game:over", onGameOver);
+
+    window.addEventListener("keydown", onKeyDown);
+
     // Scene setup AFTER React has rendered the <canvas>
     const scene = new THREE.Scene();
     scene.add(player);
@@ -33,6 +50,7 @@ export default function Cat() {
     function initializeGame() {
       initializePlayer();
       initializeMap();
+      inputEnabled = true;
       const scoreDOM = document.getElementById("score");
       const resultDOM = document.getElementById("result-container");
       if (scoreDOM) scoreDOM.innerText = "0";
@@ -80,6 +98,8 @@ export default function Cat() {
 
 // In cleanup:
 return () => {
+  window.removeEventListener("game:over", onGameOver);
+  window.removeEventListener("keydown", onKeyDown);
   player.remove(dirLight);
   scene.remove(ambientLight);
   scene.remove(player);

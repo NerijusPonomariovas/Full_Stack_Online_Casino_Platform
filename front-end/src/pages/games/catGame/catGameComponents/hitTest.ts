@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import { metadata as rows } from "./Map";
-import { player, position } from "./Player";
+import { player, position, queueMove } from "./Player";
 import { updateWalletBalance } from "../../../../api/auth";
 
 //let resultDOM: HTMLElement | null = null;
@@ -25,6 +25,7 @@ export function hitTest() {
       vehicleBoundingBox.setFromObject(ref);
       if (playerBoundingBox.intersectsBox(vehicleBoundingBox)) {
         if (!resultDOM || !finalScoreDOM) return;
+        window.dispatchEvent(new Event("game:over"));
         resultDOM.style.visibility = "visible";
         finalScoreDOM.innerText = position.currentRow.toString();
         const addScore = position.currentRow.toString();

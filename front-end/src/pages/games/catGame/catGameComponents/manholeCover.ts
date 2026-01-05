@@ -14,6 +14,7 @@ export function ManholeCover() {
     const coverMesh = new THREE.Mesh(coverGeometry, coverMaterial);
     coverMesh.rotation.x = Math.PI / 2; // Rotate it so it's lying flat
     coverMesh.castShadow = true;
+    coverMesh.receiveShadow = true;
     // Add the cover to the manhole cover group
     manholeCoverGroup.add(coverMesh);
 
