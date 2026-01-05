@@ -22,7 +22,7 @@ const Cat = forwardRef<CatHandle>(function Cat(_, ref) {
     initializeGame: () => initializeGameRef.current(),
   }));
   useEffect(() => {
-    let inputEnabled = true;
+    let inputEnabled = false;
     const onKeyDown = (event: KeyboardEvent) => {
       if(!inputEnabled) return;
       if (event.key === "ArrowRight") {
@@ -60,13 +60,18 @@ const Cat = forwardRef<CatHandle>(function Cat(_, ref) {
       inputEnabled = true;
       const scoreDOM = document.getElementById("score");
       const resultDOM = document.getElementById("result-container");
+      const jackpotDOM = document.getElementById("retry");
+      if (jackpotDOM) {
+        jackpotDOM.style.color = "black";
+        jackpotDOM.innerText = "Bet and play again!";
+      }
       if (scoreDOM) scoreDOM.innerText = "0";
       if (resultDOM) resultDOM.style.visibility = "hidden";
     }
 
     initializeGameRef.current = initializeGame;  
 
-    initializeGame();
+    //initializeGame();
 
     const {renderer, dispose} = Renderer(); // ✅ now works because canvas exists
 
@@ -128,10 +133,10 @@ return () => {
       </div>
       <div id="score">0</div>
       <div id="result-container">
-        <div id="result">
+        <div id="result" className="rounded-4xl p-5 bg-[#1c5ec3]">
           <h1>Game Over!</h1>
-          <p><span id="final-score" className="text-white pointer-events-none"></span></p>
-          <button id="retry">Retry</button>
+          <p><span id="final-score" className="text-[#1c5ec3] pointer-events-none"></span></p>
+          <button id="retry">Bet and play again!</button>
         </div>
       </div>
     </div>

@@ -13,6 +13,32 @@ export function hitTest() {
   const finalScoreDOM = document.getElementById("final-score");
 
   const row = rows[position.currentRow - 1];
+if (position.currentRow === 11) {
+  if (runState.settled) return; // extra safety
+
+  settleRun(); // ✅ this is the key line
+
+  const idx = position.currentRow - 1;
+  const multiplier = multipliers[idx];
+  const payout = Math.floor(runState.bet * multiplier) - runState.bet;
+
+  // show UI once
+  if (resultDOM) resultDOM.style.visibility = "visible";
+  if (finalScoreDOM) finalScoreDOM.innerText = position.currentRow.toString();
+
+  const jackpotDOM = document.getElementById("retry");
+  if (jackpotDOM) {
+    jackpotDOM.style.color = "gold";
+    jackpotDOM.innerText = `JACKPOT! YOU WON ${payout}!`;
+  }
+
+  updateWalletBalance(String(payout), "win");
+  window.dispatchEvent(new Event("game:over"));
+
+  setTimeout(() => window.dispatchEvent(new Event("balance:refresh")), 50);
+
+  return;
+}
   if (!row) return;
 
   // Check if the row has vehicles (and if they are visible)
@@ -32,7 +58,7 @@ export function hitTest() {
 
         const idx = position.currentRow-1/* Math.max(0, Math.min(position.currentRow, multipliers.length - 1)) */;
         const multiplier = multipliers[idx];
-        const payout = Math.floor(runState.bet * multiplier)-runState.bet;
+        const payout = Math.floor(runState.bet * multiplier)-runState.bet+1;
         console.log(payout + " " + multiplier);
         window.dispatchEvent(new Event("game:over"));
         resultDOM.style.visibility = "visible";

@@ -49,7 +49,7 @@ export default function BettingPanel({ children, betAmount, setBetAmount, startG
   }, []);
 
 
-  const isGoButtonActive = betAmount !== null && betAmount > 0 && !gameStarted && betAmount <= balance;
+  const isGoButtonActive = betAmount !== null && betAmount > 0 && !gameStarted && betAmount < balance/3-1;
 
   const handleGoButtonClick = () => {
     if (gameOver) {
@@ -67,7 +67,7 @@ export default function BettingPanel({ children, betAmount, setBetAmount, startG
 
   useEffect(() => {
     if (gameOver) {
-      //setBetPlaced(true); // Reset bet placed status when game is over
+      setBetPlaced(true); // Reset bet placed status when game is over
       setBetAmount(null); // Optionally reset bet amount
       
     }
