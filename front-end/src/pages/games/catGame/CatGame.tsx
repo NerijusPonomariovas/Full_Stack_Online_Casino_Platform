@@ -2,7 +2,7 @@ import { useEffect, useRef, useCallback } from "react";
 import * as THREE from "three";
 import { Renderer } from "./catGameComponents/Renderer";
 import { Camera } from "./catGameComponents/Camera";
-import { player, initializePlayer, position } from "./catGameComponents/Player";
+import { player, initializePlayer, position, queueMove } from "./catGameComponents/Player";
 import { map, initializeMap } from "./catGameComponents/Map";
 import { DirectionalLight } from "./catGameComponents/DirectionalLight";
 import { animateVehicles } from "./catGameComponents/animateVehicles";
@@ -43,7 +43,7 @@ export default function Cat() {
 
     initializeGame();
 
-    const renderer = Renderer(); // ✅ now works because canvas exists
+    const {renderer, dispose} = Renderer(); // ✅ now works because canvas exists
 
     const animate = () => {
       animateVehicles();
@@ -80,7 +80,12 @@ export default function Cat() {
 
 // In cleanup:
 return () => {
-  renderer.dispose();
+  player.remove(dirLight);
+  scene.remove(ambientLight);
+  scene.remove(player);
+  scene.remove(map);
+  renderer.setAnimationLoop(null);
+  dispose();
   //document.querySelector("#retry")?.removeEventListener("click", initializeGame);
 };
   }, []);
@@ -95,7 +100,7 @@ return () => {
       <div id="controls">
         <div>
           {/* <button id="left">◀</button> */}
-          <button id="forward">▶</button>
+          <button id="forward" onClick={() => queueMove("forward")}>▶</button>
         </div>
       </div>
       <div id="score">0</div>

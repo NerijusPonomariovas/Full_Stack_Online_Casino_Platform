@@ -40,5 +40,21 @@ export function Renderer() {
 
   renderer.shadowMap.enabled = true;
 
-  return renderer;
+  const dispose = () => {
+    window.removeEventListener("resize", resize);
+
+    // stop any ongoing loop from the outside too (safe)
+    renderer.setAnimationLoop(null);
+
+    renderer.dispose();
+
+    // optional but very effective when re-entering scenes often:
+    //renderer.forceContextLoss?.();
+
+    // release references
+    // @ts-expect-error
+    renderer.domElement = null;
+  };
+
+  return {renderer, dispose};
 }

@@ -1,6 +1,6 @@
 import { queueMove } from "./Player";
 
-document.getElementById("forward")?.addEventListener("click", () => queueMove("forward"));
+//document.getElementById("forward")?.addEventListener("click", () => queueMove("forward"));
 
 /* document
   .getElementById("backward")
