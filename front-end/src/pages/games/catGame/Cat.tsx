@@ -1,15 +1,16 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import "./BettingPanel.css";
 import Login from "../../Login";
 import Register from "../../Register";
 import BettingPanel from "../gameComponents/BettingPanel";
-import Cat from "./CatGame";
+import Cat, { type CatHandle } from "./CatGame";
 import logo from "../../../assets/LOGO.svg";
 import cat from "../../../assets/games/game-cat.png";
 
 // png imports
 export default function Home() {
+  const catRef = useRef<CatHandle | null>(null);
 
   const [betAmount, setBetAmount] = useState<number | null>(null);
   const [gameStarted, setGameStarted] = useState(false);
@@ -32,13 +33,25 @@ export default function Home() {
   };
 
   const startGame = () => {
+    if (!isAuthenticated) return;
+    if (!betAmount || betAmount <= 0) return;
     setGameStarted(true);
     setGameOver(false);
+    catRef.current?.initializeGame();
     // Add your game starting logic here
   };
   useEffect(() => {
     const token = localStorage.getItem("token");
     setIsAuthenticated(!!token);
+  }, []);
+  useEffect(() => {
+      const handleGameOver = () => {
+        console.log("over!");
+        setGameOver(true);
+        setGameStarted(false);
+      }
+      window.addEventListener("game:over", handleGameOver);
+      return () => window.removeEventListener("game:over", handleGameOver);
   }, []);
   return (
     <main className="home">
@@ -62,7 +75,7 @@ export default function Home() {
         <div className="w-full justify-center items-center flex h-150">
           <BettingPanel betAmount={betAmount} setBetAmount={setBetAmount} startGame={startGame} gameOver={gameOver} gameStarted={gameStarted}>
             <div id="game-container" className="w-full h-full sm:rounded-none md:rounded-tr-2xl">
-              <Cat />
+              <Cat ref={catRef}/>
             </div>
           </BettingPanel>
         </div>

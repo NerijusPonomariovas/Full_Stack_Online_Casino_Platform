@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback } from "react";
+import { useEffect, useRef, forwardRef, useImperativeHandle } from "react";
 import * as THREE from "three";
 import { Renderer } from "./catGameComponents/Renderer";
 import { Camera } from "./catGameComponents/Camera";
@@ -8,12 +8,19 @@ import { DirectionalLight } from "./catGameComponents/DirectionalLight";
 import { animateVehicles } from "./catGameComponents/animateVehicles";
 import { animatePlayer } from "./catGameComponents/animatePlayer";
 import { hitTest } from "./catGameComponents/hitTest";
-//import "./catGameComponents/collectUserInput";
 import "./catGameComponents/cat.css";
 
-export default function Cat() {
+
+export type CatHandle = {
+  initializeGame: () => void;
+};
+
+const Cat = forwardRef<CatHandle>(function Cat(_, ref) {
   const initializeGameRef = useRef<() => void>(() => {});
 
+  useImperativeHandle(ref, () => ({
+    initializeGame: () => initializeGameRef.current(),
+  }));
   useEffect(() => {
     let inputEnabled = true;
     const onKeyDown = (event: KeyboardEvent) => {
@@ -110,10 +117,6 @@ return () => {
 };
   }, []);
 
-  const onRetry = useCallback(() => {
-    initializeGameRef.current();
-  }, []);
-
   return (
     <div className="w-full h-full">
       <canvas className="game"></canvas>
@@ -128,9 +131,11 @@ return () => {
         <div id="result">
           <h1>Game Over!</h1>
           <p><span id="final-score" className="text-white pointer-events-none"></span></p>
-          <button id="retry" onClick={onRetry}>Retry</button>
+          <button id="retry">Retry</button>
         </div>
       </div>
     </div>
   );
-}
+});
+
+export default Cat;
