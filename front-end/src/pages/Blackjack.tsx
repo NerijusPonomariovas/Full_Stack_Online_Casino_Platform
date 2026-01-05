@@ -152,7 +152,6 @@ export default function Home() {
     console.log(dealerValue);
     if (dealerValue > 21) {
       handleGamerOver({ type: "player", message: "Player wins" });
-      handleDeposit("win");
       console.log("win-ABOVE");
       window.dispatchEvent(new Event("balance:refresh"));
     }

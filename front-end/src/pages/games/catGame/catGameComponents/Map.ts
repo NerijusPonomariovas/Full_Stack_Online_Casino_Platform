@@ -114,7 +114,7 @@ function hasVehicles(row: Row): row is (
   const newRow = Road(rowIndex);
 
   // Add stop bollard to the new row
-  const stopBollard = StopBollard();
+  const stopBollard = StopBollard(rowIndex);
   stopBollard.position.set(-42, 0, 0); // Adjust position of stop bollard
   newRow.add(stopBollard)
   
@@ -184,7 +184,7 @@ function hasVehicles(row: Row): row is (
   newRow.userData.rowIndex = rowIndex;
   newRow.name = `row-${rowIndex}`;
 
-  const stopBollard = StopBollard();
+  const stopBollard = StopBollard(rowIndex);
   stopBollard.position.set(-42, 0, 0);
   newRow.add(stopBollard);
 

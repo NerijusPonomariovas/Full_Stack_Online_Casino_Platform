@@ -18,6 +18,7 @@ export default function Wallet() {
   const [editUsername, setEditUsername] = useState<string>("");
   const [editEmail, setEditEmail] = useState<string>("");
   const [saveSuccess, setSaveSuccess] = useState<string | null>(null);
+  const [depositCooldown, setDepositCooldown] = useState<number>(0); // Time remaining in seconds
   const navigate = useNavigate();
 
   const closeAuthModal = () => {
@@ -67,6 +68,34 @@ export default function Wallet() {
     return () => window.removeEventListener("balance:refresh", getBalance);
   }, []);
 
+  // Initialize cooldown from localStorage
+  useEffect(() => {
+    const storedCooldown = localStorage.getItem("depositCooldown");
+    if (storedCooldown) {
+      const cooldownEnd = parseInt(storedCooldown);
+      const now = Date.now();
+      const remaining = Math.max(0, Math.ceil((cooldownEnd - now) / 1000));
+      setDepositCooldown(remaining);
+    }
+  }, []);
+
+  // Countdown timer effect
+  useEffect(() => {
+    if (depositCooldown > 0) {
+      const timer = setInterval(() => {
+        setDepositCooldown(prev => {
+          const newValue = prev - 1;
+          if (newValue <= 0) {
+            localStorage.removeItem("depositCooldown");
+            return 0;
+          }
+          return newValue;
+        });
+      }, 1000);
+      return () => clearInterval(timer);
+    }
+  }, [depositCooldown]);
+
   const handleDeposit = async () => {
     console.log("Pressed");
     setLoading(true);
@@ -78,6 +107,10 @@ export default function Wallet() {
         setAccountBalance(result.balance);
         console.log("New balance: ", result.balance);
         await getBalance();
+        // Set 5-minute cooldown (300 seconds)
+        const cooldownEnd = Date.now() + (5 * 60 * 1000);
+        localStorage.setItem("depositCooldown", cooldownEnd.toString());
+        setDepositCooldown(300);
       }
       else {
         console.error("Deposit failed:", result.message);
@@ -185,9 +218,13 @@ export default function Wallet() {
         {/* Actions */}
         <button
           onClick={handleDeposit}
-          disabled={loading}
-          className="w-full py-4 bg-blue-500 rounded-lg font-semibold hover:bg-blue-600 transition-all hover:-translate-y-0.5 hover:shadow-lg">
-          {loading ? "Processing..." : `Deposit`}
+          disabled={loading || depositCooldown > 0}
+          className={`w-full py-4 rounded-lg font-semibold transition-all hover:-translate-y-0.5 hover:shadow-lg ${
+            loading || depositCooldown > 0
+              ? 'bg-gray-500 cursor-not-allowed'
+              : 'bg-blue-500 hover:bg-blue-600'
+          }`}>
+          {loading ? "Processing..." : depositCooldown > 0 ? `Deposit (${Math.floor(depositCooldown / 60)}:${(depositCooldown % 60).toString().padStart(2, '0')})` : `Deposit`}
         </button>
       </div>
       <aside className="max-w-2xl mx-auto p-5">
