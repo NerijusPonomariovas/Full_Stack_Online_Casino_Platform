@@ -124,7 +124,7 @@ export default function Home() {
                 rel="noopener noreferrer"
                 className="font-semibold text-amber-50 underline decoration-amber-300/40 underline-offset-4 hover:text-white hover:decoration-amber-200/70"
               >
-                Jakub Rogoža on Facebook
+                Jakub Rogoža on Facebook dalbajob jebany
               </a>{" "}
                to solve the problem.
             </p>
