@@ -30,6 +30,7 @@ export default function Home() {
   const [showLogin, setShowLogin] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
   const [balance, setBalance] = useState<number>(0.0);
+  const [xuj, setXuj] = useState(false);
 
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
